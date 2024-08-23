@@ -1,5 +1,6 @@
 import About from '@/component/sections/About'
 import Banner from '@/component/sections/Banner'
+import BannerSwiper from '@/component/sections/BannerSwiper'
 import Highlights from '@/component/sections/Highlights'
 import db from '@/db/db'
 import React from 'react'
@@ -22,7 +23,7 @@ const Page = async () => {
     const highlightsData = await getHighlightsData()
     return (
         <div>
-            <Banner />
+            <BannerSwiper />
             <Highlights data={highlightsData} />
             <About />
         </div>

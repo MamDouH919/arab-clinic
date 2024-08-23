@@ -1,11 +1,18 @@
 "use client";
 import { styled } from "@mui/material/styles";
-import { Player } from "@lottiefiles/react-lottie-player";
+// import { Player } from "@lottiefiles/react-lottie-player";
 // import bannerLottie from '../assets/lottiefiles/bannerLottie.json'
 import { Box, Container, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { useTranslation } from 'react-i18next';
 import image from '../../public/staticImages/banner/bannerLottie.json'
+import { useEffect } from "react";
+import dynamic from 'next/dynamic';
+
+const Player = dynamic(() =>
+    import('@lottiefiles/react-lottie-player').then((mod) => mod.Player),
+    { ssr: false }
+);
 
 const PREFIX = "Banner";
 
@@ -33,7 +40,8 @@ const Root = styled("div")(({ theme }) => ({
 
 const Banner = () => {
     const { t } = useTranslation("custom");
-    console.log();
+
+    console.log(Player);
     
 
     return (
