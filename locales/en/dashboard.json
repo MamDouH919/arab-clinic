@@ -1,0 +1,22 @@
+{
+  "nameEn": "name in english",
+  "nameAr": "name in arabic",
+  "save": "save",
+  "cancel": "cancel",
+  "delete": "delete",
+  "add": "add",
+  "number": "number",
+  "addNew": "add new",
+  "deleteMSG": "are you sure you want to delete this item?",
+  "jobNameAr": "job name in arabic",
+  "jobNameEn": "job name in english",
+  "available": "available",
+  "availableJobs": "available jobs",
+  "highlights": "highlights",
+  "clients": "clients",
+  "employments": "employments",
+  "news": "news",
+  "dashboard": "dashboard",
+  "New": "New",
+  "noData": "no data available"
+}

@@ -1,0 +1,85 @@
+"use client";
+import React, { useContext } from 'react'
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
+
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import createCache from "@emotion/cache";
+import { prefixer } from "stylis";
+import rtlPlugin from "stylis-plugin-rtl";
+import { CacheProvider } from "@emotion/react";
+import { dir } from "i18next";
+import { ModeContext } from './modeContext';
+import { config } from "@/config";
+import * as color from "@mui/material/colors";
+
+export const muiCache = createCache({
+    key: "mui",
+});
+
+const cacheRtl = createCache({
+    key: "muirtl",
+    stylisPlugins: [prefixer, rtlPlugin],
+});
+
+const ThemeProv = ({ children, locale }: { children: React.ReactNode, locale: string }) => {
+    const { darkMode } = useContext(ModeContext)
+
+    const primaryColor = darkMode ? config.theme.primaryDark : config.theme.primaryLight;
+    const primaryColorKey = primaryColor as keyof typeof color;
+    const secondaryColor = darkMode ? config.theme.secondaryDark : config.theme.secondaryLight;
+    const secondaryColorKey = secondaryColor as keyof typeof color;
+
+    const theme = createTheme({
+        direction: dir(locale),
+        palette: {
+            mode: "dark",
+            primary: {
+                main: primaryColor.startsWith("#")
+                    ? primaryColor
+                    : color[primaryColorKey][500 as keyof typeof color[typeof primaryColorKey]],
+            },
+            secondary: {
+                main: secondaryColor.startsWith("#")
+                    ? secondaryColor
+                    : color[secondaryColorKey][500 as keyof typeof color[typeof secondaryColorKey]],
+            },
+            ...(true ? {
+                background: {
+                    default: "#18191a",
+                    paper: "#2f3031",
+                    // hover: "rgba(73, 73, 73)",
+                    // appTitle: "rgba(73, 73, 73)"
+                }
+            }
+                : {
+                    background: {
+                        default: "#fafafa",
+                        paper: "#fff",
+                        // hover: "#f5f5f5",
+                        // appTitle: "#f5f7f9"
+                    }
+                })
+        },
+        typography: {
+            fontFamily: ['"Cairo"', "sans-serif"].join(","),
+            fontSize: 12.5,
+        }
+    });
+
+    return (
+        <AppRouterCacheProvider options={{
+            key: dir(locale) === "rtl" ? "muirtl" : "mui",
+            stylisPlugins: dir(locale) === "rtl" ? [prefixer, rtlPlugin] : [],
+        }}>
+
+            <ThemeProvider theme={theme}>
+                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+                <CssBaseline />
+                {children}
+            </ThemeProvider>
+        </AppRouterCacheProvider>
+    )
+}
+
+export default ThemeProv

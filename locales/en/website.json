@@ -1,0 +1,17 @@
+{
+  "companyName": "Mountain",
+  "poweredDate": "2024",
+  "poweredBy": "powered by",
+  "home": "home",
+  "clients": "clients",
+  "employment": "employment",
+  "news": "news",
+  "PersonalData": "Personal Data",
+  "fullName": "Full Name",
+  "email": "Email",
+  "phone": "Phone",
+  "governorate": "Governorate",
+  "insertFile": "Insert File",
+  "submit": "Submit",
+  "ThePositionAppliedFor": "The Position Applied For"
+}
