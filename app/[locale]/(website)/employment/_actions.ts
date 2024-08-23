@@ -2,7 +2,6 @@
 import fs from "fs/promises"
 import db from "@/db/db";
 import { addJobSchema } from "@/schemas";
-import * as z from "zod";
 
 export async function getAvailableJobs() {
     const highlight = await db.availableJobs.findMany({
@@ -57,27 +56,3 @@ export async function addNewJob(formData: FormData) {
         });
     }
 }
-
-// export async function addNewJob(formData: z.infer<typeof addJobSchema>) {
-//     const result = addJobSchema.safeParse(formData)
-//     if (result.success === false) {
-//         return result.error.formErrors.fieldErrors
-//     }
-
-//     const data = result.data
-
-//     await fs.mkdir("products", { recursive: true })
-//     const filePath = `products/${crypto.randomUUID()}-${data.file.name}`
-//     await fs.writeFile(filePath, Buffer.from(await data.file.arrayBuffer()))
-
-//     await db.jobs.create({
-//         data: {
-//             jobName: data.jobName,
-//             file: filePath,
-//             email: data.email,
-//             governorate: data.governorate,
-//             name: data.name,
-//             phone: data.phone,
-//         }
-//     })
-// }
