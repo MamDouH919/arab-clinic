@@ -12,6 +12,11 @@ import { MuiTelInput } from 'mui-tel-input'
 import * as z from "zod"
 import { addJobSchema } from "@/schemas"
 import { addNewJob } from '../_actions'
+import { enqueueSnackbarFunc } from '@/component/helperFunctions/snackBar'
+import LoadingButton from '@mui/lab/LoadingButton'
+import ControlMUITextField from '@/component/ui/ControlMUItextField'
+import MUIselect from '@/component/MUI/Select'
+import MUIRadioGroup from '@/component/MUI/RadioGroup'
 
 const EmploymentForm = ({
     availableJobs
@@ -22,24 +27,24 @@ const EmploymentForm = ({
         labelAr: string;
     }[]
 }) => {
-    const { control, handleSubmit, setError } = useForm<z.infer<typeof addJobSchema>>()
+    const { control, handleSubmit, setError, reset } = useForm<z.infer<typeof addJobSchema>>()
     const { t, i18n } = useTranslation()
+    const [loading, setLoading] = useState(false)
 
     let governoratesOptions: {
-        label: string;
-        value: string;
-        id: string;
+        key: string;
+        value: string | number;
     }[] = []
 
     governorates.forEach((governorate) => {
         governoratesOptions.push({
-            label: i18n.language === 'ar' ? governorate.governorate_name_ar : governorate.governorate_name_en,
-            value: governorate.id,
-            id: governorate.id
+            key: i18n.language === 'ar' ? governorate.governorate_name_ar : governorate.governorate_name_en,
+            value: i18n.language === 'ar' ? governorate.governorate_name_ar : governorate.governorate_name_en,
         })
     })
 
     const onSubmit = async (data: z.infer<typeof addJobSchema>) => {
+        setLoading(true)
         const formData = new FormData();
         formData.append("name", data.name);
         formData.append("email", data.email);
@@ -52,6 +57,7 @@ const EmploymentForm = ({
 
         const result = await addNewJob(formData);
         if (result) {
+            setLoading(false)
             // Handle validation errors
             for (const [field, messages] of Object.entries(result)) {
                 setError(field as keyof z.infer<typeof addJobSchema>, {
@@ -60,9 +66,11 @@ const EmploymentForm = ({
                 });
             }
         } else {
+            setLoading(false)
+            reset()
+            enqueueSnackbarFunc(t("yourDataHasBeenSent"), "success")
             // Handle success
         }
-
     }
 
     return (
@@ -74,24 +82,26 @@ const EmploymentForm = ({
                 <form noValidate onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2} m={0}>
                         <Grid xs={12}>
-                            <TextFieldElement
+                            <ControlMUITextField
                                 name='name'
                                 label={t('fullName')}
                                 control={control}
                                 variant='filled'
-                                fullWidth
-                                required
+                                rules={{
+                                    required: t("fieldIsRequired"),
+                                }}
                             />
                         </Grid>
                         <Grid xs={12}>
-                            <TextFieldElement
+                            <ControlMUITextField
                                 name='email'
                                 variant='filled'
                                 label={t('email')}
                                 type='email'
-                                required
                                 control={control}
-                                fullWidth
+                                rules={{
+                                    required: t("fieldIsRequired"),
+                                }}
                             />
                         </Grid>
                         <Grid xs={12}>
@@ -101,16 +111,17 @@ const EmploymentForm = ({
                                 control={control}
                                 rules={{ required: true }}
                                 render={({ field, fieldState }) => {
-                                    console.log(fieldState);
-
+                                    if (fieldState.error?.type === "required") {
+                                        fieldState.error.message = t("fieldIsRequired")
+                                    }
                                     return (
                                         <MuiTelInput
                                             {...field}
                                             forceCallingCode
                                             label={t('phone')}
                                             variant='filled'
-                                            helperText={fieldState.invalid ? "Tel is invalid" : ""}
                                             error={fieldState.invalid}
+                                            helperText={fieldState.error && fieldState.error.message}
                                             fullWidth
                                             defaultCountry='EG'
                                         />
@@ -119,27 +130,34 @@ const EmploymentForm = ({
                             />
                         </Grid>
                         <Grid xs={12}>
-                            <SelectElement
+                            <MUIselect
                                 name='governorate'
                                 label={t('governorate')}
                                 control={control}
                                 variant='filled'
-                                options={governoratesOptions}
-                                fullWidth
-                                required
+                                data={governoratesOptions}
+                                rules={{
+                                    required: t("fieldIsRequired"),
+                                }}
                             />
                         </Grid>
                         <Grid xs={12}>
-                            <RadioButtonGroup
+                            <MUIRadioGroup
                                 name='jobName'
                                 label={t('ThePositionAppliedFor')}
-                                required
+                                rules={{
+                                    required: t("fieldIsRequired"),
+                                }}
                                 control={control}
-                                options={availableJobs.map((job) => ({
-                                    id: i18n.language === 'ar' ? job.labelAr : job.labelEn,
+                                data={availableJobs.map((job) => ({
+                                    key: i18n.language === 'ar' ? job.labelAr : job.labelEn,
                                     value: i18n.language === 'ar' ? job.labelAr : job.labelEn,
-                                    label: i18n.language === 'ar' ? job.labelAr : job.labelEn,
                                 }))}
+                                // options={availableJobs.map((job) => ({
+                                //     id: i18n.language === 'ar' ? job.labelAr : job.labelEn,
+                                //     value: i18n.language === 'ar' ? job.labelAr : job.labelEn,
+                                //     label: i18n.language === 'ar' ? job.labelAr : job.labelEn,
+                                // }))}
                             />
                         </Grid>
                         <Grid xs={12}>
@@ -147,33 +165,39 @@ const EmploymentForm = ({
                                 name="file"
                                 control={control}
                                 rules={{ required: true }}
-                                render={({ field, fieldState }) => (
-                                    <MuiFileInput
-                                        {...field}
-                                        variant='filled'
-                                        helperText={fieldState.invalid ? "File is invalid" : ""}
-                                        error={fieldState.invalid}
-                                        fullWidth
-                                        required
-                                        clearIconButtonProps={{
-                                            title: "Remove",
-                                            children: <Close fontSize="small" />
-                                        }}
-                                        placeholder={t('insertFile')}
-                                        InputProps={{
-                                            inputProps: {
-                                                accept: 'application/pdf',
-                                            },
-                                            startAdornment: <AttachFile sx={{ mb: "16px" }} />
-                                        }}
-                                    />
-                                )}
+                                render={({ field, fieldState }) => {
+                                    if (fieldState.error?.type === "required") {
+                                        fieldState.error.message = t("fieldIsRequired")
+                                    }
+                                    return (
+                                        <MuiFileInput
+                                            {...field}
+                                            variant='filled'
+                                            helperText={fieldState.error && fieldState.error.message}
+                                            error={fieldState.invalid}
+                                            fullWidth
+                                            required
+                                            clearIconButtonProps={{
+                                                title: "Remove",
+                                                children: <Close fontSize="small" />
+                                            }}
+                                            placeholder={t('insertFile')}
+                                            InputProps={{
+                                                inputProps: {
+                                                    accept: 'application/pdf',
+                                                },
+                                                startAdornment: <AttachFile sx={{ mb: "16px" }} />
+                                            }}
+                                        />
+                                    )
+                                }
+                                }
                             />
                         </Grid>
                         <Grid xs={12}>
-                            <Button variant='contained' type='submit' fullWidth>
+                            <LoadingButton variant='contained' type='submit' fullWidth loading={loading}>
                                 {t('submit')}
-                            </Button>
+                            </LoadingButton>
                         </Grid>
                     </Grid>
                 </form>

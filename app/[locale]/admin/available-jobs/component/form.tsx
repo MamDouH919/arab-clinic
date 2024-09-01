@@ -10,10 +10,12 @@ import { AddAvailableJobsSchema } from '@/schemas'
 import { useForm } from 'react-hook-form';
 import { TextFieldElement, SwitchElement } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next'
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: number, data?: z.infer<typeof AddAvailableJobsSchema> }) => {
     const [openDialog, setOpenDialog] = useState(false)
     const router = useRouter()
+    const [loading, setLoading] = useState(false)
 
     const { handleSubmit, setValue, control, setError, reset } = useForm<z.infer<typeof AddAvailableJobsSchema>>({
         defaultValues: {
@@ -33,10 +35,12 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: numb
     }, [id, openDialog, setValue])
 
     const onSubmit = async (data: z.infer<typeof AddAvailableJobsSchema>) => {
+        setLoading(true)
         if (id) {
             await updateAvailableJob(data, id).
                 then((res) => {
                     if (res) {
+                        setLoading(false)
                         for (const [field, messages] of Object.entries(res)) {
                             setError(field as keyof z.infer<typeof AddAvailableJobsSchema>, {
                                 type: "validate",
@@ -52,6 +56,7 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: numb
         }
         await addAvailableJob(data).
             then((res) => {
+                setLoading(false)
                 if (res) {
                     for (const [field, messages] of Object.entries(res)) {
                         setError(field as keyof z.infer<typeof AddAvailableJobsSchema>, {
@@ -123,8 +128,10 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: numb
                 }
                 actions={
                     <Stack justifyContent={"flex-end"} direction={"row"} spacing={1}>
-                        <Button variant='contained' color='success' type='submit'>{t("save")}</Button>
-                        <Button variant='contained' color='inherit' onClick={closeDialog}>{t("cancel")}</Button>
+                        <Button variant='contained' color='inherit' onClick={closeDialog} disabled={loading}>{t("cancel")}</Button>
+                        <LoadingButton variant='contained' color='success' type='submit' loading={loading}>
+                            {t("save")}
+                        </LoadingButton>
                     </Stack>
                 }
             />}

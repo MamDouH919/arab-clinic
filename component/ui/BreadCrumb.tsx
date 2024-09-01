@@ -10,6 +10,7 @@ import Link from "next/link";
 const PREFIX = "BreadCrumb";
 const classes = {
     activeLink: `${PREFIX}-activeLink`,
+    breadcrumbs: `${PREFIX}-breadcrumbs`,
 };
 
 const Root = styled(Stack)(({ theme }) => ({
@@ -30,6 +31,12 @@ const Root = styled(Stack)(({ theme }) => ({
             textDecoration: "underline",
         },
     },
+    [`& .${classes.breadcrumbs} .MuiBreadcrumbs-ol`]: {
+
+        justifyContent: "center",
+        alignItems: "center",
+
+    },
 }));
 
 interface inputProps {
@@ -42,7 +49,7 @@ const BreadCrumb = (props: inputProps) => {
     const { t } = useTranslation();
     return (
         <Root justifyContent={"center"} alignItems={"center"}>
-            <Breadcrumbs aria-label="breadcrumb" >
+            <Breadcrumbs aria-label="breadcrumb" className={classes.breadcrumbs}>
                 <Link
                     href={"/"}
                     className={classes.activeLink}
@@ -52,7 +59,7 @@ const BreadCrumb = (props: inputProps) => {
                 </Link>
                 {prevLink && <Link href={`/${prevLink}`} className={classes.activeLink}>
                     <GrainIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                    {prevLink}
+                    {t(prevLink)}
                 </Link>}
                 <Typography
                     sx={{ display: 'flex', alignItems: 'center' }}

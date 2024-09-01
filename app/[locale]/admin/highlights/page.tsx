@@ -50,7 +50,7 @@ const HighlightsData = async ({ locale }: { locale: string }) => {
         orderBy: { createdAt: "asc" },
     })
 
-    if (highlights.length === 0) return <NoData locale={locale} />
+    if (highlights.length === 0) return <NoData />
 
     return highlights.map((highlight) => (
         <Grid display={"flex"} key={highlight.id} xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -58,7 +58,7 @@ const HighlightsData = async ({ locale }: { locale: string }) => {
                 <Stack spacing={2}>
                     <Typography variant="h6" fontSize={30}>{locale === "en" ? highlight.nameEn : highlight.nameAr}</Typography>
                     <Typography variant="h6" fontSize={30}>{highlight.number}</Typography>
-                    <Stack direction={"row"} spacing={2} >
+                    <Stack direction={"row"} spacing={1} >
                         <FormItem id={highlight.id}>
                             <IconButton size="small">
                                 <EditIcon fontSize='small' />
@@ -66,7 +66,7 @@ const HighlightsData = async ({ locale }: { locale: string }) => {
                         </FormItem>
                         <DeleteItem id={highlight.id}>
                             <IconButton size="small">
-                                <DeleteIcon fontSize='small' />
+                                <DeleteIcon fontSize='small' color='error' />
                             </IconButton>
                         </DeleteItem>
                     </Stack>

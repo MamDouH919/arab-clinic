@@ -13,5 +13,12 @@
   "governorate": "المحافظة",
   "insertFile": "أدخل ملف",
   "submit": "تقديم",
-  "ThePositionAppliedFor": "الوظيفة التي تقدمها"
+  "ThePositionAppliedFor": "الوظيفة التي تقدمها",
+  "noAvailableJobs": "لا توجد وظائف متاحة",
+  "noNews": "لا توجد أخبار",
+  "readMore": "اقرأ المزيد",
+  "uploadImage": "رفع صورة",
+  "fieldIsRequired": "هذا الحقل مطلوب",
+  "noData": "لا توجد بيانات",
+  "yourDataHasBeenSent": "تم إرسال بياناتك"
 }

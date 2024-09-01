@@ -1,12 +1,13 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING")
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model Services {
@@ -52,4 +53,26 @@ model Jobs {
   jobName     String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model News {
+  id            Int      @id @default(autoincrement())
+  image         String
+  title         String
+  titleAr       String
+  description   String
+  descriptionAr String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Contacts {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  branch    String
+  mobile    String
+  message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

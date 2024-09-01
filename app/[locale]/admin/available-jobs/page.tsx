@@ -9,19 +9,22 @@ import FormItem from './component/form';
 import { CheckCircleOutline, HighlightOff } from '@mui/icons-material';
 import { ListHeaderTitle } from '@/component/ui/ListHeader';
 import NoData from '@/component/ui/NoData';
+import initTranslations from '@/app/i18n';
 
-const Page = ({
+const Page = async ({
     params: { locale }
 }: {
     params: { locale: string }
 }) => {
+    const { t } = await initTranslations(locale, ['dashboard']);
+
     return (
         <Stack spacing={2}>
             <Stack direction={"row"} spacing={2} justifyContent={"space-between"} useFlexGap>
                 <ListHeaderTitle title={"availableJobs"} />
                 <FormItem>
                     <Button variant="contained" color="primary" size="medium">
-                        New
+                        {t("New")}
                     </Button>
                 </FormItem>
 
@@ -46,7 +49,7 @@ const HighlightsData = async ({ locale }: { locale: string }) => {
         orderBy: { createdAt: "asc" },
     })
 
-    if (availableJobs.length === 0) return <NoData locale={locale} />
+    if (availableJobs.length === 0) return <NoData />
 
     return availableJobs.map((job) => (
         <Grid display={"flex"} key={job.id} xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -58,7 +61,7 @@ const HighlightsData = async ({ locale }: { locale: string }) => {
                             <CheckCircleOutline fontSize='large' sx={{ color: "green" }} />
                             : <HighlightOff fontSize='large' sx={{ color: "red" }} />}
                     </Stack>
-                    <Stack direction={"row"} spacing={2} >
+                    <Stack direction={"row"} spacing={1} >
                         <FormItem id={job.id}>
                             <IconButton size="small">
                                 <EditIcon fontSize='small' />
@@ -66,7 +69,7 @@ const HighlightsData = async ({ locale }: { locale: string }) => {
                         </FormItem>
                         <DeleteItem id={job.id}>
                             <IconButton size="small">
-                                <DeleteIcon fontSize='small' />
+                                <DeleteIcon fontSize='small' color='error' />
                             </IconButton>
                         </DeleteItem>
                     </Stack>

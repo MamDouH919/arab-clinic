@@ -95,7 +95,6 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: numb
                                     label={t('nameEn')}
                                     control={control}
                                     fullWidth
-
                                 />
                             </Grid>
                             <Grid xs={12}>

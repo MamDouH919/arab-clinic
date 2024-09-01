@@ -12,6 +12,7 @@ import { dir } from "i18next";
 import { ModeContext } from './modeContext';
 import { config } from "@/config";
 import * as color from "@mui/material/colors";
+import { SnackbarProvider } from "notistack";
 
 export const muiCache = createCache({
     key: "mui",
@@ -76,7 +77,9 @@ const ThemeProv = ({ children, locale }: { children: React.ReactNode, locale: st
             <ThemeProvider theme={theme}>
                 {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                 <CssBaseline />
-                {children}
+                <SnackbarProvider maxSnack={3}>
+                    {children}
+                </SnackbarProvider>
             </ThemeProvider>
         </AppRouterCacheProvider>
     )

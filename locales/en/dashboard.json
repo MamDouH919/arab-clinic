@@ -18,5 +18,19 @@
   "news": "news",
   "dashboard": "dashboard",
   "New": "New",
-  "noData": "no data available"
+  "noData": "no data available",
+  "dataInArabic": "data in arabic",
+  "dataInEnglish": "data in english",
+  "titleAr": "title in arabic",
+  "titleEn": "title in english",
+  "descriptionAr": "description in arabic",
+  "descriptionEn": "description in english",
+  "dragAnImageHere": "drag an image here",
+  "edit": "edit",
+  "downloadCV": "download CV",
+  "name": "name",
+  "email": "email",
+  "phone": "phone",
+  "jobName": "job name",
+  "governorate": "governorate"
 }
