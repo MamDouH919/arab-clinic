@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm install prisma --save-dev && npx prisma migrate dev --name init && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -51,7 +51,7 @@
     "@types/stylis": "^4.2.6",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
-    "prisma": "^5.18.0",
+    "prisma": "^5.19.1",
     "ts-node": "^10.9.2",
     "typescript": "^5"
   }
