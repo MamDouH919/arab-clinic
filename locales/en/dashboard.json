@@ -32,5 +32,14 @@
   "email": "email",
   "phone": "phone",
   "jobName": "job name",
-  "governorate": "governorate"
+  "governorate": "governorate",
+  "whatsApp": " WhatsApp",
+  "locationEn": "location in english",
+  "locationAr": "location in arabic",
+  "createdAt": "created at",
+  "contacts": "contacts",
+  "branch": "branch",
+  "type": "type",
+  "emptyData": "no data available",
+  "actions": "actions"
 }

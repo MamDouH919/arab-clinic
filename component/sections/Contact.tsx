@@ -9,6 +9,14 @@ import { isMobile } from 'react-device-detect';
 import Image from 'next/image';
 import SectionTitle from '../ui/SectionTitle';
 import ControlMUITextField from '../ui/ControlMUItextField';
+import Select from '../MUI/Select';
+import { useEffect, useState } from 'react';
+import { getBranchesDropDown } from '@/actions/branches';
+import * as z from 'zod';
+import { AddContactsSchema } from '@/schemas';
+import { enqueueSnackbarFunc } from '../helperFunctions/snackBar';
+import { addContacts } from '@/actions/contacts';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const PREFIX = "Contact";
 
@@ -22,7 +30,6 @@ const Root = styled(Box)(({ theme }) => ({
     borderTop: `1px solid ${theme.palette.divider}`,
     borderBottom: `1px solid ${theme.palette.divider}`,
     position: "relative",
-    backgroundColor: theme.palette.background.paper,
     [`& .${classes.content}`]: {
         paddingTop: theme.spacing(10),
         background: theme.palette.divider,
@@ -47,39 +54,66 @@ const Root = styled(Box)(({ theme }) => ({
 
 const Contact = () => {
     const { t, i18n } = useTranslation()
-    const { control, handleSubmit } = useForm()
+    const { control, handleSubmit, reset, setError } = useForm<z.infer<typeof AddContactsSchema>>()
+    const [loading, setLoading] = useState(false)
 
-    function createWhatsAppLink(phoneNumber: any, text: any) {
-        const encodedText = encodeURIComponent(text);
-        return `https://wa.me/${phoneNumber}/?text=${encodedText}`;
+    const [branches, setBranches] = useState<{
+        key: string,
+        value: string
+    }[]>([])
+
+    const onSubmit = async (data: z.infer<typeof AddContactsSchema>) => {
+        setLoading(true)
+        const formData = new FormData();
+        formData.append("name", data.name);
+        formData.append("email", data.email);
+        formData.append("mobile", data.mobile);
+        formData.append("branch", data.branch);
+        formData.append("message", data.message);
+
+        const result = await addContacts(formData);
+
+        if (result) {
+            setLoading(false)
+            // Handle validation errors
+            for (const [field, messages] of Object.entries(result)) {
+                setError(field as keyof z.infer<typeof AddContactsSchema>, {
+                    type: "validate",
+                    message: messages[0] // Assuming we take the first message
+                });
+            }
+        } else {
+            setLoading(false)
+            reset()
+            enqueueSnackbarFunc(t("yorMessageHasBeenSent"), "success")
+        }
     }
 
-    const onSubmit = (formData: any) => {
-        //         if (data.whatsApp) {
-        //             // Example usage:
-        //             const messageAr = `اهلا بحضرتك يا فندم 
-        // الاسم: ${formData.fullName}
-        // الايميل: ${formData.email} 
-        // رقم الموبايل: ${formData.mobile} 
-        // الفرع الاقرب: ${formData.branch} 
-        // رسالتك: ${formData.message}`
-        //             const message = `Hello, sir/madam,
-        // Name: ${formData.fullName}
-        // Email: ${formData.email}
-        // Mobile number: ${formData.mobile}
-        // Nearest branch: ${formData.branch}
-        // Your message: ${formData.message}`
-        //             const whatsappLink = createWhatsAppLink(data.whatsApp, i18n.language === "ar" ? messageAr : message);
-        //             window.open(whatsappLink, '_blank');
-        //         }
-    }
+    useEffect(() => {
+        const Branches = async () => {
+            const data = await getBranchesDropDown()
+            const ss = data.map((item) => {
+                return {
+                    key: i18n.language === "ar" ? item.nameAr : item.name,
+                    value: i18n.language === "ar" ? item.nameAr : item.name,
+                }
+            })
+            setBranches(ss)
+        }
+        Branches()
+
+    }, [i18n])
+
 
     return (
-        <Stack sx={{ background: (theme) => theme.palette.background.paper }}>
+        <Stack sx={{ background: (theme) => theme.palette.background.default }}>
             {/* <a href="https://wa.me/+201157143609/?text=urlencodedtext" target='_blank' rel="noreferrer">sdfsd</a> */}
             <Root
                 sx={{
-                    background: `url(${true ? contactUsImage : contactUsImage}) no-repeat top / cover`,
+                    backgroundImage: `url('/staticImages/contactDark.png')`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center center',
+                    backgroundSize: 'cover',
                     backgroundAttachment: isMobile ? "inherit" : "fixed",
                 }}
                 py={2}
@@ -105,34 +139,37 @@ const Contact = () => {
                                         <Grid container spacing={2} m={0} alignItems={"center"} justifyContent={"center"} >
                                             <Grid md={12} xs={12}>
                                                 <ControlMUITextField
-                                                    name="fullName"
+                                                    name="name"
                                                     label={t("fullName")}
-                                                    
                                                     control={control}
+                                                    rules={{ required: t("fieldIsRequired") }}
                                                 />
                                             </Grid>
                                             <Grid md={12} xs={12}>
                                                 <ControlMUITextField
                                                     name="email"
                                                     label={t("email")}
-                                                    
+
                                                     control={control}
+                                                    rules={{ required: t("fieldIsRequired") }}
                                                 />
                                             </Grid>
                                             <Grid md={12} xs={12}>
-                                                <ControlMUITextField
+                                                <Select
                                                     name="branch"
                                                     label={t("nearBranch")}
-                                                    
                                                     control={control}
+                                                    rules={{ required: t("fieldIsRequired") }}
+                                                    data={branches}
                                                 />
                                             </Grid>
                                             <Grid md={12} xs={12}>
                                                 <ControlMUITextField
                                                     name="mobile"
                                                     label={t("mobile")}
-                                                    
+
                                                     control={control}
+                                                    rules={{ required: t("fieldIsRequired") }}
                                                 />
                                             </Grid>
                                             <Grid md={12} xs={12}>
@@ -140,11 +177,12 @@ const Contact = () => {
                                                     name="message"
                                                     label={t("message")}
                                                     control={control}
+                                                    rules={{ required: t("fieldIsRequired") }}
                                                     rows={3}
                                                 />
                                             </Grid>
                                             <Grid md={12} xs={12}>
-                                                <Button type='submit' variant='contained' fullWidth>{t("send")}</Button>
+                                                <LoadingButton loading={loading} type='submit' variant='contained' fullWidth>{t("send")}</LoadingButton>
                                             </Grid>
                                         </Grid>
                                     </Box>

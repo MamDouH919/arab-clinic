@@ -98,7 +98,6 @@ const UploadImage = (props: inputProps) => {
     const { t } = useTranslation()
     const handleChange = (file: any) => {
         setFile(file);
-
         const previewUrl = URL.createObjectURL(file);
         setPreview(previewUrl);
     };

@@ -27,6 +27,7 @@ import {
     InventoryOutlined
 } from '@mui/icons-material';
 import { useTranslation } from "react-i18next";
+import clsx from "clsx";
 
 const PREFIX = "NavDrawer";
 
@@ -37,6 +38,7 @@ const classes = {
     list: `${PREFIX}-list`,
     ListItemText: `${PREFIX}-ListItemText`,
     ListItemTextChild: `${PREFIX}-ListItemTextChild`,
+    ListItemTextActive: `${PREFIX}-ListItemTextActive`,
 };
 
 const drawerWidth = 240;
@@ -62,6 +64,9 @@ const Root = styled(Drawer)(({ theme }) => ({
         margin: 0,
         textTransform: "capitalize",
         color: theme.palette.text.primary
+    },
+    [`& .${classes.ListItemTextActive}`]: {
+        color: theme.palette.primary.main
     },
 
     [`& .${classes.ListItemTextChild}`]: {
@@ -96,6 +101,9 @@ interface LinksList {
 const NavDrawer = (props: propsInput) => {
     const { open, DrawerHeader } = props;
     const { t } = useTranslation(["dashboard"])
+    const pathname = usePathname()
+    console.log(pathname.split("/"));
+
 
     const linksList: LinksList[] = [
         {
@@ -103,6 +111,20 @@ const NavDrawer = (props: propsInput) => {
             icon: DashboardOutlined,
             primary: "dashboard",
             regex: /dashboard/,
+        },
+        {
+            regex: /branches/,
+            pathname: "/admin/branches",
+            sectionName: "branches",
+            icon: SwitchLeftOutlined,
+            primary: "branches",
+        },
+        {
+            pathname: "/admin/contacts",
+            sectionName: "contacts",
+            icon: Inventory2Outlined,
+            primary: "contacts",
+            regex: /contacts/,
         },
         {
             pathname: "/admin/highlights",
@@ -132,9 +154,21 @@ const NavDrawer = (props: propsInput) => {
             icon: SwitchLeftOutlined,
             primary: "news",
         },
+        {
+            regex: /clients/,
+            pathname: "/admin/clients",
+            sectionName: "clients",
+            icon: SwitchLeftOutlined,
+            primary: "clients",
+        },
+        {
+            regex: /services/,
+            pathname: "/admin/services",
+            sectionName: "services",
+            icon: SwitchLeftOutlined,
+            primary: "services",
+        },
     ];
-
-    const pathname = usePathname()
 
     return (
         <Root
@@ -159,11 +193,13 @@ const NavDrawer = (props: propsInput) => {
                             <ListItem disablePadding>
                                 <ListItemButton
                                     className={classes.listItem}>
-                                    <ListItemIcon className={classes.listIcon}>
+                                    <ListItemIcon
+                                        className={clsx(classes.listIcon, { [classes.ListItemTextActive]: link.regex.test(pathname) })}
+                                    >
                                         {<link.icon fontSize={"small"} />}
                                     </ListItemIcon>
                                     <ListItemText
-                                        className={classes.ListItemText}
+                                        className={clsx(classes.ListItemText, { [classes.ListItemTextActive]: link.regex.test(pathname) })}
                                         disableTypography={true}
                                         primary={t(link.primary)}
                                     />
@@ -193,7 +229,11 @@ const NavDrawer = (props: propsInput) => {
                             >
                                 {link?.children?.map((child, i) => {
                                     return (
-                                        <Link href={child.pathname} key={i} className={classes.link}>
+                                        <Link
+                                            href={child.pathname}
+                                            key={i}
+                                            className={classes.link}
+                                        >
                                             <ListItem
                                                 className={classes.listItem}
                                                 button

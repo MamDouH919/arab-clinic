@@ -20,5 +20,11 @@
   "uploadImage": "رفع صورة",
   "fieldIsRequired": "هذا الحقل مطلوب",
   "noData": "لا توجد بيانات",
-  "yourDataHasBeenSent": "تم إرسال بياناتك"
+  "yourDataHasBeenSent": "تم إرسال بياناتك",
+  "branches": "الفروع",
+  "nearBranch": "الفرع القريب",
+  "mobile": "الهاتف المحمول",
+  "message": "الرسالة",
+  "yorMessageHasBeenSent": "تم إرسال رسالتك",
+  "send": "إرسال"
 }

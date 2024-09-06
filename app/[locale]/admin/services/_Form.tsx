@@ -1,9 +1,9 @@
 "use client"
 import { ListHeaderTitle } from '@/component/ui/ListHeader'
-import { AddNewsSchema, UpdateNewsSchema } from '@/schemas'
+import { AddNewsSchema, AddServicesSchema, UpdateNewsSchema, UpdateServicesSchema } from '@/schemas'
 import { Box, Button, Paper, Skeleton, Stack, TextField, Typography } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
-import React, { useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { TextFieldElement } from 'react-hook-form-mui'
 import { useTranslation } from 'react-i18next'
@@ -59,19 +59,25 @@ interface News {
 
 const Form = ({ id, data }: { id?: number, data?: News }) => {
 
-    const schema = id ? UpdateNewsSchema : AddNewsSchema;
+    const schema = id ? UpdateServicesSchema : AddServicesSchema;
     console.log(schema);
 
     const { t } = useTranslation(['dashboard']);
-    const { control, handleSubmit, setError, setValue, watch } = useForm<z.infer<typeof schema> & { fileName: string }>({
+    const { control, handleSubmit, setError, setValue, watch } = useForm<z.infer<typeof schema> & {
+        fileIcon: string, fileImgOne: string, fileImgTwo: string, fileImgThree: string
+    }>({
         defaultValues: {
             titleAr: data?.titleAr ?? '',
             title: data?.title ?? '',
-            fileName: data?.image ?? '',
+            fileIcon: data?.image ?? '',
+
             descriptionAr: data?.descriptionAr ?? '',
             description: data?.description ?? '',
         }
     });
+
+    console.log(watch());
+
 
     const router = useRouter()
     const [errors, setErrors] = useState<{
@@ -109,44 +115,45 @@ const Form = ({ id, data }: { id?: number, data?: News }) => {
 
 
     const onSubmit = async (data: z.infer<typeof schema>) => {
-        const formData = new FormData();
-        formData.append("titleAr", data.titleAr);
-        formData.append("title", data.title);
-        formData.append("descriptionAr", data.descriptionAr);
-        formData.append("description", data.description);
+        console.log(data);
 
-        if (data.image) {
-            formData.append("image", data?.image);
-        } else {
-            if (id) {
-                formData.append("image", new File([], ""));
-            }
-        }
+        // const formData = new FormData();
+        // formData.append("titleAr", data.titleAr);
+        // formData.append("title", data.title);
+        // formData.append("descriptionAr", data.descriptionAr);
+        // formData.append("description", data.description);
 
-        const result = id ? await updateNews(formData, id) : await addNews(formData);
+        // if (data.image) {
+        //     formData.append("image", data?.image);
+        // } else {
+        //     if (id) {
+        //         formData.append("image", new File([], ""));
+        //     }
+        // }
 
-        if (result) {
-            for (const [field, messages] of Object.entries(result)) {
-                if (field === "image") {
-                    setError("fileName", {
-                        type: "validate",
-                        message: messages[0] // Assuming we take the first message
-                    });
-                }
+        // const result = id ? await updateNews(formData, id) : await addNews(formData);
 
-                setError(field as keyof z.infer<typeof schema>, {
-                    type: "validate",
-                    message: messages[0] // Assuming we take the first message
-                });
+        // if (result) {
+        //     for (const [field, messages] of Object.entries(result)) {
+        //         if (field === "image") {
+        //             // setError("fileName", {
+        //             //     type: "validate",
+        //             //     message: messages[0] // Assuming we take the first message
+        //             // });
+        //         }
 
-            }
-        } else {
-            router.refresh()
-            router.push("/admin/news")
-        }
+        //         setError(field as keyof z.infer<typeof schema>, {
+        //             type: "validate",
+        //             message: messages[0] // Assuming we take the first message
+        //         });
+
+        //     }
+        // } else {
+        //     router.refresh()
+        //     router.push("/admin/news")
+        // }
     }
 
-    console.log(watch());
 
 
     return (
@@ -158,20 +165,21 @@ const Form = ({ id, data }: { id?: number, data?: News }) => {
                 <Paper sx={{ padding: 3 }}>
                     <Grid container spacing={2} m={0} justifyContent={"center"}>
                         <Grid md={12} xs={12} display={"flex"} justifyContent={"center"}>
-                            <UploadFile
+                            {/* <UploadFile
                                 control={control}
                                 setValue={setValue}
-                                name="image"
+                                name="icon"
+                                fileName="fileIcon"
                                 icon={"add_photo_alternate"}
                                 label={t("uploadImage")}
-                                accept=".png,.jpg"
+                                accept=".png,.jpg,.svg"
                                 rules={{
                                     validate: {
                                         require: (value: any) =>
                                             value ? true : t("fieldIsRequired"),
                                     },
                                 }}
-                            />
+                            /> */}
                         </Grid>
                         <Grid md={6} xs={12}>
                             <Box width={"100%"}>
@@ -268,6 +276,10 @@ const Form = ({ id, data }: { id?: number, data?: News }) => {
                                     </Grid>
                                 </Grid>
                             </Box>
+                        </Grid>
+
+                        <Grid md={12} xs={12} display={"flex"} justifyContent={"flex-end"}>
+                            <Button variant={"contained"} fullWidth>{t("addImages")}</Button>
                         </Grid>
                         <Grid md={12} xs={12} display={"flex"} justifyContent={"flex-end"}>
                             <Button variant={"contained"} type={"submit"}>{t("save")}</Button>

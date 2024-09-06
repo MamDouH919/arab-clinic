@@ -11,18 +11,18 @@ datasource db {
 }
 
 model Services {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  icon        String
-  url         String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Clients {
-  id   Int    @id @default(autoincrement())
-  name String
+  id            Int      @id @default(autoincrement())
+  title         String
+  titleAr       String
+  description   String
+  descriptionAr String
+  icon          String
+  coverImg      String
+  imgOne        String
+  imgTwo        String
+  imgThree      String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model highlights {
@@ -73,6 +73,29 @@ model Contacts {
   branch    String
   mobile    String
   message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Branches {
+  id         Int      @id @default(autoincrement())
+  name       String
+  nameAr     String
+  location   String
+  locationAr String
+  mobile     String
+  whatsApp   String
+  image      String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Clients {
+  id        Int      @id @default(autoincrement())
+  name      String
+  nameAr    String
+  image     String
+  type      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

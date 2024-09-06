@@ -20,5 +20,11 @@
   "uploadImage": "upload image",
   "fieldIsRequired": "field is required",
   "noData": "no data",
-  "yourDataHasBeenSent": "your data has been sent"
+  "yourDataHasBeenSent": "your data has been sent",
+  "branches": "branches",
+  "nearBranch": "near branch",
+  "mobile": "mobile",
+  "message": "message",
+  "yorMessageHasBeenSent": "your message has been sent",
+  "send": "send"
 }

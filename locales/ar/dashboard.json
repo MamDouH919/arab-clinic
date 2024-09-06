@@ -32,5 +32,14 @@
   "email": "البريد الإلكتروني",
   "phone": "الموبيل",
   "jobName": "الوظيفة المقدم لها",
-  "governorate": "المحافظة"
+  "governorate": "المحافظة",
+  "whatsApp": " WhatsApp",
+  "locationEn": "الموقع بالإنجليزي",
+  "locationAr": "الموقع بالعربي",
+  "createdAt": "تاريخ الإنشاء",
+  "contacts": "التواصل",
+  "branch": "الفرع",
+  "type": "النوع",
+  "emptyData": "لا توجد بيانات متاحة",
+  "actions": "الإجراءات"
 }

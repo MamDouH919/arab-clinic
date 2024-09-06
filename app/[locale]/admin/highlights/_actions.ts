@@ -14,7 +14,6 @@ export async function getHighlight(id: number) {
 
 export async function addHighlights(formData: z.infer<typeof AddHighlightsSchema>) {
     const result = AddHighlightsSchema.safeParse(formData)
-    console.log(result)
 
     if (result.success === false) {
         return result.error.formErrors.fieldErrors

@@ -22,7 +22,7 @@ export function generateStaticParams() {
   return i18nConfig.locales.map(locale => ({ locale }))
 }
 
-const i18nNamespaces = ['website', 'dashboard', "custom"]
+const i18nNamespaces = ['website', 'dashboard', 'custom']
 
 export default async function RootLayout({
   children,
@@ -32,7 +32,7 @@ export default async function RootLayout({
   params: { locale: string };
 }>) {
 
-  const { t, resources } = await initTranslations(locale, i18nNamespaces);
+  const { resources } = await initTranslations(locale, i18nNamespaces);
 
   return (
     <html lang={locale} dir={dir(locale)}>

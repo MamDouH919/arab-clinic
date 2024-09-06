@@ -118,6 +118,7 @@ const EmploymentForm = ({
                                         <MuiTelInput
                                             {...field}
                                             forceCallingCode
+                                            sx={{ direction: (theme) => theme.direction }}
                                             label={t('phone')}
                                             variant='filled'
                                             error={fieldState.invalid}
