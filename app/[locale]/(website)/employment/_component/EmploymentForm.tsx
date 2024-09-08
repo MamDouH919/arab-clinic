@@ -22,7 +22,7 @@ const EmploymentForm = ({
     availableJobs
 }: {
     availableJobs: {
-        id: number;
+        id: string;
         labelEn: string;
         labelAr: string;
     }[]

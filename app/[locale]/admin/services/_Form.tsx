@@ -49,7 +49,7 @@ const Root = styled(Stack)(({ theme }) => ({
 }));
 
 interface News {
-    id: number
+    id: string
     titleAr: string
     title: string
     descriptionAr: string
@@ -57,7 +57,7 @@ interface News {
     image: string
 }
 
-const Form = ({ id, data }: { id?: number, data?: News }) => {
+const Form = ({ id, data }: { id?: string, data?: News }) => {
 
     const schema = id ? UpdateServicesSchema : AddServicesSchema;
     console.log(schema);

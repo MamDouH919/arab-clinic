@@ -7,7 +7,7 @@ import { notFound, redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
 import { AddHighlightsSchema } from "@/schemas"
 
-export async function getHighlight(id: number) {
+export async function getHighlight(id: string) {
     const highlight = await db.highlights.findUnique({ where: { id } });
     return highlight;
 }
@@ -28,7 +28,7 @@ export async function addHighlights(formData: z.infer<typeof AddHighlightsSchema
     })
 }
 
-export async function updateHighlights(formData: z.infer<typeof AddHighlightsSchema>, id: number) {
+export async function updateHighlights(formData: z.infer<typeof AddHighlightsSchema>, id: string) {
     const result = AddHighlightsSchema.safeParse(formData)
 
     if (result.success === false) {
@@ -48,7 +48,7 @@ export async function updateHighlights(formData: z.infer<typeof AddHighlightsSch
     revalidatePath("/admin/highlights")
 }
 
-export async function deleteHighlights(id: number) {
+export async function deleteHighlights(id: string) {
     const product = await db.highlights.delete({ where: { id } })
 
     if (product == null) return notFound()

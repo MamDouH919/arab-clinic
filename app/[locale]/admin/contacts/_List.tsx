@@ -124,7 +124,7 @@ export default function OrdersList({
                                                 {row.message}
                                             </FixedTableCell>
                                             <FixedTableCell align={'left'}>
-                                                {row.branch}
+                                                {row.branch ?? t("placeholder")}
                                             </FixedTableCell>
                                             <FixedTableCell align={'left'}>
                                                 {row.email}

@@ -6,12 +6,17 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
+// datasource db {
+//   provider = "sqlite"
+//   url      = env("DATABASE_URL")
+// }
+
 model Services {
-  id            Int      @id @default(autoincrement())
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   titleAr       String
   description   String
@@ -26,7 +31,7 @@ model Services {
 }
 
 model highlights {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   nameEn    String
   nameAr    String
   number    Int
@@ -35,7 +40,7 @@ model highlights {
 }
 
 model AvailableJobs {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   jobNameEn String
   jobNameAr String
   available Boolean
@@ -44,7 +49,7 @@ model AvailableJobs {
 }
 
 model Jobs {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   governorate String
   phone       String
@@ -56,7 +61,7 @@ model Jobs {
 }
 
 model News {
-  id            Int      @id @default(autoincrement())
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
   image         String
   title         String
   titleAr       String
@@ -67,10 +72,10 @@ model News {
 }
 
 model Contacts {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   email     String
-  branch    String
+  branch    String?
   mobile    String
   message   String
   createdAt DateTime @default(now())
@@ -78,7 +83,7 @@ model Contacts {
 }
 
 model Branches {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   name       String
   nameAr     String
   location   String
@@ -91,7 +96,7 @@ model Branches {
 }
 
 model Clients {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   nameAr    String
   image     String

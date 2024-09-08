@@ -7,7 +7,7 @@ import { notFound, redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
 import { AddAvailableJobsSchema } from "@/schemas"
 
-export async function getAvailableJob(id: number) {
+export async function getAvailableJob(id: string) {
     const job = await db.availableJobs.findUnique({ where: { id } });
     return job;
 }
@@ -29,7 +29,7 @@ export async function addAvailableJob(formData: z.infer<typeof AddAvailableJobsS
     })
 }
 
-export async function updateAvailableJob(formData: z.infer<typeof AddAvailableJobsSchema>, id: number) {
+export async function updateAvailableJob(formData: z.infer<typeof AddAvailableJobsSchema>, id: string) {
     const result = AddAvailableJobsSchema.safeParse(formData)
 
     if (result.success === false) {
@@ -49,7 +49,7 @@ export async function updateAvailableJob(formData: z.infer<typeof AddAvailableJo
     revalidatePath("/admin/available-jobs")
 }
 
-export async function deleteAvailableJob(id: number) {
+export async function deleteAvailableJob(id: string) {
     const product = await db.availableJobs.delete({ where: { id } })
 
     if (product == null) return notFound()

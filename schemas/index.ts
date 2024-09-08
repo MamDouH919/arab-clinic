@@ -148,11 +148,7 @@ export const AddContactsSchema = z.object({
   }).email({
     message: i18n.language === "en" ? "must be a valid email" : "يجب أن يكون بريد إلكتروني صحيح",
   }),
-  branch: z.string({
-    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
-  }).min(1, {
-    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
-  }),
+  branch: z.string().nullable(),
   mobile: z.string({
     message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
   }).min(1, {

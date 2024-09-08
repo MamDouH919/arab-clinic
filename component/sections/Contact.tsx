@@ -68,7 +68,7 @@ const Contact = () => {
         formData.append("name", data.name);
         formData.append("email", data.email);
         formData.append("mobile", data.mobile);
-        formData.append("branch", data.branch);
+        data.branch && formData.append("branch", data.branch);
         formData.append("message", data.message);
 
         const result = await addContacts(formData);
@@ -154,7 +154,7 @@ const Contact = () => {
                                                     rules={{ required: t("fieldIsRequired") }}
                                                 />
                                             </Grid>
-                                            <Grid md={12} xs={12}>
+                                            {branches.length > 0 && <Grid md={12} xs={12}>
                                                 <Select
                                                     name="branch"
                                                     label={t("nearBranch")}
@@ -162,7 +162,7 @@ const Contact = () => {
                                                     rules={{ required: t("fieldIsRequired") }}
                                                     data={branches}
                                                 />
-                                            </Grid>
+                                            </Grid>}
                                             <Grid md={12} xs={12}>
                                                 <ControlMUITextField
                                                     name="mobile"

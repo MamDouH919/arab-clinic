@@ -7,8 +7,11 @@ export async function addContacts(formData: FormData) {
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
     const mobile = formData.get("mobile") as string;
-    const branch = formData.get("branch") as string;
+    const branch = formData.get("branch") as string | null;
     const message = formData.get("message") as string;
+
+    console.log(branch);
+
 
     const parsedData = {
         name,
@@ -17,6 +20,9 @@ export async function addContacts(formData: FormData) {
         branch,
         message,
     };
+
+    console.log(parsedData);
+
 
     const result = AddContactsSchema.safeParse(parsedData);
     if (!result.success) {

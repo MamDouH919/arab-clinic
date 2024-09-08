@@ -45,7 +45,7 @@ const Root = styled(Box)(({ theme }) => ({
 }));
 
 
-const Clients = ({ data }: { data: { id: number, name: string, nameAr: string, image: string }[] }) => {
+const Clients = ({ data }: { data: { id: string, name: string, nameAr: string, image: string }[] }) => {
     const scrollToRight = keyframes`
     0% {transform: translateX(0);}
     100% {transform: translateX(calc(-250px * ${data.length / 2}));`;
@@ -56,6 +56,10 @@ const Clients = ({ data }: { data: { id: number, name: string, nameAr: string, i
 
 
     const { i18n } = useTranslation()
+
+    if (data.length === 0) {
+        return null
+    }
 
     return (
         <Root sx={{ background: (theme) => theme.palette.background.default }} py={2}>

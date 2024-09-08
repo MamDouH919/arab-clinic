@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm install prisma --save-dev && npx prisma migrate dev --name init && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -18,7 +18,7 @@
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.16.6",
     "@mui/material-nextjs": "^5.16.6",
-    "@prisma/client": "^5.18.0",
+    "@prisma/client": "^5.19.1",
     "axios": "^1.7.7",
     "clsx": "^2.1.1",
     "cookies-next": "^4.2.1",

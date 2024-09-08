@@ -12,7 +12,7 @@ import { TextFieldElement } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next'
 import db from '@/db/db'
 
-const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: number, data?: z.infer<typeof AddHighlightsSchema> }) => {
+const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: string, data?: z.infer<typeof AddHighlightsSchema> }) => {
     const [openDialog, setOpenDialog] = useState(false)
     const router = useRouter()
 

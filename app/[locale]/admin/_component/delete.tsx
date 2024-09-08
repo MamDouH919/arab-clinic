@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
 
-const DeleteItem = ({ children, id, deleteFun }: { children: React.ReactNode, id: number, deleteFun: (id: number) => void }) => {
+const DeleteItem = ({ children, id, deleteFun }: { children: React.ReactNode, id: string, deleteFun: (id: string) => void }) => {
     const [openDialog, setOpenDialog] = useState(false)
     const router = useRouter()
 
@@ -17,7 +17,7 @@ const DeleteItem = ({ children, id, deleteFun }: { children: React.ReactNode, id
         setOpenDialog(true)
     }
 
-    const deleteHighlightsFun = async (id: number) => {
+    const deleteHighlightsFun = async (id: string) => {
         await deleteFun(id)
         router.refresh()
         closeDialog()
@@ -44,7 +44,7 @@ const DeleteItem = ({ children, id, deleteFun }: { children: React.ReactNode, id
                     </Stack>
                 }
             />
-            <div style={{width: "100%"}} onClick={openDialogFun}>
+            <div style={{ width: "100%" }} onClick={openDialogFun}>
                 {children}
             </div>
         </>

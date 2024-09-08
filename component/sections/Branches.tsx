@@ -53,7 +53,7 @@ const socialIcons = {
 
 const Branches = ({ data }: {
     data: {
-        id: number,
+        id: string,
         name: string,
         nameAr: string,
         location: string,

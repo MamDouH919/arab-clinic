@@ -45,7 +45,7 @@ export async function getBranchesDropDown() {
 
 
 
-export async function deleteBranch(id: number) {
+export async function deleteBranch(id: string) {
     const branch = await db.branches.delete({ where: { id } })
 
     if (branch == null) return notFound()
@@ -109,7 +109,7 @@ export async function addBranch(formData: FormData) {
     revalidatePath("/admin/branches")
 }
 
-export async function updateBranch(formData: FormData, id: number) {
+export async function updateBranch(formData: FormData, id: string) {
     const name = formData.get("name") as string;
     const nameAr = formData.get("nameAr") as string;
     const locationAr = formData.get("locationAr") as string;
@@ -167,7 +167,7 @@ export async function updateBranch(formData: FormData, id: number) {
     revalidatePath("/admin/branches")
 }
 
-export async function getBranchById(id: number) {
+export async function getBranchById(id: string) {
     const branches = await db.branches.findUnique({
         where: { id },
         select: {

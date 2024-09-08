@@ -12,7 +12,7 @@ import { TextFieldElement, SwitchElement } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next'
 import LoadingButton from '@mui/lab/LoadingButton';
 
-const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: number, data?: z.infer<typeof AddAvailableJobsSchema> }) => {
+const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: string, data?: z.infer<typeof AddAvailableJobsSchema> }) => {
     const [openDialog, setOpenDialog] = useState(false)
     const router = useRouter()
     const [loading, setLoading] = useState(false)

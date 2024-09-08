@@ -15,7 +15,7 @@ import { clientsTypeArray } from '@/types'
 import { AddClientsSchema, UpdateClientsSchema } from '@/schemas'
 import { addClient, getClientsById, updateClient } from '@/actions/clients'
 
-const FormItem = ({ children, id, updateData }: { children: React.ReactNode, id?: number, updateData?: any }) => {
+const FormItem = ({ children, id, updateData }: { children: React.ReactNode, id?: string, updateData?: any }) => {
     const schema = id ? UpdateClientsSchema : AddClientsSchema;
     const [openDialog, setOpenDialog] = useState(false)
     const router = useRouter()

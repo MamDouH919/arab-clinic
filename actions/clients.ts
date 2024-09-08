@@ -26,7 +26,7 @@ import { AddClientsSchema, UpdateClientsSchema } from "@/schemas"
 //     return branches
 // }
 
-export async function getClientsById(id: number) {
+export async function getClientsById(id: string) {
     const client = await db.clients.findUnique({
         where: { id },
         select: {
@@ -42,7 +42,7 @@ export async function getClientsById(id: number) {
 }
 
 
-export async function deleteClient(id: number) {
+export async function deleteClient(id: string) {
     const client = await db.clients.delete({ where: { id } })
 
     if (client == null) return notFound()
@@ -97,7 +97,7 @@ export async function addClient(formData: FormData) {
     revalidatePath("/admin/clients")
 }
 
-export async function updateClient(formData: FormData, id: number) {
+export async function updateClient(formData: FormData, id: string) {
     const name = formData.get("name") as string;
     const nameAr = formData.get("nameAr") as string;
     const type = formData.get("type") as string;

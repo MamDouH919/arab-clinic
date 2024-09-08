@@ -5,7 +5,7 @@ import { notFound } from "next/navigation"
 import { revalidatePath } from "next/cache"
 import fs from "fs/promises"
 
-export async function deleteJob(id: number) {
+export async function deleteJob(id: string) {
     const job = await db.jobs.delete({ where: { id } })
 
     if (job == null) return notFound()

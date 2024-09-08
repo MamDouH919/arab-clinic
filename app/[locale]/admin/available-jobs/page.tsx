@@ -4,12 +4,13 @@ import db from '@/db/db';
 import Grid from '@mui/material/Unstable_Grid2';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteItem from './component/delete';
 import FormItem from './component/form';
 import { CheckCircleOutline, HighlightOff } from '@mui/icons-material';
 import { ListHeaderTitle } from '@/component/ui/ListHeader';
 import NoData from '@/component/ui/NoData';
 import initTranslations from '@/app/i18n';
+import DeleteItem from '../_component/delete';
+import { deleteAvailableJob } from './_actions';
 
 const Page = async ({
     params: { locale }
@@ -67,7 +68,7 @@ const HighlightsData = async ({ locale }: { locale: string }) => {
                                 <EditIcon fontSize='small' />
                             </IconButton>
                         </FormItem>
-                        <DeleteItem id={job.id}>
+                        <DeleteItem id={job.id} deleteFun={deleteAvailableJob}>
                             <IconButton size="small">
                                 <DeleteIcon fontSize='small' color='error' />
                             </IconButton>

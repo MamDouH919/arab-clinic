@@ -13,7 +13,7 @@ const imageSchema = fileSchema.refine(
     file => file.size === 200 || file.type.startsWith("image/")
 )
 
-export async function deleteNews(id: number) {
+export async function deleteNews(id: string) {
     const news = await db.news.delete({ where: { id } })
 
     if (news == null) return notFound()
@@ -71,7 +71,7 @@ export async function addNews(formData: FormData) {
     revalidatePath("/admin/news")
 }
 
-export async function updateNews(formData: FormData, id: number) {
+export async function updateNews(formData: FormData, id: string) {
     const titleAr = formData.get("titleAr") as string;
     const title = formData.get("title") as string;
     const descriptionAr = formData.get("descriptionAr") as string;
@@ -123,7 +123,7 @@ export async function updateNews(formData: FormData, id: number) {
     revalidatePath("/admin/news")
 }
 
-export async function getNewsById(id: number) {
+export async function getNewsById(id: string) {
     const news = await db.news.findUnique({
         where: { id },
         select: {

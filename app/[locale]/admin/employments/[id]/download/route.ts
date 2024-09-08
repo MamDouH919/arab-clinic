@@ -8,7 +8,7 @@ export async function GET(
     { params: { id } }: { params: { id: string } }
 ) {
     const product = await db.jobs.findUnique({
-        where: { id: Number(id) },
+        where: { id: id },
         select: { file: true, name: true },
     })
 

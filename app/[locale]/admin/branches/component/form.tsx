@@ -14,7 +14,7 @@ import ControlMUITextField from '@/component/ui/ControlMUItextField'
 import { MuiTelInput } from 'mui-tel-input'
 import { addBranch, getBranchById, updateBranch } from '@/actions/branches'
 
-const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: number, data?: z.infer<typeof AddBranchesSchema> }) => {
+const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: string, data?: z.infer<typeof AddBranchesSchema> }) => {
     const schema = id ? UpdateBranchesSchema : AddBranchesSchema;
     const [openDialog, setOpenDialog] = useState(false)
     const router = useRouter()

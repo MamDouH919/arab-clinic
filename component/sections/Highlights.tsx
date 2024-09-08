@@ -102,7 +102,7 @@ const Highlights = ({
     data,
 }: {
     data: {
-        id: number,
+        id: string,
         nameAr: string,
         nameEn: string,
         number: number,
