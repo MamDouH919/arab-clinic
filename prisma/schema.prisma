@@ -23,9 +23,9 @@ model Services {
   descriptionAr String
   icon          String
   coverImg      String
-  imgOne        String
-  imgTwo        String
-  imgThree      String
+  imgOne        String?
+  imgTwo        String?
+  imgThree      String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
@@ -95,12 +95,19 @@ model Branches {
   updatedAt  DateTime @updatedAt
 }
 
+enum ClientType {
+  syndicates
+  healthcareCompanies
+  discountContractCompanies
+  contractingCompanies
+}
+
 model Clients {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   nameAr    String
   image     String
-  type      String
+  type      ClientType
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

@@ -17,6 +17,10 @@ import { addNews, updateNews } from '@/actions/new'
 import UploadFile from '@/component/ui/UploadFile'
 import ControlMUITextField from '@/component/ui/ControlMUItextField'
 import clsx from 'clsx'
+import CustomDialog from '@/component/ui/customDialog'
+import Image from 'next/image'
+import { addServices, updateServices } from '@/actions/services'
+import LoadingButton from '@mui/lab/LoadingButton'
 
 // Loading component to display while ReactQuill is being loaded
 const Loading = () => <Skeleton height={"300px"} animation="wave" variant="rectangular" />;
@@ -54,23 +58,39 @@ interface News {
     title: string
     descriptionAr: string
     description: string
-    image: string
+    icon: string
+    coverImg: string
+    imgOne: string | null
+    imgTwo: string | null
+    imgThree: string | null
 }
 
 const Form = ({ id, data }: { id?: string, data?: News }) => {
+    const [loading, setLoading] = useState(false)
+    const [openDialog, setOpenDialog] = useState({
+        open: false,
+        fileName: "",
+        name: "",
+    })
+
+    const closeDialog = () => {
+        setOpenDialog({ open: false, fileName: "", name: "" })
+    }
 
     const schema = id ? UpdateServicesSchema : AddServicesSchema;
-    console.log(schema);
 
     const { t } = useTranslation(['dashboard']);
     const { control, handleSubmit, setError, setValue, watch } = useForm<z.infer<typeof schema> & {
-        fileIcon: string, fileImgOne: string, fileImgTwo: string, fileImgThree: string
+        fileIcon: string, fileImgOne: string, fileImgTwo: string, fileImgThree: string, fileCover: string
     }>({
         defaultValues: {
             titleAr: data?.titleAr ?? '',
             title: data?.title ?? '',
-            fileIcon: data?.image ?? '',
-
+            fileIcon: data?.icon ?? '',
+            fileImgOne: data?.imgOne ?? '',
+            fileImgTwo: data?.imgTwo ?? '',
+            fileImgThree: data?.imgThree ?? '',
+            fileCover: data?.coverImg ?? '',
             descriptionAr: data?.descriptionAr ?? '',
             description: data?.description ?? '',
         }
@@ -78,16 +98,19 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
 
     console.log(watch());
 
-
     const router = useRouter()
     const [errors, setErrors] = useState<{
-        descriptionAr: string
-        descriptionEn: string
-        imageFile: string
+        icon: string
+        coverImg: string
+        imgOne: string
+        imgTwo: string
+        imgThree: string
     }>({
-        descriptionAr: "",
-        descriptionEn: "",
-        imageFile: ""
+        icon: "",
+        coverImg: "",
+        imgOne: "",
+        imgTwo: "",
+        imgThree: ""
     });
 
     const modules = {
@@ -115,49 +138,129 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
 
 
     const onSubmit = async (data: z.infer<typeof schema>) => {
-        console.log(data);
+        setLoading(true);
 
-        // const formData = new FormData();
-        // formData.append("titleAr", data.titleAr);
-        // formData.append("title", data.title);
-        // formData.append("descriptionAr", data.descriptionAr);
-        // formData.append("description", data.description);
+        const formData = new FormData();
+        formData.append("titleAr", data.titleAr);
+        formData.append("title", data.title);
+        formData.append("descriptionAr", data.descriptionAr);
+        formData.append("description", data.description);
 
-        // if (data.image) {
-        //     formData.append("image", data?.image);
-        // } else {
-        //     if (id) {
-        //         formData.append("image", new File([], ""));
-        //     }
-        // }
+        if (data.icon) {
+            formData.append("icon", data?.icon);
+        } else {
+            if (id) {
+                formData.append("icon", new File([], ""));
+            }
+        }
+        if (data.imgOne) {
+            formData.append("imgOne", data?.imgOne);
+        } else {
+            if (id && data.imgOne) {
+                formData.append("imgOne", new File([], ""));
+            }
+        }
+        if (data.imgTwo) {
+            formData.append("imgTwo", data?.imgTwo);
+        } else {
+            if (id && data.imgTwo) {
+                formData.append("imgTwo", new File([], ""));
+            }
+        }
+        if (data.imgThree) {
+            formData.append("imgThree", data?.imgThree);
+        } else {
+            if (id && data.imgThree) {
+                formData.append("imgThree", new File([], ""));
+            }
+        }
+        if (data.coverImg) {
+            formData.append("coverImg", data?.coverImg);
+        } else {
+            if (id) {
+                formData.append("coverImg", new File([], ""));
+            }
+        }
 
-        // const result = id ? await updateNews(formData, id) : await addNews(formData);
+        console.log(formData);
 
-        // if (result) {
-        //     for (const [field, messages] of Object.entries(result)) {
-        //         if (field === "image") {
-        //             // setError("fileName", {
-        //             //     type: "validate",
-        //             //     message: messages[0] // Assuming we take the first message
-        //             // });
-        //         }
 
-        //         setError(field as keyof z.infer<typeof schema>, {
-        //             type: "validate",
-        //             message: messages[0] // Assuming we take the first message
-        //         });
+        const result = id ? await updateServices(formData, id) : await addServices(formData);
 
-        //     }
-        // } else {
-        //     router.refresh()
-        //     router.push("/admin/news")
-        // }
+        if (result) {
+            setLoading(false)
+            console.log(result);
+
+
+            for (const [field, messages] of Object.entries(result)) {
+                if (field === "icon" || field === "coverImg" || field === "imgOne" || field === "imgTwo" || field === "imgThree") {
+                    setErrors(prevErrors => ({
+                        ...prevErrors, // Keep the previous error state
+                        icon: field === "icon" ? messages[0] : prevErrors.icon || "",
+                        coverImg: field === "coverImg" ? messages[0] : prevErrors.coverImg || "",
+                        imgOne: field === "imgOne" ? messages[0] : prevErrors.imgOne || "",
+                        imgTwo: field === "imgTwo" ? messages[0] : prevErrors.imgTwo || "",
+                        imgThree: field === "imgThree" ? messages[0] : prevErrors.imgThree || "",
+                    }));
+                }
+
+                setError(field as keyof z.infer<typeof schema>, {
+                    type: "validate",
+                    message: messages[0] // Assuming we take the first message
+                });
+
+            }
+        } else {
+            router.refresh()
+            router.push("/admin/services")
+        }
     }
 
-
+    const previewImage = (file: File | string) => {
+        let previewUrl
+        if (typeof file === "string") {
+            previewUrl = file
+            return previewUrl
+        }
+        if (typeof file !== "string") {
+            previewUrl = URL.createObjectURL(file);
+            return previewUrl
+        }
+        return ''
+    }
 
     return (
         <Root spacing={2}>
+            <CustomDialog
+                open={openDialog.open}
+                handleClose={closeDialog}
+                title={t("addImage")}
+                maxWidth='sm'
+                content={
+                    <Box p={2}>
+                        <UploadFile
+                            control={control}
+                            setValue={setValue}
+                            name={openDialog.name}
+                            fileName={openDialog.fileName}
+                            icon={"add_photo_alternate"}
+                            label={t("uploadImage")}
+                            accept=".png,.jpg,.svg"
+                            rules={{
+                                validate: {
+                                    require: (value: any) =>
+                                        value ? true : t("fieldIsRequired"),
+                                },
+                            }}
+                        />
+                    </Box>
+                }
+                actions={
+                    <Stack justifyContent={"flex-end"} direction={"row"} spacing={1}>
+                        <Button variant={'contained'} color='inherit' onClick={closeDialog} disabled={loading}>{t("done")}</Button>
+                    </Stack>
+                }
+            />
             <Stack direction={"row"} spacing={2} justifyContent={"space-between"} useFlexGap>
                 <ListHeaderTitle title={id ? "edit" : "addNew"} />
             </Stack>
@@ -165,21 +268,190 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                 <Paper sx={{ padding: 3 }}>
                     <Grid container spacing={2} m={0} justifyContent={"center"}>
                         <Grid md={12} xs={12} display={"flex"} justifyContent={"center"}>
-                            {/* <UploadFile
-                                control={control}
-                                setValue={setValue}
-                                name="icon"
-                                fileName="fileIcon"
-                                icon={"add_photo_alternate"}
-                                label={t("uploadImage")}
-                                accept=".png,.jpg,.svg"
-                                rules={{
-                                    validate: {
-                                        require: (value: any) =>
-                                            value ? true : t("fieldIsRequired"),
-                                    },
-                                }}
-                            /> */}
+                            <Box width={"100%"}>
+                                <Grid container spacing={3} m={0}>
+                                    <Grid md={4} xs={12}>
+                                        {(watch("icon") || watch("fileIcon")) &&
+                                            <Image
+                                                src={previewImage(watch("icon") || watch("fileIcon"))}
+                                                alt="icon"
+                                                width={100}
+                                                height={100}
+                                                objectFit='cover'
+                                                layout='responsive'
+                                                style={{
+                                                    width: "100%",
+                                                    maxHeight: "350px"
+                                                }}
+                                            />
+                                        }
+                                        {errors.icon && <Typography color="error">{errors.icon}</Typography>}
+                                        <Button
+                                            variant='contained'
+                                            fullWidth
+                                            color='primary'
+                                            size='medium'
+                                            onClick={() => {
+                                                setErrors(prevErrors => ({
+                                                    ...prevErrors, // Keep the previous error state
+                                                    icon: ""
+                                                }));
+                                                setOpenDialog({
+                                                    fileName: "fileIcon",
+                                                    name: "icon",
+                                                    open: true
+                                                })
+                                            }}
+                                        >
+                                            {t("addImage")}
+                                        </Button>
+                                    </Grid>
+                                    <Grid md={8} xs={12}>
+                                        {(watch("coverImg") || watch("fileCover")) &&
+                                            <Image
+                                                src={previewImage(watch("coverImg") || watch("fileCover"))}
+                                                alt="coverImg"
+                                                width={100}
+                                                height={100}
+                                                objectFit='cover'
+                                                layout='responsive'
+                                                style={{
+                                                    width: "100%",
+                                                    maxHeight: "350px"
+                                                }}
+                                            />
+                                        }
+                                        {errors.coverImg && <Typography color="error">{errors.coverImg}</Typography>}
+                                        <Button
+                                            variant='contained'
+                                            fullWidth
+                                            color='primary'
+                                            size='medium'
+                                            onClick={() => {
+                                                setErrors(prevErrors => ({
+                                                    ...prevErrors, // Keep the previous error state
+                                                    coverImg: ""
+                                                }));
+                                                setOpenDialog({
+                                                    fileName: "fileCover",
+                                                    name: "coverImg",
+                                                    open: true
+                                                })
+                                            }}
+                                        >
+                                            {t("addImage")}
+                                        </Button>
+                                    </Grid>
+                                    <Grid md={4} xs={12}>
+                                        {(watch("imgOne") || watch("fileImgOne")) &&
+                                            <Image
+                                                src={previewImage(watch("imgOne") || watch("fileImgOne"))}
+                                                alt="imgOne"
+                                                width={100}
+                                                height={100}
+                                                objectFit='cover'
+                                                layout='responsive'
+                                                style={{
+                                                    width: "100%",
+                                                    maxHeight: "350px"
+                                                }}
+                                            />
+                                        }
+                                        {errors.imgOne && <Typography color="error">{errors.imgOne}</Typography>}
+                                        <Button
+                                            variant='contained'
+                                            fullWidth
+                                            color='primary'
+                                            size='medium'
+                                            onClick={() => {
+                                                setErrors(prevErrors => ({
+                                                    ...prevErrors, // Keep the previous error state
+                                                    imgOne: ""
+                                                }));
+                                                setOpenDialog({
+                                                    fileName: "fileImgOne",
+                                                    name: "imgOne",
+                                                    open: true
+                                                })
+                                            }}
+                                        >
+                                            {t("addImage")}
+                                        </Button>
+                                    </Grid>
+                                    <Grid md={4} xs={12}>
+                                        {(watch("imgTwo") || watch("fileImgTwo")) &&
+                                            <Image
+                                                src={previewImage(watch("imgTwo") || watch("fileImgTwo"))}
+                                                alt="imgTwo"
+                                                width={100}
+                                                height={100}
+                                                objectFit='cover'
+                                                layout='responsive'
+                                                style={{
+                                                    width: "100%",
+                                                    maxHeight: "350px"
+                                                }}
+                                            />
+                                        }
+                                        {errors.imgTwo && <Typography color="error">{errors.imgTwo}</Typography>}
+                                        <Button
+                                            variant='contained'
+                                            fullWidth
+                                            color='primary'
+                                            size='medium'
+                                            onClick={() => {
+                                                setErrors(prevErrors => ({
+                                                    ...prevErrors, // Keep the previous error state
+                                                    imgTwo: ""
+                                                }));
+                                                setOpenDialog({
+                                                    fileName: "fileImgTwo",
+                                                    name: "imgTwo",
+                                                    open: true
+                                                })
+                                            }}
+                                        >
+                                            {t("addImage")}
+                                        </Button>
+                                    </Grid>
+                                    <Grid md={4} xs={12}>
+                                        {(watch("imgThree") || watch("fileImgThree")) &&
+                                            <Image
+                                                src={previewImage(watch("imgThree") || watch("fileImgThree"))}
+                                                alt="imgThree"
+                                                width={100}
+                                                height={100}
+                                                objectFit='cover'
+                                                layout='responsive'
+                                                style={{
+                                                    width: "100%",
+                                                    maxHeight: "350px"
+                                                }}
+                                            />
+                                        }
+                                        {errors.imgThree && <Typography color="error">{errors.imgThree}</Typography>}
+                                        <Button
+                                            variant='contained'
+                                            fullWidth
+                                            color='primary'
+                                            size='medium'
+                                            onClick={() => {
+                                                setErrors(prevErrors => ({
+                                                    ...prevErrors, // Keep the previous error state
+                                                    imgThree: ""
+                                                }));
+                                                setOpenDialog({
+                                                    fileName: "fileImgThree",
+                                                    name: "imgThree",
+                                                    open: true
+                                                })
+                                            }}
+                                        >
+                                            {t("addImage")}
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </Box>
                         </Grid>
                         <Grid md={6} xs={12}>
                             <Box width={"100%"}>
@@ -279,10 +551,7 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                         </Grid>
 
                         <Grid md={12} xs={12} display={"flex"} justifyContent={"flex-end"}>
-                            <Button variant={"contained"} fullWidth>{t("addImages")}</Button>
-                        </Grid>
-                        <Grid md={12} xs={12} display={"flex"} justifyContent={"flex-end"}>
-                            <Button variant={"contained"} type={"submit"}>{t("save")}</Button>
+                            <LoadingButton loading={loading} variant={"contained"} type={"submit"}>{t("save")}</LoadingButton>
                         </Grid>
                     </Grid>
                 </Paper>

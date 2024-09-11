@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { styled } from "@mui/material/styles";
 import { keyframes } from '@mui/system';
 import SectionTitle from '../ui/SectionTitle';
+import Image from 'next/image';
 // import { useAppSelector } from '../store/store';
 
 const PREFIX = "Clients";
@@ -83,12 +84,12 @@ const Clients = ({ data }: { data: { id: string, name: string, nameAr: string, i
                 >
                     {data.map((client, index) => (
                         <div className={classes.slide} key={index}>
-                            <img src={client.image} alt={`data`} />
+                            <Image height={200} width={200} src={client.image} alt={`data`} layout='responsive' style={{ borderRadius: "50%", width: "100%" }} />
                         </div>
                     ))}
                     {data.map((client, index) => (
                         <div className={classes.slide} key={index}>
-                            <img src={client.image} alt={`data`} />
+                            <Image height={200} width={200} src={client.image} alt={`data`} layout='responsive' style={{ borderRadius: "50%", width: "100%" }} />
                         </div>
                     ))}
                 </Box>

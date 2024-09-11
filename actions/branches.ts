@@ -101,6 +101,8 @@ export async function addBranch(formData: FormData) {
                 mobile: data.mobile,
                 image,
             }
+        }).catch((error) => {
+            return error
         })
     }
 

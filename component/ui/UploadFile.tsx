@@ -17,6 +17,7 @@ interface UploadFileProps extends Omit<TextFieldProps, 'name' | 'control'> {
     setValue: any;
     iconDisable?: boolean;
     rules: any
+    fileName?: string
 }
 
 const UploadFile: React.FC<UploadFileProps> = (props) => {
@@ -30,6 +31,7 @@ const UploadFile: React.FC<UploadFileProps> = (props) => {
         setValue,
         iconDisable,
         rules,
+        fileName,
         ...restProps
     } = props;
 
@@ -44,7 +46,7 @@ const UploadFile: React.FC<UploadFileProps> = (props) => {
 
     const handelChangeShipment = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.item(0)?.name) {
-            setValue("fileName", e.target.files?.item(0)?.name, {
+            setValue(fileName ?? "fileName", e.target.files?.item(0)?.name, {
                 shouldValidate: true,
             });
         }
@@ -53,7 +55,7 @@ const UploadFile: React.FC<UploadFileProps> = (props) => {
     return (
         <ControlMUITextField
             control={control}
-            name="fileName"
+            name={fileName ?? "fileName"}
             readOnly
             rules={rules}
             {...restProps}

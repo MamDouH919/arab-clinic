@@ -31,6 +31,7 @@ export default function CustomDialog(props: propsInput) {
                 open={open}
                 onClose={handleClose}
                 PaperProps={PaperProps}
+                maxWidth={props.maxWidth ?? 'sm'}
             >
                 {title &&
                     <Paper sx={{ background: (theme) => theme.palette.divider }}>

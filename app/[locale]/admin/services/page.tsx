@@ -38,7 +38,7 @@ const Page = async ({
 export default Page
 
 const NewsData = async ({ locale }: { locale: string }) => {
-    const news = await db.services.findMany({
+    const services = await db.services.findMany({
         select: {
             id: true,
             icon: true,
@@ -48,9 +48,9 @@ const NewsData = async ({ locale }: { locale: string }) => {
         orderBy: { createdAt: "asc" },
     })
 
-    if (news.length === 0) return <NoData />
+    if (services.length === 0) return <NoData />
 
-    return news.map((item) => (
+    return services.map((item) => (
         <Grid display={"flex"} key={item.id} xs={12} sm={6} md={4} lg={3} xl={2}>
             <Paper sx={{ padding: "20px", width: "100%" }}>
                 <Stack spacing={2}>
@@ -66,7 +66,7 @@ const NewsData = async ({ locale }: { locale: string }) => {
                     <Typography variant="h6" fontSize={25} textAlign={"center"}>{locale === "en" ? item.title : item.titleAr}</Typography>
 
                     <Stack direction={"row"} spacing={1} >
-                        <IconButton size="small" component={Link} href={`/admin/news/${item.id}`}>
+                        <IconButton size="small" component={Link} href={`/admin/services/${item.id}`}>
                             <EditIcon fontSize='small' />
                         </IconButton>
                         <DeleteItem deleteFun={deleteNews} id={item.id}>

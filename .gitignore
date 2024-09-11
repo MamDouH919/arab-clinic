@@ -38,5 +38,6 @@ next-env.d.ts
 /public/news
 /public/clients
 /public/branches
+/public/services
 .env
 /prisma/dev.db

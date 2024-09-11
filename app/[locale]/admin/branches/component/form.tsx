@@ -56,6 +56,8 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: stri
 
         const result = id ? await updateBranch(formData, id) : await addBranch(formData);
 
+        console.log(result);
+
         if (result) {
             for (const [field, messages] of Object.entries(result)) {
                 if (field === "image") {

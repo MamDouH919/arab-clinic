@@ -1,13 +1,9 @@
-import React from 'react'
+import Loading from '@/component/ui/Loading'
 
-const Loading = () => {
+const WebsiteLoading = () => {
     return (
-        <div>
-            <h1>Loading...</h1>
-            <h1>Loading...</h1>
-            <h1>Loading...</h1>
-        </div>
+        <Loading />
     )
 }
 
-export default Loading
+export default WebsiteLoading

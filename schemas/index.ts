@@ -208,16 +208,30 @@ export const AddServicesSchema = z.object({
     message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
   }),
   icon: imageSchema.refine(file => file.size < 10 * 1024 && file.size > 0, i18n.language === "en" ? "File must be smaller than 10KB" : "يجب أن يكون الملف أصغر من 10 كيلوبايت"),
-  imgOne: imageSchema.refine(file => file.size < 250 * 1024 && file.size > 0, i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250 كيلوبايت"),
-  imgTwo: imageSchema.refine(file => file.size < 250 * 1024 && file.size > 0, i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250 كيلوبايت"),
+  // imgOne: imageSchema.refine(file => file.size < 250 * 1024 && file.size > 0, i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250 كيلوبايت"),
+  // imgTwo: imageSchema.refine(file => file.size < 250 * 1024 && file.size > 0, i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250 كيلوبايت"),
   coverImg: imageSchema.refine(file => file.size < 250 * 1024 && file.size > 0, i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250 كيلوبايت"),
-  imgThree: imageSchema.refine(file => file.size < 250 * 1024 && file.size > 0, i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250 كيلوبايت")
+  imgOne: fileSchema
+    .refine(
+      file => file && file.size < 250 * 1024 && file.size > 0,
+      { message: i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250 كيلوبايت" }
+    )
+    .optional(),
+  imgTwo: fileSchema
+    .refine(
+      file => file && file.size < 250 * 1024 && file.size > 0,
+      { message: i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250 كيلوبايت" }
+    )
+    .optional(),
+  imgThree: fileSchema
+    .refine(
+      file => file && file.size < 250 * 1024 && file.size > 0,
+      { message: i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250 كيلوبايت" }
+    )
+    .optional()
 })
 
 export const UpdateServicesSchema = AddServicesSchema.extend({
-  icon: imageSchema.optional(),
-  imgOne: imageSchema.optional(),
-  imgTwo: imageSchema.optional(),
-  coverImg: imageSchema.optional(),
-  imgThree: imageSchema.optional(),
+  icon: imageSchema.refine(file => file.size < 10 * 1024, i18n.language === "en" ? "File must be smaller than 10KB" : "يجب أن يكون الملف أصغر من 10 كيلوبايت").optional(),
+  coverImg: imageSchema.refine(file => file.size < 250 * 1024, i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250 كيلوبايت").optional(),
 })
