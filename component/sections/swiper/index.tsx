@@ -11,6 +11,7 @@ import 'swiper/css/navigation';
 import './style.css';
 
 import { Box } from '@mui/material';
+import Image from 'next/image';
 
 const Root = styled(Box)(({ theme }) => ({
     [`& .swiper-pagination-bullet`]: {
@@ -51,34 +52,68 @@ const Root = styled(Box)(({ theme }) => ({
     },
 }));
 
-const SwiperSection = () => {
+interface inputProps {
+    imgOne?: string
+    imgTwo?: string
+    imgThree?: string
+    title: string
+}
+
+
+const SwiperSection = (props: inputProps) => {
+    const {
+        imgOne,
+        imgTwo,
+        imgThree,
+        title
+    } = props
     return (
         <Root id={"id"}>
-            <Box sx={{ height: "100dvh", position: "relative", }}>
+            <Box sx={{ height: "100dvh", position: "relative" }}>
                 <Swiper
                     spaceBetween={0}
                     className="profileSwiper"
+                    loop={true}
                 >
-                    {/* {[{
-                        image: image,
-                        title: 'Work 1',
-                    }, {
-                        image: image2,
-                        title: 'Work 2',
-                    }, {
-                        image: image3,
-                        title: 'Work 3',
-                    }, {
-                        image: image4,
-                        title: 'Work 4',
-                    }, {
-                        image: image5,
-                        title: 'Work 5',
-                    }].map((item, index) => (
-                        <SwiperSlide key={index}>
-                            <img src={item.image} alt="" />
+                    {imgOne &&
+                        <SwiperSlide>
+                            <Image
+                                src={imgOne}
+                                alt={title}
+                                width={1200}
+                                height={1200}
+                                layout="responsive"
+                                objectFit='contain'
+                                style={{ width: '100%', height: "100%" }}
+                            />
                         </SwiperSlide>
-                    ))} */}
+                    }
+                    {imgTwo &&
+                        <SwiperSlide>
+                            <Image
+                                src={imgTwo}
+                                alt={title}
+                                width={1200}
+                                height={1200}
+                                objectFit='contain'
+                                layout="responsive"
+                                style={{ width: '100%', height: "100%" }}
+                            />
+                        </SwiperSlide>
+                    }
+                    {imgThree &&
+                        <SwiperSlide>
+                            <Image
+                                src={imgThree}
+                                alt={title}
+                                width={1200}
+                                height={1200}
+                                objectFit='contain'
+                                layout="responsive"
+                                style={{ width: '100%', height: "100%" }}
+                            />
+                        </SwiperSlide>
+                    }
                 </Swiper>
             </Box>
         </Root>

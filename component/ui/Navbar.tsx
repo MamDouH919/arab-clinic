@@ -141,10 +141,13 @@ function Navbar() {
     }, [shouldShowHeader]);
 
 
+    console.log(pathname);
+    console.log(pathname.includes("/services"));
+
     return (
         <Root
             position={shouldShowHeader ? "fixed" : "absolute"}
-            sx={{ background: "transparent" }}
+            sx={{ background: (theme) => pathname.includes("/services") ? theme.palette.background.default : "transparent" }}
             className={clsx({
                 [classes.stickyHeader]: shouldShowHeader,
                 [animationClass]: shouldShowHeader,

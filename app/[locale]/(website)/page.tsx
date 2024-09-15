@@ -5,6 +5,7 @@ import Branches from '@/component/sections/Branches'
 import Clients from '@/component/sections/Clients'
 import Contact from '@/component/sections/Contact'
 import Highlights from '@/component/sections/Highlights'
+import Services from '@/component/sections/Services'
 import db from '@/db/db'
 import React from 'react'
 
@@ -48,12 +49,27 @@ async function getClientsData() {
     return data
 }
 
+async function getServicesData() {
+    const data = await db.services.findMany({
+        select: {
+            id: true,
+            title: true,
+            titleAr: true,
+            icon: true,
+            description: true,
+            descriptionAr: true
+        }
+    })
+    return data
+}
+
 
 const Page = async () => {
-    const [highlightsData, branchesData, clientsData] = await Promise.all([
+    const [highlightsData, branchesData, clientsData, servicesData] = await Promise.all([
         getHighlightsData(),
         getBranchesData(),
-        getClientsData()
+        getClientsData(),
+        getServicesData()
     ])
 
     return (
@@ -61,6 +77,7 @@ const Page = async () => {
             <BannerSwiper />
             <Highlights data={highlightsData} />
             <About />
+            <Services data={servicesData} />
             <Contact />
             <Branches data={branchesData} />
             <Clients data={clientsData} />

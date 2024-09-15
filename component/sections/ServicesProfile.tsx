@@ -6,6 +6,8 @@ import Grid from '@mui/material/Unstable_Grid2';
 import SwiperSection from './swiper';
 import YouTube from 'react-youtube';
 import { isMobile } from 'react-device-detect';
+import NoData from '../ui/NoData';
+import { useTranslation } from 'react-i18next';
 
 const PREFIX = "Navbar";
 const classes = {
@@ -37,11 +39,35 @@ const Root = styled("div")(({ theme }) => ({
     }
 }));
 
-const ServicesProfile = () => {
+interface inputProps {
+    data: {
+        title: string;
+        id: string;
+        titleAr: string;
+        description: string;
+        descriptionAr: string;
+        icon: string;
+        coverImg: string;
+        imgOne: string | null;
+        imgTwo: string | null;
+        imgThree: string | null;
+    } | null
+}
+
+const ServicesProfile = (props: inputProps) => {
+    const { data } = props
+    console.log(data);
+    const { t, i18n } = useTranslation()
+
+    if (!data) {
+        return <Stack height={"100vh"}>
+            <NoData />
+        </Stack>
+    }
     return (
         <Root>
             <div className={classes.bannerBackground} style={{
-                backgroundImage: `url('/staticImages/contactDark.png')`,
+                backgroundImage: `url('${data.coverImg}')`,
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center center',
                 backgroundSize: 'cover',
@@ -50,7 +76,9 @@ const ServicesProfile = () => {
             <Container maxWidth={'lg'} sx={{ my: 20 }}>
                 <Stack spacing={5} >
                     <Typography variant="body1" sx={{ fontWeight: "bold" }} color={"text.secondary"} textAlign={"center"}>
-                        sdjfsdhfj
+                        <div
+                            dangerouslySetInnerHTML={{ __html: i18n.language === "en" ? data.description : data.descriptionAr }}
+                        />
                     </Typography>
                     {/* <Grid container spacing={4} m={0} alignItems={"center"} justifyContent={"center"}>
                         <Grid sm={12} md={3}>
@@ -100,7 +128,12 @@ const ServicesProfile = () => {
                     </Grid> */}
                 </Stack>
             </Container>
-            <SwiperSection />
+            {(data.imgOne || data.imgTwo || data.imgThree) && <SwiperSection
+                title={i18n.language === "en" ? data.title : data.titleAr}
+                imgOne={data.imgOne ?? undefined}
+                imgTwo={data.imgTwo ?? undefined}
+                imgThree={data.imgThree ?? undefined}
+            />}
             <Container maxWidth={'lg'} sx={{ my: 20 }}>
                 <Grid container spacing={4} m={0}>
                     <Grid xs={12} md={6}>

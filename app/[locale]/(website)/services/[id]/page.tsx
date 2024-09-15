@@ -8,7 +8,7 @@ const Page = async ({ params: { id, locale } }: { params: { id: string, locale: 
 
     return (
         <div>
-            <ServicesProfile />
+            <ServicesProfile data={fff} />
         </div>
     )
 }
