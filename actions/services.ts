@@ -5,8 +5,12 @@ import { revalidatePath } from "next/cache"
 import fs from "fs/promises"
 import { AddServicesSchema, UpdateServicesSchema } from "@/schemas";
 import { notFound } from "next/navigation";
+import { isValidObjectId } from "@/component/helperFunctions/isValidObjectId";
 
 export async function getServicesById(id: string) {
+    const check = isValidObjectId(id)
+    if (!check) return null
+
     const service = await db.services.findUnique({
         where: { id },
         select: {

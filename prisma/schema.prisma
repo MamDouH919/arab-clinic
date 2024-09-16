@@ -15,8 +15,16 @@ datasource db {
 //   url      = env("DATABASE_URL")
 // }
 
+model VideosLink {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  content   String
+  serviceId String   @db.ObjectId // Use @db.ObjectId to match the Services model
+  service   Services @relation(fields: [serviceId], references: [id])
+}
+
 model Services {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   titleAr       String
   description   String
@@ -26,8 +34,9 @@ model Services {
   imgOne        String?
   imgTwo        String?
   imgThree      String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  videosLink    VideosLink[]
 }
 
 model highlights {
@@ -103,11 +112,11 @@ enum ClientType {
 }
 
 model Clients {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   nameAr    String
   image     String
   type      ClientType
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }

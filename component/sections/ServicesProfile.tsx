@@ -74,8 +74,8 @@ const ServicesProfile = (props: inputProps) => {
                 backgroundAttachment: isMobile ? "inherit" : "fixed",
             }}></div>
             <Container maxWidth={'lg'} sx={{ my: 20 }}>
-                <Stack spacing={5} >
-                    <Typography variant="body1" sx={{ fontWeight: "bold" }} color={"text.secondary"} textAlign={"center"}>
+                <Stack spacing={5} alignItems={"center"}>
+                    <Typography variant="body1" sx={{ fontWeight: "bold" }} color={"text.secondary"}>
                         <div
                             dangerouslySetInnerHTML={{ __html: i18n.language === "en" ? data.description : data.descriptionAr }}
                         />
@@ -137,7 +137,11 @@ const ServicesProfile = (props: inputProps) => {
             <Container maxWidth={'lg'} sx={{ my: 20 }}>
                 <Grid container spacing={4} m={0}>
                     <Grid xs={12} md={6}>
-                        <YouTube videoId="mS3tCWnNRqk" className={classes.video} />
+                        <YouTube
+                            videoId="mS3tCWnNRqk"
+                            className={classes.video}
+                            title="Video string"
+                        />
                     </Grid>
                     <Grid xs={12} md={6}>
                         <YouTube

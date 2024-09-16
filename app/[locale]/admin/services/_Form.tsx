@@ -245,7 +245,7 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                             fileName={openDialog.fileName}
                             icon={"add_photo_alternate"}
                             label={t("uploadImage")}
-                            accept=".png,.jpg,.svg"
+                            accept=".png,.jpg,.svg,jpeg"
                             rules={{
                                 validate: {
                                     require: (value: any) =>

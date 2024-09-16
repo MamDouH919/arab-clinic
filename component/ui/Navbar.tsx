@@ -140,10 +140,6 @@ function Navbar() {
         }
     }, [shouldShowHeader]);
 
-
-    console.log(pathname);
-    console.log(pathname.includes("/services"));
-
     return (
         <Root
             position={shouldShowHeader ? "fixed" : "absolute"}
