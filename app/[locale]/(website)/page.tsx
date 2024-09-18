@@ -65,12 +65,16 @@ async function getServicesData() {
 
 
 const Page = async () => {
-    const [highlightsData, branchesData, clientsData, servicesData] = await Promise.all([
-        getHighlightsData(),
-        getBranchesData(),
-        getClientsData(),
-        getServicesData()
-    ])
+    // const [highlightsData, branchesData, clientsData, servicesData] = await Promise.all([
+    //     getHighlightsData(),
+    //     getBranchesData(),
+    //     getClientsData(),
+    //     getServicesData()
+    // ])
+    const highlightsData = await getHighlightsData()
+    const branchesData = await getBranchesData()
+    const clientsData = await getClientsData()
+    const servicesData = await getServicesData()
 
     return (
         <div>
