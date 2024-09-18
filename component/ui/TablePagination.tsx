@@ -1,5 +1,4 @@
 import { TablePagination } from "@mui/material";
-import PropTypes from "prop-types";
 import React from "react";
 import { styled } from "@mui/material/styles";
 import { useTranslation } from "react-i18next";
@@ -66,14 +65,6 @@ const MUITablePagination = (props: any) => {
             />
         </Root>
     );
-};
-
-MUITablePagination.propTypes = {
-    count: PropTypes.number,
-    rowsPerPage: PropTypes.number,
-    page: PropTypes.number,
-    onPageChange: PropTypes.func,
-    onRowsPerPageChange: PropTypes.func,
 };
 
 export default MUITablePagination;
