@@ -10,7 +10,7 @@ const nextConfig = {
             },
             {
                 protocol: 'http',
-                hostname: 'localhost', // This allows images from any domain over HTTP
+                hostname: '*', // This allows images from any domain over HTTP
             },
         ],
     },
