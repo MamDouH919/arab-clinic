@@ -7,20 +7,19 @@ import { revalidatePath } from "next/cache"
 import fs from "fs/promises"
 import * as z from "zod"
 import { AddBranchesSchema, UpdateBranchesSchema } from "@/schemas"
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 
 const fileSchema = z.instanceof(File, { message: "Required" })
 const imageSchema = fileSchema.refine(
     file => file.size === 200 || file.type.startsWith("image/")
 )
 
-const s3Client = new S3Client({
-    region: process.env.NEXT_AWS_S3_REGION || 'eu-north-1',
-    credentials: {
-        accessKeyId: process.env.NEXT_AWS_S3_ACCESS_KEY_ID || 'AKIA4AQ3UJQNGJGUI6YZ',
-        secretAccessKey: process.env.NEXT_AWS_S3_SECRET_ACCESS_KEY || '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',
-    },
-});
+// const s3Client = new S3Client({
+//     region: process.env.NEXT_AWS_S3_REGION || 'eu-north-1',
+//     credentials: {
+//         accessKeyId: process.env.NEXT_AWS_S3_ACCESS_KEY_ID || 'AKIA4AQ3UJQNGJGUI6YZ',
+//         secretAccessKey: process.env.NEXT_AWS_S3_SECRET_ACCESS_KEY || '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',
+//     },
+// });
 
 async function uploadFileToS3(file: any, fileName: string) {
     const fileBuffer = file
@@ -32,10 +31,10 @@ async function uploadFileToS3(file: any, fileName: string) {
         ContentType: "image/jpg",
     };
 
-    const command = new PutObjectCommand(params);
+    // const command = new PutObjectCommand(params);
     try {
-        const response = await s3Client.send(command);
-        console.log("File uploaded successfully:", response);
+        // const response = await s3Client.send(command);
+        // console.log("File uploaded successfully:", response);
         return fileName;
     } catch (error) {
         throw error;
@@ -183,8 +182,8 @@ export async function updateBranch(formData: FormData, id: string) {
             Bucket: process.env.NEXT_AWS_S3_BUCKET_NAME || 'arabclinic',
             Key: imagePath,
         }
-        var deleteObjectRequest = new DeleteObjectCommand(param)
-        await s3Client.send(deleteObjectRequest);
+        // var deleteObjectRequest = new DeleteObjectCommand(param)
+        // await s3Client.send(deleteObjectRequest);
 
         imagePath = `/branches/${crypto.randomUUID()}-${data.image.name}`
         const buffer = Buffer.from(await data.image.arrayBuffer());

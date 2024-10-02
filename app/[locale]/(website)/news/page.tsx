@@ -36,7 +36,7 @@ const NewsData = async ({ locale }: { locale: string }) => {
                 id: true,
                 description: true,
                 descriptionAr: true,
-                image: true,
+                imagePath: true,
                 title: true,
                 titleAr: true,
                 createdAt: true,
@@ -58,7 +58,7 @@ const NewsData = async ({ locale }: { locale: string }) => {
                     <Paper sx={{ padding: "20px", width: "100%" }}>
                         <Stack spacing={2}>
                             <Image
-                                src={item.image}
+                                src={item.imagePath}
                                 alt={item.title}
                                 width={200} // Required for Next.js Image optimization
                                 height={200} // Required for Next.js Image optimization

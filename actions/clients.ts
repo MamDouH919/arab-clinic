@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache"
 import fs from "fs/promises"
 import * as z from "zod"
 import { AddClientsSchema, UpdateClientsSchema } from "@/schemas"
-import { ClientType } from "@prisma/client"
+// import { ClientType } from "@prisma/client"
 import { storage } from '@/firebase'
 import { deleteObject, ref } from 'firebase/storage'
 import { saveImage } from "./saveImage"
@@ -66,7 +66,7 @@ export async function deleteClient(id: string) {
 export async function addClient(formData: FormData) {
     const name = formData.get("name") as string;
     const nameAr = formData.get("nameAr") as string;
-    const type = formData.get("type") as ClientType;
+    const type = formData.get("type");
     const image = formData.get("image") as File | null;
 
     const parsedData = {
@@ -91,7 +91,7 @@ export async function addClient(formData: FormData) {
             data: {
                 nameAr: data.nameAr,
                 name: data.name,
-                type: ClientType[data.type as keyof typeof ClientType],
+                type: data.type,
                 imagePath: imagePath,
                 imageName: imageName,
             }
@@ -137,7 +137,7 @@ export async function updateClient(formData: FormData, id: string) {
                 data: {
                     nameAr: data.nameAr,
                     name: data.name,
-                    type: ClientType[data.type as keyof typeof ClientType],
+                    type: data.type,
                     imageName: imageName,
                     imagePath: imagePath,
                 },
