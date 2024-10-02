@@ -26,5 +26,6 @@
   "mobile": "mobile",
   "message": "message",
   "yorMessageHasBeenSent": "your message has been sent",
-  "send": "send"
+  "send": "send",
+  "viewAllClients":"view all clients"
 }

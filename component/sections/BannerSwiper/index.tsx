@@ -88,7 +88,7 @@ const BannerSwiper = () => {
                     {[1, 2].map((item, index) => (
                         <SwiperSlide key={index}>
                             <div className='content-background'></div>
-                            <Typography variant='h1' fontSize={{ xs: "35px", md: "60px", lg: "80px" }} width={"80%"} className='content'>{"sdfsd"}</Typography>
+                            {/* <Typography variant='h1' fontSize={{ xs: "35px", md: "60px", lg: "80px" }} width={"80%"} className='content'>{"sdfsd"}</Typography> */}
                             <img src={'/staticImages/about/about.webp'} alt={"dksfjkd"} srcSet={'/staticImages/about/about.webp'} />
                         </SwiperSlide>
                     ))}

@@ -10,74 +10,6 @@ import db from '@/db/db'
 import { cache } from '@/lib/cache'
 import React from 'react'
 
-// const getHighlightsData = cache(
-//     () => {
-//         return db.highlights.findMany({
-//             select: {
-//                 id: true,
-//                 nameAr: true,
-//                 nameEn: true,
-//                 number: true,
-//             }
-//         })
-//     },
-//     ["/", "getHighlightsData"],
-//     { revalidate: 60 * 60 * 24 }
-// )
-// // async function getHighlightsData() {
-// //     const data = await db.highlights.findMany({
-// //         select: {
-// //             id: true,
-// //             nameAr: true,
-// //             nameEn: true,
-// //             number: true,
-// //         }
-// //     })
-// //     return data
-// // }
-
-// async function getBranchesData() {
-//     const data = await db.branches.findMany({
-//         select: {
-//             id: true,
-//             name: true,
-//             nameAr: true,
-//             location: true,
-//             locationAr: true,
-//             mobile: true,
-//             whatsApp: true,
-//             image: true,
-//         }
-//     })
-//     return data
-// }
-
-// async function getClientsData() {
-//     const data = await db.clients.findMany({
-//         select: {
-//             id: true,
-//             name: true,
-//             nameAr: true,
-//             image: true,
-//         }
-//     })
-//     return data
-// }
-
-// async function getServicesData() {
-//     const data = await db.services.findMany({
-//         select: {
-//             id: true,
-//             title: true,
-//             titleAr: true,
-//             icon: true,
-//             description: true,
-//             descriptionAr: true
-//         }
-//     })
-//     return data
-// }
-
 async function fetchHighlightsFromAPI() {
     const response = await fetch(`${process.env.BACKEND}/api/highlights`, {
         cache: 'no-store', // Disable caching
@@ -121,7 +53,6 @@ async function fetchServicesFromAPI() {
 }
 
 
-
 const Page = async () => {
     const [branchesData, clientsData, servicesData, highlightsData] = await Promise.all([
         fetchBranchesFromAPI(),
@@ -130,20 +61,15 @@ const Page = async () => {
         fetchHighlightsFromAPI()
     ])
 
-    // const highlightsData = await getHighlightsData()
-    // const branchesData = await getBranchesData()
-    // const clientsData = await getClientsData()
-    // const servicesData = await getServicesData()
-
     return (
         <div>
             <BannerSwiper />
-            <Highlights data={highlightsData.data} />
+            {!!highlightsData.data.length && <Highlights data={highlightsData.data} />}
             <About />
-            <Services data={servicesData.data} />
+            {!!servicesData.data.length && <Services data={servicesData.data} />}
             <Contact />
-            <Branches data={branchesData.data} />
-            <Clients data={clientsData.data} />
+            {!!branchesData.data.length && <Branches data={branchesData.data} />}
+            {!!clientsData.data.length && <Clients data={clientsData.data} />}
         </div>
     )
 }

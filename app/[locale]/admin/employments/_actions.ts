@@ -13,6 +13,6 @@ export async function deleteJob(id: string) {
     await fs.unlink(job.file)
 
     revalidatePath("/")
-    revalidatePath("/admin/highlights")
+    revalidatePath("/admin/employments")
 }
 

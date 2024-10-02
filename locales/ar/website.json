@@ -26,5 +26,6 @@
   "mobile": "الهاتف المحمول",
   "message": "الرسالة",
   "yorMessageHasBeenSent": "تم إرسال رسالتك",
-  "send": "إرسال"
+  "send": "إرسال",
+  "viewAllClients": "عرض جميع العملاء"
 }

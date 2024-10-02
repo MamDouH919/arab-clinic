@@ -31,7 +31,6 @@ const DeleteItem = ({ children, id, deleteFun }: { children: React.ReactNode, id
                 open={openDialog}
                 handleClose={closeDialog}
                 title={t("delete")}
-                maxWidth='md'
                 content={
                     <Box p={2}>
                         <Typography>{t("deleteMSG")}</Typography>

@@ -11,7 +11,7 @@ async function getClientsNqData() {
             id: true,
             name: true,
             nameAr: true,
-            image: true,
+            imagePath: true,
         }
     })
     return data
@@ -24,7 +24,7 @@ async function getClientsCoData() {
             id: true,
             name: true,
             nameAr: true,
-            image: true,
+            imagePath: true,
         }
     })
     return data
@@ -37,7 +37,7 @@ async function getClientsHcData() {
             id: true,
             name: true,
             nameAr: true,
-            image: true,
+            imagePath: true,
         }
     })
     return data
@@ -50,7 +50,7 @@ async function getClientsDcData() {
             id: true,
             name: true,
             nameAr: true,
-            image: true,
+            imagePath: true,
         }
     })
     return data
@@ -64,34 +64,25 @@ const Page = async () => {
         getClientsDcData()
     ])
 
-    console.log(clientsNqData);
-    console.log(clientsCoData);
-    console.log(clientsHcData);
-    console.log(clientsDcData);
-
     return (
         <div>
             <BreadCrumb pageLink={"clients"} />
             {(clientsNqData.length === 0 && clientsCoData.length === 0 && clientsHcData.length === 0 && clientsDcData.length === 0) &&
                 <NoData label={"noData"} />}
             {clientsNqData.length > 0 && <StackImageTitle
-                sectionTitle={"sectionTitle"}
-                subSectionTitle={"subSectionTitle"}
+                sectionTitle={"syndicates"}
                 data={clientsNqData}
             />}
             {clientsCoData.length > 0 && <StackImageTitle
-                sectionTitle={"sectionTitle"}
-                subSectionTitle={"subSectionTitle"}
+                sectionTitle={"contractingCompanies"}
                 data={clientsCoData}
             />}
             {clientsHcData.length > 0 && <StackImageTitle
-                sectionTitle={"sectionTitle"}
-                subSectionTitle={"subSectionTitle"}
+                sectionTitle={"healthcareCompanies"}
                 data={clientsHcData}
             />}
             {clientsDcData.length > 0 && <StackImageTitle
-                sectionTitle={"sectionTitle"}
-                subSectionTitle={"subSectionTitle"}
+                sectionTitle={"discountContractCompanies"}
                 data={clientsDcData}
             />}
         </div>

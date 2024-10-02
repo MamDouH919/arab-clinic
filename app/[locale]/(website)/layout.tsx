@@ -2,6 +2,8 @@ import Footer from '@/component/ui/Footer'
 import Navbar from '@/component/ui/Navbar'
 import React from 'react'
 
+export const dynamic = "force-dynamic"
+
 const layout = ({ children }: { children: React.ReactNode }) => {
     return (
         <div>

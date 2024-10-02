@@ -8,6 +8,9 @@ import fs from "fs/promises"
 import * as z from "zod"
 import { AddClientsSchema, UpdateClientsSchema } from "@/schemas"
 import { ClientType } from "@prisma/client"
+import { storage } from '@/firebase'
+import { deleteObject, ref } from 'firebase/storage'
+import { saveImage } from "./saveImage"
 
 // export async function getBranches() {
 //     const branches = await db.branches.findMany({
@@ -36,7 +39,8 @@ export async function getClientsById(id: string) {
             name: true,
             type: true,
             createdAt: true,
-            image: true,
+            imageName: true,
+            imagePath: true,
         }
     });
     return client;
@@ -48,7 +52,12 @@ export async function deleteClient(id: string) {
 
     if (client == null) return notFound()
 
-    await fs.unlink(`public${client.image}`)
+    const imageName = client.imageName
+    const desertRef = ref(storage, imageName);
+
+    deleteObject(desertRef).then(async () => {
+
+    }).catch((err) => console.log(err))
 
     revalidatePath("/")
     revalidatePath("/admin/clients")
@@ -76,19 +85,15 @@ export async function addClient(formData: FormData) {
     const data = result.data;
 
     if (data.image) {
-        await fs.mkdir("public/clients", { recursive: true })
-        const image = `/clients/${crypto.randomUUID()}-${data.image.name}`
-        await fs.writeFile(
-            `public${image}`,
-            Buffer.from(await data.image.arrayBuffer())
-        )
+        const { imagePath, imageName } = await saveImage(data.image!, "clients")
 
         await db.clients.create({
             data: {
                 nameAr: data.nameAr,
                 name: data.name,
                 type: ClientType[data.type as keyof typeof ClientType],
-                image,
+                imagePath: imagePath,
+                imageName: imageName,
             }
         })
     }
@@ -121,25 +126,36 @@ export async function updateClient(formData: FormData, id: string) {
 
     if (client == null) return notFound()
 
-    let imagePath = client.image
+    let prevImageName = client.imageName
     if (data.image != null && data.image.size > 0) {
-        await fs.unlink(`public${client.image}`)
-        imagePath = `/clients/${crypto.randomUUID()}-${data.image.name}`
-        await fs.writeFile(
-            `public${imagePath}`,
-            Buffer.from(await data.image.arrayBuffer())
-        )
+        const desertRef = ref(storage, prevImageName);
+        deleteObject(desertRef).then(async () => {
+            const { imagePath, imageName } = await saveImage(data.image!, "clients")
+            // File deleted successfully
+            await db.clients.update({
+                where: { id },
+                data: {
+                    nameAr: data.nameAr,
+                    name: data.name,
+                    type: ClientType[data.type as keyof typeof ClientType],
+                    imageName: imageName,
+                    imagePath: imagePath,
+                },
+            })
+        }).catch((error) => {
+            console.log(error)
+
+            // Uh-oh, an error occurred!
+        });
+        // await fs.unlink(`public${client.image}`)
+        // imagePath = `/clients/${crypto.randomUUID()}-${data.image.name}`
+        // await fs.writeFile(
+        //     `public${imagePath}`,
+        //     Buffer.from(await data.image.arrayBuffer())
+        // )
     }
 
-    await db.clients.update({
-        where: { id },
-        data: {
-            nameAr: data.nameAr,
-            name: data.name,
-            type: ClientType[data.type as keyof typeof ClientType],
-            image: imagePath,
-        },
-    })
+
 
     revalidatePath("/")
     revalidatePath("/clients")

@@ -7,6 +7,9 @@ import { revalidatePath } from "next/cache"
 import fs from "fs/promises"
 import * as z from "zod"
 import { AddNewsSchema, UpdateNewsSchema } from "@/schemas"
+import { saveImage } from "./saveImage"
+import { deleteObject, ref } from "firebase/storage"
+import { storage } from "@/firebase"
 
 const fileSchema = z.instanceof(File, { message: "Required" })
 const imageSchema = fileSchema.refine(
@@ -18,7 +21,11 @@ export async function deleteNews(id: string) {
 
     if (news == null) return notFound()
 
-    await fs.unlink(`public${news.image}`)
+    const imageName = news.imageName
+    const desertRef = ref(storage, imageName);
+    deleteObject(desertRef).then(async () => {
+
+    }).catch((err) => console.log(err))
 
     revalidatePath("/")
     revalidatePath("/admin/news")
@@ -48,20 +55,15 @@ export async function addNews(formData: FormData) {
     const data = result.data;
 
     if (data.image) {
-        await fs.mkdir("public/news", { recursive: true })
-        const image = `/news/${crypto.randomUUID()}-${data.image.name}`
-        await fs.writeFile(
-            `public${image}`,
-            Buffer.from(await data.image.arrayBuffer())
-        )
-
+        const { imagePath, imageName } = await saveImage(data.image!, "news")
         await db.news.create({
             data: {
                 titleAr: data.titleAr,
                 title: data.title,
                 descriptionAr: data.descriptionAr,
                 description: data.description,
-                image,
+                imagePath: imagePath,
+                imageName: imageName,
             }
         })
     }
@@ -97,26 +99,31 @@ export async function updateNews(formData: FormData, id: string) {
 
     if (news == null) return notFound()
 
-    let imagePath = news.image
+    let prevImageName = news.imageName
     if (data.image != null && data.image.size > 0) {
-        await fs.unlink(`public${news.image}`)
-        imagePath = `/news/${crypto.randomUUID()}-${data.image.name}`
-        await fs.writeFile(
-            `public${imagePath}`,
-            Buffer.from(await data.image.arrayBuffer())
-        )
+        const desertRef = ref(storage, prevImageName);
+        deleteObject(desertRef).then(async () => {
+            const { imagePath, imageName } = await saveImage(data.image!, "news")
+            // File deleted successfully
+            await db.news.update({
+                where: { id },
+                data: {
+                    titleAr: data.titleAr,
+                    title: data.title,
+                    descriptionAr: data.descriptionAr,
+                    description: data.description,
+                    imageName: imageName,
+                    imagePath: imagePath
+                },
+            })
+        }).catch((error) => {
+            console.log(error)
+
+            // Uh-oh, an error occurred!
+        });
     }
 
-    await db.news.update({
-        where: { id },
-        data: {
-            titleAr: data.titleAr,
-            title: data.title,
-            descriptionAr: data.descriptionAr,
-            description: data.description,
-            image: imagePath,
-        },
-    })
+
 
     revalidatePath("/")
     revalidatePath("/news")
@@ -132,7 +139,7 @@ export async function getNewsById(id: string) {
             title: true,
             descriptionAr: true,
             description: true,
-            image: true,
+            imagePath: true,
         }
     });
     return news;

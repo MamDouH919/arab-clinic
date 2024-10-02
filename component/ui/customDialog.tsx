@@ -12,7 +12,7 @@ interface propsInput {
     title?: string | React.ReactNode;
     content?: string | React.ReactNode;
     actions?: string | React.ReactNode;
-    maxWidth: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+    maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
 export default function CustomDialog(props: propsInput) {

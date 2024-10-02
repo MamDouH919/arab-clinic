@@ -17,6 +17,7 @@ import { addNews, updateNews } from '@/actions/new'
 import UploadFile from '@/component/ui/UploadFile'
 import ControlMUITextField from '@/component/ui/ControlMUItextField'
 import clsx from 'clsx'
+import LoadingButton from '@mui/lab/LoadingButton'
 
 // Loading component to display while ReactQuill is being loaded
 const Loading = () => <Skeleton height={"300px"} animation="wave" variant="rectangular" />;
@@ -54,35 +55,25 @@ interface News {
     title: string
     descriptionAr: string
     description: string
-    image: string
+    imagePath: string
 }
 
 const Form = ({ id, data }: { id?: string, data?: News }) => {
-
     const schema = id ? UpdateNewsSchema : AddNewsSchema;
-    console.log(schema);
+    const [loading, setLoading] = useState(false)
 
     const { t } = useTranslation(['dashboard']);
     const { control, handleSubmit, setError, setValue, watch } = useForm<z.infer<typeof schema> & { fileName: string }>({
         defaultValues: {
             titleAr: data?.titleAr ?? '',
             title: data?.title ?? '',
-            fileName: data?.image ?? '',
+            fileName: data?.imagePath ?? '',
             descriptionAr: data?.descriptionAr ?? '',
             description: data?.description ?? '',
         }
     });
 
     const router = useRouter()
-    const [errors, setErrors] = useState<{
-        descriptionAr: string
-        descriptionEn: string
-        imageFile: string
-    }>({
-        descriptionAr: "",
-        descriptionEn: "",
-        imageFile: ""
-    });
 
     const modules = {
         toolbar: [
@@ -109,6 +100,7 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
 
 
     const onSubmit = async (data: z.infer<typeof schema>) => {
+        setLoading(true)
         const formData = new FormData();
         formData.append("titleAr", data.titleAr);
         formData.append("title", data.title);
@@ -126,6 +118,7 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
         const result = id ? await updateNews(formData, id) : await addNews(formData);
 
         if (result) {
+            setLoading(false)
             for (const [field, messages] of Object.entries(result)) {
                 if (field === "image") {
                     setError("fileName", {
@@ -146,9 +139,6 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
         }
     }
 
-    console.log(watch());
-
-
     return (
         <Root spacing={2}>
             <Stack direction={"row"} spacing={2} justifyContent={"space-between"} useFlexGap>
@@ -164,7 +154,7 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                                 name="image"
                                 icon={"add_photo_alternate"}
                                 label={t("uploadImage")}
-                                accept=".png,.jpg"
+                                accept=".png,.jpg,.jpeg"
                                 rules={{
                                     validate: {
                                         require: (value: any) =>
@@ -270,7 +260,7 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                             </Box>
                         </Grid>
                         <Grid md={12} xs={12} display={"flex"} justifyContent={"flex-end"}>
-                            <Button variant={"contained"} type={"submit"}>{t("save")}</Button>
+                            <LoadingButton loading={loading} variant={"contained"} type={"submit"}>{t("save")}</LoadingButton>
                         </Grid>
                     </Grid>
                 </Paper>

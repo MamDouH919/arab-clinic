@@ -29,7 +29,7 @@ interface inputProps {
     sectionTitle: string,
     subSectionTitle?: string,
     data: {
-        image: string
+        imagePath: string
         name: string
         nameAr: string
     }[],
@@ -38,16 +38,15 @@ interface inputProps {
 const StackImageTitle = (props: inputProps) => {
     const {
         sectionTitle,
-        subSectionTitle,
         data
     } = props
-    const { i18n } = useTranslation()
+
+    const { t, i18n } = useTranslation(["custom"])
 
     return (
         <Box py={2}>
             <SectionTitle
-                sectionTitle={sectionTitle}
-                subSectionTitle={subSectionTitle}
+                sectionTitle={t(sectionTitle)}
             />
             <Root style={{ margin: "32px 0", }}>
                 <Container maxWidth={'lg'}>
@@ -56,7 +55,7 @@ const StackImageTitle = (props: inputProps) => {
                             <Grid key={index} xs={12} sm={6} md={4} lg={3} xl={3}>
                                 <Stack alignItems={"center"} spacing={2}>
                                     <Image
-                                        src={item.image}
+                                        src={item.imagePath}
                                         alt={i18n.language === "ar" ? item.nameAr : item.name}
                                         height={"240"}
                                         width={"240"}

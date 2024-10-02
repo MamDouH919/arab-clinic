@@ -45,12 +45,15 @@ const BranchesData = async ({ locale }: { locale: string }) => {
 
     if (branches.length === 0) return <NoData />
 
+    console.log(branches);
+    
+
     return branches.map((branch) => (
         <Grid display={"flex"} key={branch.id} xs={12} sm={6} md={4} lg={3} xl={2}>
             <Paper sx={{ padding: "20px", width: "100%" }}>
                 <Stack spacing={2} alignItems={"center"}>
                     <Image
-                        src={branch.image}
+                        src={`https://arabclinic.s3.eu-north-1.amazonaws.com/${branch.image}`}
                         alt={branch.name}
                         width={200}
                         height={200}

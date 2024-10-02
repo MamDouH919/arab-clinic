@@ -11,6 +11,7 @@ import { Edit } from '@mui/icons-material'
 import Grid from '@mui/material/Unstable_Grid2'
 import Link from 'next/link'
 import StyledLink from '@/component/ui/StyledLink'
+import { cache } from '@/lib/cache'
 
 const Page = async ({ params: { locale } }: { params: { locale: string } }) => {
     return (
@@ -29,18 +30,24 @@ export default Page
 const NewsData = async ({ locale }: { locale: string }) => {
     const { t } = await initTranslations(locale, ['website'])
 
-    const news = await db.news.findMany({
-        select: {
-            id: true,
-            description: true,
-            descriptionAr: true,
-            image: true,
-            title: true,
-            titleAr: true,
-            createdAt: true,
-        },
-        orderBy: { createdAt: "asc" },
-    })
+    const getProducts = cache(() => {
+        return db.news.findMany({
+            select: {
+                id: true,
+                description: true,
+                descriptionAr: true,
+                image: true,
+                title: true,
+                titleAr: true,
+                createdAt: true,
+            },
+            orderBy: { createdAt: "asc" },
+        })
+    }, ["/products", "getProducts"])
+
+    const news = await getProducts()
+    console.log(news);
+    
 
     if (news.length === 0) return <NoData label={t("noNews")} />
 

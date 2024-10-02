@@ -38,6 +38,7 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: stri
     }, [id, openDialog, setValue])
 
     const onSubmit = async (data: z.infer<typeof AddBranchesSchema>) => {
+        setLoading(true)
         const formData = new FormData();
         formData.append("name", data.name);
         formData.append("nameAr", data.nameAr);
@@ -56,9 +57,8 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: stri
 
         const result = id ? await updateBranch(formData, id) : await addBranch(formData);
 
-        console.log(result);
-
         if (result) {
+            setLoading(false)
             for (const [field, messages] of Object.entries(result)) {
                 if (field === "image") {
                     setError("fileName", {
@@ -66,14 +66,15 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: stri
                         message: messages[0] // Assuming we take the first message
                     });
                 }
-
+                
                 setError(field as keyof z.infer<typeof schema>, {
                     type: "validate",
                     message: messages[0] // Assuming we take the first message
                 });
-
+                
             }
         } else {
+            setLoading(false)
             router.refresh()
             closeDialog()
         }

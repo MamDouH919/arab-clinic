@@ -1,6 +1,5 @@
 import * as z from "zod";
 import i18n from 'i18next';
-import i18nConfig from "@/i18nConfig";
 
 const fileSchema = z.instanceof(File, { message: i18n.language === "en" ? "Required" : "الملف مطلوب" })
 const imageSchema = fileSchema.refine(
@@ -182,7 +181,11 @@ export const AddClientsSchema = z.object({
 })
 
 export const UpdateClientsSchema = AddClientsSchema.extend({
-  image: imageSchema.optional(),
+  image: imageSchema.refine(
+    file => file && file.size < 150 * 1024 && file.size > 0,
+    { message: i18n.language === "en" ? "File must be smaller than 150KB" : "يجب أن يكون الملف أصغر من 150 كيلوبايت" }
+  )
+    .optional()
 })
 
 // const fileSchema = z.instanceof(File, { message: i18n.language === "en" ? "Required" : "الملف مطلوب" })

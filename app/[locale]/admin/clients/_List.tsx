@@ -108,7 +108,7 @@ export default function OrdersList({
                                             </FixedTableCell>
                                             <FixedTableCell>
                                                 <Image
-                                                    src={row.image}
+                                                    src={row.imagePath}
                                                     alt={row.name}
                                                     width={50}
                                                     height={50}

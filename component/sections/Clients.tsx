@@ -1,10 +1,11 @@
 "use client"
-import { Box } from '@mui/material'
+import { Box, Button, Stack } from '@mui/material'
 import { useTranslation } from 'react-i18next';
 import { styled } from "@mui/material/styles";
 import { keyframes } from '@mui/system';
 import SectionTitle from '../ui/SectionTitle';
 import Image from 'next/image';
+import Link from 'next/link';
 // import { useAppSelector } from '../store/store';
 
 const PREFIX = "Clients";
@@ -46,7 +47,7 @@ const Root = styled(Box)(({ theme }) => ({
 }));
 
 
-const Clients = ({ data }: { data: { id: string, name: string, nameAr: string, image: string }[] }) => {
+const Clients = ({ data }: { data: { id: string, name: string, nameAr: string, imagePath: string }[] }) => {
     const scrollToRight = keyframes`
     0% {transform: translateX(0);}
     100% {transform: translateX(calc(-250px * ${data.length / 2}));`;
@@ -56,7 +57,7 @@ const Clients = ({ data }: { data: { id: string, name: string, nameAr: string, i
     100% {transform: translateX(calc(250px * ${data.length / 2}));}`;
 
 
-    const { i18n } = useTranslation()
+    const { t, i18n } = useTranslation()
 
     if (data.length === 0) {
         return null
@@ -84,16 +85,24 @@ const Clients = ({ data }: { data: { id: string, name: string, nameAr: string, i
                 >
                     {data.map((client, index) => (
                         <div className={classes.slide} key={index}>
-                            <Image height={200} width={200} src={client.image} alt={`data`} layout='responsive' style={{ borderRadius: "50%", width: "100%" }} />
+                            <Image height={200} width={200} src={client.imagePath} alt={`data`} layout='responsive' style={{ borderRadius: "50%", width: "100%" }} />
                         </div>
                     ))}
                     {data.map((client, index) => (
                         <div className={classes.slide} key={index}>
-                            <Image height={200} width={200} src={client.image} alt={`data`} layout='responsive' style={{ borderRadius: "50%", width: "100%" }} />
+                            <Image height={200} width={200} src={client.imagePath} alt={`data`} layout='responsive' style={{ borderRadius: "50%", width: "100%" }} />
                         </div>
                     ))}
                 </Box>
             </div>
+            <Stack alignItems={"center"}>
+                <Link href="/clients" style={{ textDecoration: "none" }}>
+                    <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+                        {t("viewAllClients")}
+                    </Button>
+                </Link>
+            </Stack>
+
             {/* {viewAllClients} */}
         </Root>
     )

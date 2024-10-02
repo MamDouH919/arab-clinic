@@ -15,6 +15,7 @@ import { clientsTypeArray } from '@/types'
 import { AddClientsSchema, UpdateClientsSchema } from '@/schemas'
 import { addClient, getClientsById, updateClient } from '@/actions/clients'
 
+
 const FormItem = ({ children, id, updateData }: { children: React.ReactNode, id?: string, updateData?: any }) => {
     const schema = id ? UpdateClientsSchema : AddClientsSchema;
     const [openDialog, setOpenDialog] = useState(false)
@@ -29,7 +30,7 @@ const FormItem = ({ children, id, updateData }: { children: React.ReactNode, id?
                 setValue('nameAr', data?.nameAr ?? '')
                 setValue('name', data?.name ?? '')
                 setValue('type', data?.type ?? '')
-                setValue('fileName', data?.image ?? "")
+                setValue('fileName', data?.imageName ?? "")
 
             })
         }
@@ -76,6 +77,7 @@ const FormItem = ({ children, id, updateData }: { children: React.ReactNode, id?
     }
 
     const closeDialog = () => {
+        setLoading(false)
         reset()
         setOpenDialog(false)
     }
@@ -108,7 +110,7 @@ const FormItem = ({ children, id, updateData }: { children: React.ReactNode, id?
                                     name="image"
                                     icon={"add_photo_alternate"}
                                     label={t("uploadImage")}
-                                    accept=".png,.jpg"
+                                    accept=".png"
                                     rules={{
                                         validate: {
                                             require: (value: any) =>

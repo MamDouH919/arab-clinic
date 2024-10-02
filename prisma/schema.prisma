@@ -5,26 +5,26 @@ generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
-}
-
 // datasource db {
-//   provider = "sqlite"
+//   provider = "mongodb"
 //   url      = env("DATABASE_URL")
 // }
 
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
 model VideosLink {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(uuid())
   title     String
   content   String
-  serviceId String   @db.ObjectId // Use @db.ObjectId to match the Services model
+  serviceId String // Use @db.ObjectId to match the Services model
   service   Services @relation(fields: [serviceId], references: [id])
 }
 
 model Services {
-  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  id            String       @id @default(uuid())
   title         String
   titleAr       String
   description   String
@@ -40,7 +40,7 @@ model Services {
 }
 
 model highlights {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(uuid())
   nameEn    String
   nameAr    String
   number    Int
@@ -49,7 +49,7 @@ model highlights {
 }
 
 model AvailableJobs {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(uuid())
   jobNameEn String
   jobNameAr String
   available Boolean
@@ -58,7 +58,7 @@ model AvailableJobs {
 }
 
 model Jobs {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(uuid())
   name        String
   governorate String
   phone       String
@@ -70,18 +70,19 @@ model Jobs {
 }
 
 model News {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  image         String
+  id            String   @id @default(uuid())
   title         String
   titleAr       String
   description   String
   descriptionAr String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  imagePath     String
+  imageName     String
 }
 
 model Contacts {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(uuid())
   name      String
   email     String
   branch    String?
@@ -92,7 +93,7 @@ model Contacts {
 }
 
 model Branches {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id         String   @id @default(uuid())
   name       String
   nameAr     String
   location   String
@@ -104,19 +105,20 @@ model Branches {
   updatedAt  DateTime @updatedAt
 }
 
-enum ClientType {
-  syndicates
-  healthcareCompanies
-  discountContractCompanies
-  contractingCompanies
-}
+// enum ClientType {
+//   syndicates
+//   healthcareCompanies
+//   discountContractCompanies
+//   contractingCompanies
+// }
 
 model Clients {
-  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(uuid())
   name      String
   nameAr    String
-  image     String
-  type      ClientType
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  imagePath String
+  imageName String
+  type      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
