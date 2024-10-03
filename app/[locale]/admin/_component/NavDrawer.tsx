@@ -18,14 +18,22 @@ import { usePathname } from "next/navigation";
 // import { GrDeliver } from "react-icons/gr";
 // import { GoPeople } from "react-icons/go";
 // import { TfiLayoutSlider } from "react-icons/tfi";
-
 import {
     DashboardOutlined,
     SwitchLeftOutlined,
     PeopleOutlineOutlined,
     Inventory2Outlined,
-    InventoryOutlined
+    InventoryOutlined,
+
+    AutoFixHighOutlined,
+    HouseOutlined,
+    RecentActorsOutlined,
+    SupervisorAccountOutlined,
+    DescriptionOutlined,
+    NewspaperOutlined,
+    ManageAccountsOutlined
 } from '@mui/icons-material';
+
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 
@@ -104,7 +112,6 @@ const NavDrawer = (props: propsInput) => {
     const pathname = usePathname()
     console.log(pathname.split("/"));
 
-
     const linksList: LinksList[] = [
         {
             pathname: "/admin",
@@ -116,20 +123,20 @@ const NavDrawer = (props: propsInput) => {
             regex: /branches/,
             pathname: "/admin/branches",
             sectionName: "branches",
-            icon: SwitchLeftOutlined,
+            icon: HouseOutlined,
             primary: "branches",
         },
         {
             pathname: "/admin/contacts",
             sectionName: "contacts",
-            icon: Inventory2Outlined,
+            icon: RecentActorsOutlined,
             primary: "contacts",
             regex: /contacts/,
         },
         {
             pathname: "/admin/highlights",
             sectionName: "highlights",
-            icon: Inventory2Outlined,
+            icon: AutoFixHighOutlined,
             primary: "highlights",
             regex: /highlights/,
         },
@@ -144,28 +151,28 @@ const NavDrawer = (props: propsInput) => {
             regex: /employments/,
             pathname: "/admin/employments",
             sectionName: "employments",
-            icon: InventoryOutlined,
+            icon: DescriptionOutlined,
             primary: "employments",
         },
         {
             regex: /news/,
             pathname: "/admin/news",
             sectionName: "news",
-            icon: SwitchLeftOutlined,
+            icon: NewspaperOutlined,
             primary: "news",
         },
         {
             regex: /clients/,
             pathname: "/admin/clients",
             sectionName: "clients",
-            icon: SwitchLeftOutlined,
+            icon: SupervisorAccountOutlined,
             primary: "clients",
         },
         {
             regex: /services/,
             pathname: "/admin/services",
             sectionName: "services",
-            icon: SwitchLeftOutlined,
+            icon: ManageAccountsOutlined,
             primary: "services",
         },
     ];

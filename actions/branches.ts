@@ -187,7 +187,7 @@ export async function updateBranch(formData: FormData, id: string) {
 
         imagePath = `/branches/${crypto.randomUUID()}-${data.image.name}`
         const buffer = Buffer.from(await data.image.arrayBuffer());
-        await uploadFileToS3(buffer, imagePath);
+        // await uploadFileToS3(buffer, imagePath);
         // await fs.unlink(`public${branch.image}`)
         // imagePath = `/branches/${crypto.randomUUID()}-${data.image.name}`
         // await fs.writeFile(
