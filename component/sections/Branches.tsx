@@ -60,7 +60,7 @@ const Branches = ({ data }: {
         locationAr: string,
         mobile: string,
         whatsApp: string,
-        image: string,
+        imagePath: string,
     }[]
 }) => {
     const { t, i18n } = useTranslation()
@@ -94,7 +94,7 @@ const Branches = ({ data }: {
                                             borderRadius: "20px"
                                         }}
                                     >
-                                        <Image src={item.image} height={220} alt='ss' width={210} style={{ borderRadius: "10px" }} />
+                                        <Image src={item.imagePath} height={220} alt='ss' width={210} style={{ borderRadius: "10px" }} />
                                         <Typography variant='body1' fontSize={"20px"}>
                                             {i18n.language === "ar" ? item.nameAr : item.name}
                                         </Typography>

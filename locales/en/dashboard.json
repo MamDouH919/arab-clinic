@@ -44,5 +44,10 @@
   "emptyData": "no data available",
   "actions": "actions",
   "service": "service",
-  "services": "services"
+  "services": "services",
+  "errorInDelete": "An error occurred while deleting",
+  "addIcon": "add icon",
+  "addCover": "add cover",
+  "newImage": "new image",
+  "images": "images"
 }

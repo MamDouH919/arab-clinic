@@ -27,7 +27,7 @@ const PageInfo = ({ data, locale }: { data: any, locale: string }) => {
         <Container maxWidth="lg">
             <Stack spacing={2} alignItems={"center"} my={4}>
                 <Image
-                    src={data.image}
+                    src={data.imagePath}
                     alt={data.title}
                     width={500}
                     height={500}

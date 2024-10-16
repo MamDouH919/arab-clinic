@@ -44,5 +44,10 @@
   "emptyData": "لا توجد بيانات متاحة",
   "actions": "الإجراءات",
   "service": "الخدمة",
-  "services": "الخدمات"
+  "services": "الخدمات",
+  "errorInDelete": "حدث خطأ اثناء الحذف",
+  "addIcon": "إضافة آيكون",
+  "addCover": "إضافة خلفية",
+  "newImage": "صورة جديدة",
+  "images": "الصور"
 }

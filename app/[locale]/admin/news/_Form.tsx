@@ -109,10 +109,6 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
 
         if (data.image) {
             formData.append("image", data?.image);
-        } else {
-            if (id) {
-                formData.append("image", new File([], ""));
-            }
         }
 
         const result = id ? await updateNews(formData, id) : await addNews(formData);
@@ -161,6 +157,7 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                                             value ? true : t("fieldIsRequired"),
                                     },
                                 }}
+                                maxSize={150 * 1024}
                             />
                         </Grid>
                         <Grid md={6} xs={12}>

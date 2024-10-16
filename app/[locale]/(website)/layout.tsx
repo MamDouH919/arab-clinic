@@ -4,7 +4,14 @@ import React from 'react'
 
 export const dynamic = "force-dynamic"
 
-const layout = ({ children }: { children: React.ReactNode }) => {
+async function delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+const layout = async ({ children }: { children: React.ReactNode }) => {
+
+    await delay(2000); // 2-second delay
+
     return (
         <div>
             <Navbar />

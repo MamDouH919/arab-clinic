@@ -20,6 +20,7 @@ import { usePathname } from 'next/navigation'
 import { config } from '@/config';
 import LanguageMenu from '../Language';
 import { useTranslation } from 'react-i18next';
+import DarkModeIcon from './DarkModeIcon';
 
 // import { useAppSelector } from '../store/store';
 
@@ -28,6 +29,7 @@ const classes = {
     stickyHeader: `${PREFIX}-stickyHeader`,
     animationFade: `${PREFIX}-animationFade`,
     activeLink: `${PREFIX}-activeLink`,
+    whiteColor: `${PREFIX}-whiteColor`,
 };
 
 const animationFade = keyframes`
@@ -60,6 +62,9 @@ const Root = styled(AppBar)(({ theme }) => ({
     [`& .${classes.activeLink}`]: {
         color: theme.palette.primary.main,
     },
+    [`& .${classes.whiteColor}`]: {
+        color: "#fff",
+    },
 }));
 
 const StyledHeaderLinkPath = styled(Link)(({ theme }) => ({
@@ -74,7 +79,7 @@ const StyledHeaderLinkPath = styled(Link)(({ theme }) => ({
         margin: theme.spacing(0, 1.5),
     },
     "&:hover": {
-        color: theme.palette.primary.main,
+        color: `${theme.palette.primary.main} !important`,
         cursor: "pointer",
     },
     [theme.breakpoints.down("md")]: {
@@ -87,7 +92,7 @@ const StyledHeaderLinkPath = styled(Link)(({ theme }) => ({
 }));
 
 const HeaderLinkPath = (props: any) => {
-    const { to, className } = props;
+    const { to, className, } = props;
     // const theme = useTheme();
     return (
         <StyledHeaderLinkPath
@@ -111,6 +116,12 @@ function Navbar() {
     const [shouldShowHeader, setShouldShowHeader] = useState<boolean>(false);
     const [animationClass, setAnimationClass] = useState<string>('');
     const pathname = usePathname()
+
+    const newPathName = pathname.includes("/ar")
+        ? pathname.replace("/ar", pathname === "/ar" ? "/" : "")
+        : pathname;
+    console.log(newPathName);
+
     const { t } = useTranslation();
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -161,7 +172,7 @@ function Navbar() {
                                 <HeaderLinkPath
                                     key={index}
                                     to={link.href}
-                                    className={clsx({ [classes.activeLink]: pathname === link.href })}
+                                    className={clsx({ [classes.activeLink]: newPathName === link.href, [classes.whiteColor]: !shouldShowHeader && newPathName !== link.href && newPathName === "/" })}
                                 >
                                     {t(link.label)}
                                 </HeaderLinkPath>
@@ -170,7 +181,7 @@ function Navbar() {
                             <Stack direction={"row"} spacing={1}>
                                 {/* {websiteData.app.key === "mountain" && <Settings />} */}
                                 {config.app.languages.length !== 1 && <LanguageMenu />}
-                                {/* {!websiteData.app.themeMode && <DarkModeIcon />} */}
+                                <DarkModeIcon />
                             </Stack>
                         </Stack>
                         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
@@ -203,30 +214,20 @@ function Navbar() {
                             >
                                 <Stack p={2} spacing={1}>
                                     <Stack direction={"row"} spacing={1} justifyContent={"center"}>
-                                        {/* {websiteData.app.key === "mountain" && <Settings />} */}
-                                        {/* {websiteData.app.key === "mountain" && <Divider orientation="vertical" flexItem />} */}
                                         {config.app.languages.length !== 1 && <LanguageMenu />}
-                                        {/* {websiteData.app.languages.length !== 1 && <Divider orientation="vertical" flexItem />} */}
-                                        {/* {!websiteData.app.themeMode && <DarkModeIcon />} */}
+                                        <Divider orientation="vertical" flexItem />
+                                        <DarkModeIcon />
                                     </Stack>
                                     {NavLinks.map((link, index) => (
-                                        // <HeaderLinkPath
-                                        //     key={index}
-                                        //     to={link.href}
-                                        //     className={clsx({ [classes.activeLink]: pathname === link.href })}
-                                        // >
-                                        //     {link.label}
-                                        // </HeaderLinkPath>
                                         <Fragment key={index}>
                                             <MenuItem onClick={handleCloseNavMenu}>
-                                                <HeaderLinkPath to={link.href} className={clsx({ [classes.activeLink]: pathname === link.href })}>
-                                                    {link.label}
+                                                <HeaderLinkPath to={link.href} className={clsx({ [classes.activeLink]: newPathName === link.href })}>
+                                                    {t(link.label)}
                                                 </HeaderLinkPath>
                                             </MenuItem>
                                             {index !== NavLinks.length - 1 && <Divider flexItem />}
                                         </Fragment>
                                     ))}
-                                    {/* {mobileLinks && mobileLinks({ handleCloseNavMenu })} */}
                                 </Stack>
                             </Menu>
                         </Box>

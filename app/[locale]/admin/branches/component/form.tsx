@@ -31,13 +31,13 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: stri
                 setValue('location', data?.location ?? '')
                 setValue('whatsApp', data?.whatsApp ?? '')
                 setValue('mobile', data?.mobile ?? "")
-                setValue('fileName', data?.image ?? "")
+                setValue('fileName', data?.imageName ?? "")
                 // You can update your form's default values here
             })
         }
     }, [id, openDialog, setValue])
 
-    const onSubmit = async (data: z.infer<typeof AddBranchesSchema>) => {
+    const onSubmit = async (data: z.infer<typeof schema>) => {
         setLoading(true)
         const formData = new FormData();
         formData.append("name", data.name);
@@ -49,10 +49,6 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: stri
 
         if (data.image) {
             formData.append("image", data?.image);
-        } else {
-            if (id) {
-                formData.append("image", new File([], ""));
-            }
         }
 
         const result = id ? await updateBranch(formData, id) : await addBranch(formData);
@@ -120,6 +116,7 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: stri
                                                 value ? true : t("fieldIsRequired"),
                                         },
                                     }}
+                                    maxSize={250 * 1024}
                                 />
                             </Grid>
                             <Grid xs={12}>

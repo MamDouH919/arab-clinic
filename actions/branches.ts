@@ -4,49 +4,17 @@
 import db from "@/db/db"
 import { notFound } from "next/navigation"
 import { revalidatePath } from "next/cache"
-import fs from "fs/promises"
-import * as z from "zod"
 import { AddBranchesSchema, UpdateBranchesSchema } from "@/schemas"
-
-const fileSchema = z.instanceof(File, { message: "Required" })
-const imageSchema = fileSchema.refine(
-    file => file.size === 200 || file.type.startsWith("image/")
-)
-
-// const s3Client = new S3Client({
-//     region: process.env.NEXT_AWS_S3_REGION || 'eu-north-1',
-//     credentials: {
-//         accessKeyId: process.env.NEXT_AWS_S3_ACCESS_KEY_ID || 'AKIA4AQ3UJQNGJGUI6YZ',
-//         secretAccessKey: process.env.NEXT_AWS_S3_SECRET_ACCESS_KEY || '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',
-//     },
-// });
-
-async function uploadFileToS3(file: any, fileName: string) {
-    const fileBuffer = file
-
-    const params = {
-        Bucket: process.env.NEXT_AWS_S3_BUCKET_NAME,
-        Key: `${fileName}`,
-        Body: fileBuffer,
-        ContentType: "image/jpg",
-    };
-
-    // const command = new PutObjectCommand(params);
-    try {
-        // const response = await s3Client.send(command);
-        // console.log("File uploaded successfully:", response);
-        return fileName;
-    } catch (error) {
-        throw error;
-    }
-}
-
+import { saveImage } from "./saveImage"
+import { storage } from "@/firebase"
+import { deleteObject, ref } from "firebase/storage"
 
 export async function getBranches() {
     const branches = await db.branches.findMany({
         select: {
             id: true,
-            image: true,
+            imageName: true,
+            imagePath: true,
             nameAr: true,
             name: true,
             locationAr: true,
@@ -72,14 +40,15 @@ export async function getBranchesDropDown() {
     return branches
 }
 
-
-
 export async function deleteBranch(id: string) {
     const branch = await db.branches.delete({ where: { id } })
 
     if (branch == null) return notFound()
 
-    await fs.unlink(`public${branch.image}`)
+    const imageName = branch.imageName
+    const desertRef = ref(storage, imageName);
+
+    deleteObject(desertRef)
 
     revalidatePath("/")
     revalidatePath("/admin/branches")
@@ -113,15 +82,7 @@ export async function addBranch(formData: FormData) {
     const data = result.data;
 
     if (data.image) {
-        // await fs.mkdir("public/branches", { recursive: true })
-        const image = `/branches/${crypto.randomUUID()}-${data.image.name}`
-        // await fs.writeFile(
-        //     `public${image}`,
-        //     Buffer.from(await data.image.arrayBuffer())
-        // )
-
-        const buffer = Buffer.from(await data.image.arrayBuffer());
-        await uploadFileToS3(buffer, image);
+        const { imagePath, imageName } = await saveImage(data.image!, "branches")
 
         await db.branches.create({
             data: {
@@ -131,12 +92,9 @@ export async function addBranch(formData: FormData) {
                 location: data.location,
                 whatsApp: data.whatsApp,
                 mobile: data.mobile,
-                image,
+                imageName: imageName,
+                imagePath: imagePath,
             }
-        }).catch((error) => {
-            console.log(error)
-
-            return error
         })
     }
 
@@ -161,7 +119,7 @@ export async function updateBranch(formData: FormData, id: string) {
         location,
         whatsApp,
         mobile,
-        image,
+        ...(image && { image })
     };
 
     const result = UpdateBranchesSchema.safeParse(parsedData)
@@ -175,39 +133,39 @@ export async function updateBranch(formData: FormData, id: string) {
 
     if (branch == null) return notFound()
 
-    let imagePath = branch.image
+    let prevImageName = branch.imageName
+
     if (data.image != null && data.image.size > 0) {
-        console.log(imagePath);
-        const param = {
-            Bucket: process.env.NEXT_AWS_S3_BUCKET_NAME || 'arabclinic',
-            Key: imagePath,
-        }
-        // var deleteObjectRequest = new DeleteObjectCommand(param)
-        // await s3Client.send(deleteObjectRequest);
+        const desertRef = ref(storage, prevImageName);
+        deleteObject(desertRef)
 
-        imagePath = `/branches/${crypto.randomUUID()}-${data.image.name}`
-        const buffer = Buffer.from(await data.image.arrayBuffer());
-        // await uploadFileToS3(buffer, imagePath);
-        // await fs.unlink(`public${branch.image}`)
-        // imagePath = `/branches/${crypto.randomUUID()}-${data.image.name}`
-        // await fs.writeFile(
-        //     `public${imagePath}`,
-        //     Buffer.from(await data.image.arrayBuffer())
-        // )
+        const { imagePath, imageName } = await saveImage(data.image!, "clients")
+        await db.branches.update({
+            where: { id },
+            data: {
+                nameAr: data.nameAr,
+                name: data.name,
+                locationAr: data.locationAr,
+                location: data.location,
+                whatsApp: data.whatsApp,
+                mobile: data.mobile,
+                imageName: imageName,
+                imagePath: imagePath,
+            },
+        })
+    } else {
+        await db.branches.update({
+            where: { id },
+            data: {
+                nameAr: data.nameAr,
+                name: data.name,
+                locationAr: data.locationAr,
+                location: data.location,
+                whatsApp: data.whatsApp,
+                mobile: data.mobile,
+            },
+        })
     }
-
-    await db.branches.update({
-        where: { id },
-        data: {
-            nameAr: data.nameAr,
-            name: data.name,
-            locationAr: data.locationAr,
-            location: data.location,
-            whatsApp: data.whatsApp,
-            mobile: data.mobile,
-            image: imagePath,
-        },
-    })
 
     revalidatePath("/")
     revalidatePath("/branches")
@@ -225,7 +183,8 @@ export async function getBranchById(id: string) {
             location: true,
             whatsApp: true,
             mobile: true,
-            image: true,
+            imageName: true,
+            imagePath: true,
         }
     });
     return branches;

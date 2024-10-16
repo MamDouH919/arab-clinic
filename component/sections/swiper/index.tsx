@@ -53,18 +53,17 @@ const Root = styled(Box)(({ theme }) => ({
 }));
 
 interface inputProps {
-    imgOne?: string
-    imgTwo?: string
-    imgThree?: string
+    images: {
+        id: string
+        imagePath: string
+    }[]
     title: string
 }
 
 
 const SwiperSection = (props: inputProps) => {
     const {
-        imgOne,
-        imgTwo,
-        imgThree,
+        images,
         title
     } = props
     return (
@@ -75,10 +74,10 @@ const SwiperSection = (props: inputProps) => {
                     className="profileSwiper"
                     loop={true}
                 >
-                    {imgOne &&
-                        <SwiperSlide>
+                    {images.map((e, i) =>
+                        <SwiperSlide key={i}>
                             <Image
-                                src={imgOne}
+                                src={e.imagePath}
                                 alt={title}
                                 width={1200}
                                 height={1200}
@@ -87,33 +86,7 @@ const SwiperSection = (props: inputProps) => {
                                 style={{ width: '100%', height: "100%" }}
                             />
                         </SwiperSlide>
-                    }
-                    {imgTwo &&
-                        <SwiperSlide>
-                            <Image
-                                src={imgTwo}
-                                alt={title}
-                                width={1200}
-                                height={1200}
-                                objectFit='contain'
-                                layout="responsive"
-                                style={{ width: '100%', height: "100%" }}
-                            />
-                        </SwiperSlide>
-                    }
-                    {imgThree &&
-                        <SwiperSlide>
-                            <Image
-                                src={imgThree}
-                                alt={title}
-                                width={1200}
-                                height={1200}
-                                objectFit='contain'
-                                layout="responsive"
-                                style={{ width: '100%', height: "100%" }}
-                            />
-                        </SwiperSlide>
-                    }
+                    )}
                 </Swiper>
             </Box>
         </Root>

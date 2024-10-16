@@ -13,7 +13,7 @@ import DeleteItem from '../_component/delete';
 import ButtonLink from '@/component/ui/ButtonLink';
 import Image from 'next/image';
 import Link from 'next/link';
-import { deleteNews } from '@/actions/new';
+import { deleteService } from '@/actions/services';
 
 
 const Page = async ({
@@ -25,7 +25,7 @@ const Page = async ({
     return (
         <Stack spacing={2}>
             <Stack direction={"row"} spacing={2} justifyContent={"space-between"} useFlexGap>
-                <ListHeaderTitle title={"news"} />
+                <ListHeaderTitle title={"services"} />
                 <ButtonLink href='/admin/services/create' linkLabel={t("New")} />
             </Stack>
             <Grid container spacing={2} m={0} alignItems={"stretch"}>
@@ -41,7 +41,7 @@ const NewsData = async ({ locale }: { locale: string }) => {
     const services = await db.services.findMany({
         select: {
             id: true,
-            icon: true,
+            iconPath: true,
             title: true,
             titleAr: true
         },
@@ -55,7 +55,7 @@ const NewsData = async ({ locale }: { locale: string }) => {
             <Paper sx={{ padding: "20px", width: "100%" }}>
                 <Stack spacing={2}>
                     <Image
-                        src={item.icon}
+                        src={item.iconPath}
                         alt={item.title}
                         width={200} // Required for Next.js Image optimization
                         height={200} // Required for Next.js Image optimization
@@ -69,7 +69,7 @@ const NewsData = async ({ locale }: { locale: string }) => {
                         <IconButton size="small" component={Link} href={`/admin/services/${item.id}`}>
                             <EditIcon fontSize='small' />
                         </IconButton>
-                        <DeleteItem deleteFun={deleteNews} id={item.id}>
+                        <DeleteItem deleteFun={deleteService} id={item.id}>
                             <IconButton size="small">
                                 <DeleteIcon fontSize='small' color='error' />
                             </IconButton>

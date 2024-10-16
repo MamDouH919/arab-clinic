@@ -4,17 +4,10 @@
 import db from "@/db/db"
 import { notFound } from "next/navigation"
 import { revalidatePath } from "next/cache"
-import fs from "fs/promises"
-import * as z from "zod"
 import { AddNewsSchema, UpdateNewsSchema } from "@/schemas"
 import { saveImage } from "./saveImage"
 import { deleteObject, ref } from "firebase/storage"
 import { storage } from "@/firebase"
-
-const fileSchema = z.instanceof(File, { message: "Required" })
-const imageSchema = fileSchema.refine(
-    file => file.size === 200 || file.type.startsWith("image/")
-)
 
 export async function deleteNews(id: string) {
     const news = await db.news.delete({ where: { id } })
@@ -23,9 +16,7 @@ export async function deleteNews(id: string) {
 
     const imageName = news.imageName
     const desertRef = ref(storage, imageName);
-    deleteObject(desertRef).then(async () => {
-
-    }).catch((err) => console.log(err))
+    deleteObject(desertRef)
 
     revalidatePath("/")
     revalidatePath("/admin/news")
@@ -85,7 +76,7 @@ export async function updateNews(formData: FormData, id: string) {
         title,
         descriptionAr,
         description,
-        image,
+        ...(image && { image })
     };
 
     const result = UpdateNewsSchema.safeParse(parsedData)
@@ -100,27 +91,33 @@ export async function updateNews(formData: FormData, id: string) {
     if (news == null) return notFound()
 
     let prevImageName = news.imageName
+
     if (data.image != null && data.image.size > 0) {
         const desertRef = ref(storage, prevImageName);
-        deleteObject(desertRef).then(async () => {
-            const { imagePath, imageName } = await saveImage(data.image!, "news")
-            // File deleted successfully
-            await db.news.update({
-                where: { id },
-                data: {
-                    titleAr: data.titleAr,
-                    title: data.title,
-                    descriptionAr: data.descriptionAr,
-                    description: data.description,
-                    imageName: imageName,
-                    imagePath: imagePath
-                },
-            })
-        }).catch((error) => {
-            console.log(error)
+        deleteObject(desertRef)
 
-            // Uh-oh, an error occurred!
-        });
+        const { imagePath, imageName } = await saveImage(data.image!, "clients")
+        await db.news.update({
+            where: { id },
+            data: {
+                titleAr: data.titleAr,
+                title: data.title,
+                descriptionAr: data.descriptionAr,
+                description: data.description,
+                imageName: imageName,
+                imagePath: imagePath
+            },
+        })
+    } else {
+        await db.news.update({
+            where: { id },
+            data: {
+                titleAr: data.titleAr,
+                title: data.title,
+                descriptionAr: data.descriptionAr,
+                description: data.description,
+            },
+        })
     }
 
 

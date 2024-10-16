@@ -13,7 +13,7 @@ export const ModeContext = createContext<ModeContextProps>({
     changeMode: () => {},
 });
 
-const ModeContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const ModeContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {    
     const themeMode = getCookie("themeMode");
 
     const isDarkModeEnabled = useMediaQuery('(prefers-color-scheme: dark)');
@@ -26,7 +26,7 @@ const ModeContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
             : isDarkModeEnabled
     );
 
-    const changeMode = () => {
+    const changeMode = () => {        
         darkMode
             ? setCookie("themeMode", 'light')
             : setCookie("themeMode", 'dark');

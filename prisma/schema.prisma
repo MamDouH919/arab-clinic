@@ -15,28 +15,36 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model VideosLink {
+// model VideosLink {
+//   id        String   @id @default(uuid())
+//   title     String
+//   content   String
+//   serviceId String // Use @db.ObjectId to match the Services model
+//   service   Services @relation(fields: [serviceId], references: [id])
+// }
+
+model ServicesImages {
   id        String   @id @default(uuid())
-  title     String
-  content   String
+  imageName String
+  imagePath String
   serviceId String // Use @db.ObjectId to match the Services model
   service   Services @relation(fields: [serviceId], references: [id])
 }
 
 model Services {
-  id            String       @id @default(uuid())
-  title         String
-  titleAr       String
-  description   String
-  descriptionAr String
-  icon          String
-  coverImg      String
-  imgOne        String?
-  imgTwo        String?
-  imgThree      String?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  videosLink    VideosLink[]
+  id             String           @id @default(uuid())
+  title          String
+  titleAr        String
+  description    String
+  descriptionAr  String
+  iconName       String
+  coverImgPath   String
+  iconPath       String
+  coverImgName   String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  videos         String?
+  servicesImages ServicesImages[]
 }
 
 model highlights {
@@ -100,7 +108,8 @@ model Branches {
   locationAr String
   mobile     String
   whatsApp   String
-  image      String
+  imagePath  String
+  imageName  String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }

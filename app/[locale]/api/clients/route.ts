@@ -22,5 +22,7 @@ export async function GET(request: NextRequest) {
         take: pageSize,
     });
 
-    return NextResponse.json({ data: contacts, page, pageSize });
+    const totalClients = await db.clients.count()
+
+    return NextResponse.json({ data: contacts, page, pageSize, totalClients });
 }

@@ -71,7 +71,7 @@ export default function LanguageMenu() {
                     aria-expanded={open ? 'true' : undefined}
                     onClick={handleClick}
                 >
-                    <LanguageOutlined />
+                    <LanguageOutlined color={"primary"} />
                 </IconButton>
             </Tooltip>
             <Menu

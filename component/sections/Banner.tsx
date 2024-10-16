@@ -39,11 +39,7 @@ const Root = styled("div")(({ theme }) => ({
 }));
 
 const Banner = () => {
-    const { t } = useTranslation("custom");
-
-    console.log(Player);
-    
-
+    const { t } = useTranslation("custom");    
     return (
         <Root>
             <Box className={classes.content}>

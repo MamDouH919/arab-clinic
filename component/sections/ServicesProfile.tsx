@@ -46,17 +46,14 @@ interface inputProps {
         titleAr: string;
         description: string;
         descriptionAr: string;
-        icon: string;
-        coverImg: string;
-        imgOne: string | null;
-        imgTwo: string | null;
-        imgThree: string | null;
+        coverImgPath: string;
+        videos: string | null
+        servicesImages: []
     } | null
 }
 
 const ServicesProfile = (props: inputProps) => {
     const { data } = props
-    console.log(data);
     const { t, i18n } = useTranslation()
 
     if (!data) {
@@ -64,10 +61,14 @@ const ServicesProfile = (props: inputProps) => {
             <NoData />
         </Stack>
     }
+
+    console.log(data);
+
+
     return (
         <Root>
             <div className={classes.bannerBackground} style={{
-                backgroundImage: `url('${data.coverImg}')`,
+                backgroundImage: `url('${data.coverImgPath}')`,
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center center',
                 backgroundSize: 'cover',
@@ -75,11 +76,11 @@ const ServicesProfile = (props: inputProps) => {
             }}></div>
             <Container maxWidth={'lg'} sx={{ my: 20 }}>
                 <Stack spacing={5} alignItems={"center"}>
-                    <Typography variant="body1" sx={{ fontWeight: "bold" }} color={"text.secondary"}>
-                        <div
-                            dangerouslySetInnerHTML={{ __html: i18n.language === "en" ? data.description : data.descriptionAr }}
-                        />
-                    </Typography>
+                    {/* <Typography variant="body1" sx={{ fontWeight: "bold" }} color={"text.secondary"}> */}
+                    <div
+                        dangerouslySetInnerHTML={{ __html: i18n.language === "en" ? data.description : data.descriptionAr }}
+                    />
+                    {/* </Typography> */}
                     {/* <Grid container spacing={4} m={0} alignItems={"center"} justifyContent={"center"}>
                         <Grid sm={12} md={3}>
                             <Stack alignContent={"center"} justifyContent={"center"} spacing={2}>
@@ -128,28 +129,25 @@ const ServicesProfile = (props: inputProps) => {
                     </Grid> */}
                 </Stack>
             </Container>
-            {(data.imgOne || data.imgTwo || data.imgThree) && <SwiperSection
+            {data.servicesImages && data.servicesImages.length && <SwiperSection
                 title={i18n.language === "en" ? data.title : data.titleAr}
-                imgOne={data.imgOne ?? undefined}
-                imgTwo={data.imgTwo ?? undefined}
-                imgThree={data.imgThree ?? undefined}
+                images={data.servicesImages}
             />}
-            <Container maxWidth={'lg'} sx={{ my: 20 }}>
+            {data.videos && <Container maxWidth={'lg'} sx={{ my: 20 }}>
                 <Grid container spacing={4} m={0}>
-                    <Grid xs={12} md={6}>
-                        <YouTube
-                            videoId="mS3tCWnNRqk"
-                            className={classes.video}
-                            title="Video string"
-                        />
-                    </Grid>
-                    <Grid xs={12} md={6}>
-                        <YouTube
-                            className={classes.video}
-                            videoId="mS3tCWnNRqk" />
-                    </Grid>
+                    {
+                        JSON.parse(data.videos).map((e: string) =>
+                            <Grid xs={12} md={6} key={e}>
+                                <YouTube
+                                    videoId={e}
+                                    className={classes.video}
+                                    title="Video string"
+                                />
+                            </Grid>
+                        )
+                    }
                 </Grid>
-            </Container>
+            </Container>}
         </Root>
     )
 }

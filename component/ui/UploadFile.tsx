@@ -1,6 +1,6 @@
-import React, { ChangeEvent } from "react";
-import { Icon, IconButton, InputAdornment, styled, TextFieldProps } from "@mui/material";
-import { useController, Control, FieldValues } from "react-hook-form";
+import React, { ChangeEvent, useState } from "react";
+import { Icon, IconButton, InputAdornment, Stack, styled, TextFieldProps, Typography } from "@mui/material";
+import { useController } from "react-hook-form";
 import ControlMUITextField from "./ControlMUItextField";
 
 const Input = styled("input")({
@@ -16,8 +16,9 @@ interface UploadFileProps extends Omit<TextFieldProps, 'name' | 'control'> {
     accept: string;
     setValue: any;
     iconDisable?: boolean;
-    rules: any
-    fileName?: string
+    rules: any;
+    fileName?: string;
+    maxSize: number; // Max file size in bytes
 }
 
 const UploadFile: React.FC<UploadFileProps> = (props) => {
@@ -32,6 +33,7 @@ const UploadFile: React.FC<UploadFileProps> = (props) => {
         iconDisable,
         rules,
         fileName,
+        maxSize,
         ...restProps
     } = props;
 
@@ -44,60 +46,83 @@ const UploadFile: React.FC<UploadFileProps> = (props) => {
         defaultValue: defaultValue ?? "",
     });
 
-    const handelChangeShipment = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files?.item(0)?.name) {
-            setValue(fileName ?? "fileName", e.target.files?.item(0)?.name, {
-                shouldValidate: true,
-            });
+    const [fileInfo, setFileInfo] = useState<{ name: string; size: number | null }>({ name: "", size: null });
+    const [fileError, setFileError] = useState<string | null>(null);
+
+    const handleChangeShipment = (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            if (file.size > maxSize) {
+                setFileError(`File size exceeds the maximum size of ${maxSize / 1024} KB`);
+                setFileInfo({ name: "", size: null });
+                return;
+            }
+            setFileError(null);
+            setFileInfo({ name: file.name, size: file.size }); // Store file name and size
+            setValue(fileName ?? "fileName", file.name, { shouldValidate: true });
         }
     };
 
     return (
-        <ControlMUITextField
-            control={control}
-            name={fileName ?? "fileName"}
-            readOnly
-            rules={rules}
-            {...restProps}
-            InputProps={{
-                endAdornment: (
-                    <InputAdornment position="end">
-                        <label htmlFor="icon-button-file">
-                            <Input
-                                {...fieldProps}
-                                name={name}
-                                disabled={iconDisable}
-                                value={value?.filename}
-                                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                                    if (e.target.files?.item(0)?.name) {
-                                        fieldChange(e.target.files?.[0]);
-                                        handelChangeShipment(e);
-                                    }
-                                    onChange && onChange(e);
-                                }}
-                                onClick={(event: any) => {
-                                    if (!value) {
-                                        event.target.value = null;
-                                    }
-                                }}
-                                accept={accept}
-                                id="icon-button-file"
-                                type="file"
-                            />
-                            <IconButton
-                                disabled={iconDisable}
-                                color="default"
-                                aria-label="upload"
-                                component="span"
-                                size="large"
-                            >
-                                <Icon>{icon}</Icon>
-                            </IconButton>
-                        </label>
-                    </InputAdornment>
-                ),
-            }}
-        />
+        <Stack width={"100%"}>
+            <ControlMUITextField
+                control={control}
+                name={fileName ?? "fileName"}
+                readOnly
+                rules={rules}
+                {...restProps}
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <label htmlFor="icon-button-file">
+                                <Input
+                                    {...fieldProps}
+                                    name={name}
+                                    disabled={iconDisable}
+                                    value={value?.filename}
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                        const file = e.target.files?.[0];
+                                        if (file && file.size <= maxSize) {
+                                            fieldChange(file);
+                                            handleChangeShipment(e);
+                                        } else {
+                                            setFileError(
+                                                `File size exceeds the maximum size of ${maxSize / 1024} KB`
+                                            );
+                                        }
+                                        onChange && onChange(e);
+                                    }}
+                                    onClick={(event: any) => {
+                                        if (!value) {
+                                            event.target.value = null;
+                                        }
+                                    }}
+                                    accept={accept}
+                                    id="icon-button-file"
+                                    type="file"
+                                />
+                                <IconButton
+                                    disabled={iconDisable}
+                                    color="default"
+                                    aria-label="upload"
+                                    component="span"
+                                    size="large"
+                                >
+                                    <Icon>{icon}</Icon>
+                                </IconButton>
+                            </label>
+                        </InputAdornment>
+                    ),
+                }}
+            />
+            {/* Display file name and size */}
+            {fileInfo.name && fileInfo.size !== null && (
+                <p>
+                    size: {(fileInfo.size / 1024).toFixed(2)} KB
+                </p>
+            )}
+            {fileError && <Typography color={"error.main"}>{fileError}</Typography>}
+        </Stack>
     );
 };
 

@@ -4,10 +4,13 @@ import { Box, Button, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'react-i18next'
+import LoadingButton from '@mui/lab/LoadingButton'
 
-const DeleteItem = ({ children, id, deleteFun }: { children: React.ReactNode, id: string, deleteFun: (id: string) => void }) => {
+const DeleteItem = ({ children, id, deleteFun }: { children: React.ReactNode, id: string, deleteFun: (id: string) => Promise<void> }) => {
     const [openDialog, setOpenDialog] = useState(false)
     const router = useRouter()
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("")
 
     const closeDialog = () => {
         setOpenDialog(false)
@@ -18,9 +21,14 @@ const DeleteItem = ({ children, id, deleteFun }: { children: React.ReactNode, id
     }
 
     const deleteHighlightsFun = async (id: string) => {
-        await deleteFun(id)
-        router.refresh()
-        closeDialog()
+        setLoading(true)
+        await deleteFun(id).then(() => {
+            setLoading(false)
+            router.refresh()
+            closeDialog()
+        }).catch(() => {
+            setError("errorInDelete")
+        })
     }
 
     const { t } = useTranslation(['dashboard'])
@@ -34,12 +42,13 @@ const DeleteItem = ({ children, id, deleteFun }: { children: React.ReactNode, id
                 content={
                     <Box p={2}>
                         <Typography>{t("deleteMSG")}</Typography>
+                        <Typography>{t(error)}</Typography>
                     </Box>
                 }
                 actions={
                     <Stack justifyContent={"flex-end"} direction={"row"} spacing={1}>
-                        <Button variant='contained' color='error' onClick={() => deleteHighlightsFun(id)}>{t("delete")}</Button>
-                        <Button variant='contained' color='inherit' onClick={closeDialog}>{t("cancel")}</Button>
+                        <LoadingButton loading={loading} variant='contained' color='error' onClick={() => deleteHighlightsFun(id)}>{t("delete")}</LoadingButton>
+                        <Button variant='contained' color='inherit' onClick={closeDialog} disabled={loading}>{t("cancel")}</Button>
                     </Stack>
                 }
             />

@@ -2,33 +2,12 @@
 "use server"
 
 import db from "@/db/db"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
-import fs from "fs/promises"
-import * as z from "zod"
 import { AddClientsSchema, UpdateClientsSchema } from "@/schemas"
-// import { ClientType } from "@prisma/client"
 import { storage } from '@/firebase'
 import { deleteObject, ref } from 'firebase/storage'
 import { saveImage } from "./saveImage"
-
-// export async function getBranches() {
-//     const branches = await db.branches.findMany({
-//         select: {
-//             id: true,
-//             image: true,
-//             nameAr: true,
-//             name: true,
-//             locationAr: true,
-//             location: true,
-//             mobile: true,
-//             whatsApp: true,
-//         },
-//         orderBy: { createdAt: "asc" },
-//     })
-
-//     return branches
-// }
 
 export async function getClientsById(id: string) {
     const client = await db.clients.findUnique({
@@ -55,9 +34,7 @@ export async function deleteClient(id: string) {
     const imageName = client.imageName
     const desertRef = ref(storage, imageName);
 
-    deleteObject(desertRef).then(async () => {
-
-    }).catch((err) => console.log(err))
+    deleteObject(desertRef)
 
     revalidatePath("/")
     revalidatePath("/admin/clients")
@@ -79,7 +56,10 @@ export async function addClient(formData: FormData) {
     const result = AddClientsSchema.safeParse(parsedData)
 
     if (!result.success) {
-        return result.error.formErrors.fieldErrors;
+        return {
+            status: "error",
+            data: result.error.formErrors.fieldErrors
+        };
     }
 
     const data = result.data;
@@ -113,12 +93,16 @@ export async function updateClient(formData: FormData, id: string) {
         name,
         nameAr,
         type,
-        image,
+        ...(image && { image })
     };
+
     const result = UpdateClientsSchema.safeParse(parsedData)
 
     if (!result.success) {
-        return result.error.formErrors.fieldErrors;
+        return {
+            status: "error",
+            data: result.error.formErrors.fieldErrors
+        };
     }
 
     const data = result.data
@@ -127,37 +111,56 @@ export async function updateClient(formData: FormData, id: string) {
     if (client == null) return notFound()
 
     let prevImageName = client.imageName
+
     if (data.image != null && data.image.size > 0) {
         const desertRef = ref(storage, prevImageName);
-        deleteObject(desertRef).then(async () => {
-            const { imagePath, imageName } = await saveImage(data.image!, "clients")
-            // File deleted successfully
-            await db.clients.update({
-                where: { id },
-                data: {
-                    nameAr: data.nameAr,
-                    name: data.name,
-                    type: data.type,
-                    imageName: imageName,
-                    imagePath: imagePath,
-                },
-            })
-        }).catch((error) => {
-            console.log(error)
+        deleteObject(desertRef)
 
-            // Uh-oh, an error occurred!
-        });
-        // await fs.unlink(`public${client.image}`)
-        // imagePath = `/clients/${crypto.randomUUID()}-${data.image.name}`
-        // await fs.writeFile(
-        //     `public${imagePath}`,
-        //     Buffer.from(await data.image.arrayBuffer())
-        // )
+        const { imagePath, imageName } = await saveImage(data.image!, "clients")
+        await db.clients.update({
+            where: { id },
+            data: {
+                nameAr: data.nameAr,
+                name: data.name,
+                type: data.type,
+                imageName: imageName,
+                imagePath: imagePath,
+            },
+        })
+
+        return {
+            status: "done",
+            data: {
+                id: id,
+                nameAr: data.nameAr,
+                name: data.name,
+                type: data.type,
+                imagePath: imagePath,
+            }
+        }
+    } else {
+        await db.clients.update({
+            where: { id },
+            data: {
+                nameAr: data.nameAr,
+                name: data.name,
+                type: data.type,
+            },
+        })
+
+        return {
+            status: "done",
+            data: {
+                id: id,
+                nameAr: data.nameAr,
+                name: data.name,
+                type: data.type,
+            }
+        }
     }
 
 
 
-    revalidatePath("/")
-    revalidatePath("/clients")
-    revalidatePath("/admin/clients")
+
+
 }

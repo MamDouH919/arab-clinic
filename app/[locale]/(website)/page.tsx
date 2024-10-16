@@ -1,13 +1,10 @@
 import About from '@/component/sections/About'
-import Banner from '@/component/sections/Banner'
 import BannerSwiper from '@/component/sections/BannerSwiper'
 import Branches from '@/component/sections/Branches'
 import Clients from '@/component/sections/Clients'
 import Contact from '@/component/sections/Contact'
 import Highlights from '@/component/sections/Highlights'
 import Services from '@/component/sections/Services'
-import db from '@/db/db'
-import { cache } from '@/lib/cache'
 import React from 'react'
 
 async function fetchHighlightsFromAPI() {

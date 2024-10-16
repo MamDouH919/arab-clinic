@@ -1,7 +1,7 @@
 "use client"
 import { ListHeaderTitle } from '@/component/ui/ListHeader'
 import { AddNewsSchema, AddServicesSchema, UpdateNewsSchema, UpdateServicesSchema } from '@/schemas'
-import { Box, Button, Paper, Skeleton, Stack, TextField, Typography } from '@mui/material'
+import { Box, Button, Chip, IconButton, Paper, Skeleton, Stack, TextField, Toolbar, Typography } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -19,8 +19,13 @@ import ControlMUITextField from '@/component/ui/ControlMUItextField'
 import clsx from 'clsx'
 import CustomDialog from '@/component/ui/customDialog'
 import Image from 'next/image'
-import { addServices, updateServices } from '@/actions/services'
+import { addServices, deleteServiceImage, updateServices } from '@/actions/services'
 import LoadingButton from '@mui/lab/LoadingButton'
+import { Delete } from '@mui/icons-material'
+import { deleteObject, ref } from 'firebase/storage'
+import { storage } from '@/firebase'
+import db from '@/db/db'
+import ServiceImageDialog from './_component/ServiceImageDialog'
 
 // Loading component to display while ReactQuill is being loaded
 const Loading = () => <Skeleton height={"300px"} animation="wave" variant="rectangular" />;
@@ -34,6 +39,9 @@ const PREFIX = "Counter";
 const classes = {
     editor: `${PREFIX}-editor`,
     editorError: `${PREFIX}-editorError`,
+    imagesPaper: `${PREFIX}-imagesPaper`,
+    imageWrapper: `${PREFIX}-imageWrapper`,
+    deleteImageWrapper: `${PREFIX}-deleteImageWrapper`,
 };
 
 const Root = styled(Stack)(({ theme }) => ({
@@ -50,31 +58,88 @@ const Root = styled(Stack)(({ theme }) => ({
     [`& .${classes.editorError}`]: {
         border: "1px solid red",
     },
+    [`& .${classes.imagesPaper}`]: {
+        padding: theme.spacing(2),
+    },
+    [`& .${classes.imageWrapper}`]: {
+        height: "200px",
+        width: "200px",
+        border: `1px solid ${theme.palette.divider}`,
+        borderRadius: "10px",
+        position: "relative",
+        [`&:hover`]: {
+            [`& .${classes.deleteImageWrapper}`]: {
+                display: "flex"
+            },
+        },
+    },
+    [`& .${classes.deleteImageWrapper}`]: {
+        position: "absolute",
+        top: "0",
+        left: "0",
+        height: "100%",
+        width: "100%",
+        borderRadius: "10px",
+        background: "#4747478a",
+        display: "none"
+    },
 }));
 
-interface News {
+interface Service {
     id: string
     titleAr: string
     title: string
     descriptionAr: string
     description: string
-    icon: string
-    coverImg: string
-    imgOne: string | null
-    imgTwo: string | null
-    imgThree: string | null
+    iconName: string
+    iconPath: string
+    coverImgName: string
+    coverImgPath: string
+    videos: string | null
 }
 
-const Form = ({ id, data }: { id?: string, data?: News }) => {
+export type imageType = {
+    id: string; imagePath: string; imageName: string; serviceId: string;
+}
+
+const Form = ({
+    id,
+    data,
+    imageOne,
+    imageTwo,
+    imageThree,
+    servicesImages
+}: {
+    id?: string,
+    data?: Service,
+    imageOne?: { id: string; imagePath: string; imageName: string; serviceId: string; }
+    imageTwo?: { id: string; imagePath: string; imageName: string; serviceId: string; }
+    imageThree?: { id: string; imagePath: string; imageName: string; serviceId: string; }
+    servicesImages: imageType[]
+}) => {
+    const [servicesImagesState, setServicesImagesState] = useState(servicesImages ?? [])
+    const [servicesYoutubeIdsState, setServicesYoutubeIdsState] = useState<string[]>(data?.videos ? JSON.parse(data?.videos) : [])
+    const [youtubeIdsValue, setYoutubeIdsValue] = useState("")
+
+    const [serviceImageDialog, setServiceImageDialog] = useState(false)
     const [loading, setLoading] = useState(false)
+
     const [openDialog, setOpenDialog] = useState({
         open: false,
         fileName: "",
         name: "",
+        fileSize: 0,
+        buttonName: "",
     })
 
     const closeDialog = () => {
-        setOpenDialog({ open: false, fileName: "", name: "" })
+        setOpenDialog({ open: false, fileName: "", name: "", buttonName: "", fileSize: 0 })
+    }
+    const closeServiceImageDialog = (data?: imageType) => {
+        if (data) {
+            setServicesImagesState(prev => [...prev, data])
+        }
+        setServiceImageDialog(false)
     }
 
     const schema = id ? UpdateServicesSchema : AddServicesSchema;
@@ -86,17 +151,15 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
         defaultValues: {
             titleAr: data?.titleAr ?? '',
             title: data?.title ?? '',
-            fileIcon: data?.icon ?? '',
-            fileImgOne: data?.imgOne ?? '',
-            fileImgTwo: data?.imgTwo ?? '',
-            fileImgThree: data?.imgThree ?? '',
-            fileCover: data?.coverImg ?? '',
+            fileIcon: data?.iconPath ?? '',
+            fileImgOne: imageOne?.imagePath ?? '',
+            fileImgTwo: imageTwo?.imagePath ?? '',
+            fileImgThree: imageThree?.imagePath ?? '',
+            fileCover: data?.coverImgPath ?? '',
             descriptionAr: data?.descriptionAr ?? '',
             description: data?.description ?? '',
         }
     });
-
-    console.log(watch());
 
     const router = useRouter()
     const [errors, setErrors] = useState<{
@@ -138,6 +201,8 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
 
 
     const onSubmit = async (data: z.infer<typeof schema>) => {
+        console.log(data);
+
         setLoading(true);
 
         const formData = new FormData();
@@ -145,53 +210,20 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
         formData.append("title", data.title);
         formData.append("descriptionAr", data.descriptionAr);
         formData.append("description", data.description);
+        formData.append("videos", JSON.stringify(servicesYoutubeIdsState));
 
-        if (data.icon) {
+        if (!!data.icon) {
             formData.append("icon", data?.icon);
-        } else {
-            if (id) {
-                formData.append("icon", new File([], ""));
-            }
         }
-        if (data.imgOne) {
-            formData.append("imgOne", data?.imgOne);
-        } else {
-            if (id && data.imgOne) {
-                formData.append("imgOne", new File([], ""));
-            }
-        }
-        if (data.imgTwo) {
-            formData.append("imgTwo", data?.imgTwo);
-        } else {
-            if (id && data.imgTwo) {
-                formData.append("imgTwo", new File([], ""));
-            }
-        }
-        if (data.imgThree) {
-            formData.append("imgThree", data?.imgThree);
-        } else {
-            if (id && data.imgThree) {
-                formData.append("imgThree", new File([], ""));
-            }
-        }
-        if (data.coverImg) {
+
+        if (!!data.coverImg) {
             formData.append("coverImg", data?.coverImg);
-        } else {
-            if (id) {
-                formData.append("coverImg", new File([], ""));
-            }
         }
-
-        console.log(formData);
-
 
         const result = id ? await updateServices(formData, id) : await addServices(formData);
 
         if (result) {
             setLoading(false)
-            console.log(result);
-
-
             for (const [field, messages] of Object.entries(result)) {
                 if (field === "icon" || field === "coverImg" || field === "imgOne" || field === "imgTwo" || field === "imgThree") {
                     setErrors(prevErrors => ({
@@ -208,7 +240,6 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                     type: "validate",
                     message: messages[0] // Assuming we take the first message
                 });
-
             }
         } else {
             router.refresh()
@@ -218,7 +249,7 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
 
     const previewImage = (file: File | string) => {
         let previewUrl
-        if (typeof file === "string") {
+        if (file && typeof file === "string") {
             previewUrl = file
             return previewUrl
         }
@@ -226,11 +257,31 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
             previewUrl = URL.createObjectURL(file);
             return previewUrl
         }
-        return ''
+        return "/noImage.jpg"
     }
+
+
+    const deleteServiceImageFun = async (id: string, imageName: string) => {
+        const deleteItem = await deleteServiceImage(id, imageName)
+        if (deleteItem === "done") {
+            setServicesImagesState(prev => prev.filter(e => e.id !== id))
+        }
+    }
+
+    const handleDelete = (idToDelete: string) => {
+        setServicesYoutubeIdsState(prevState => prevState.filter(id => id !== idToDelete));
+    };
+
+    const addYoutubeId = () => {
+        const resultString = youtubeIdsValue.replace(/\s/g, ''); // Removes all spaces
+        setServicesYoutubeIdsState(prev => [...prev, resultString])
+        setYoutubeIdsValue("")
+    };
+
 
     return (
         <Root spacing={2}>
+            {serviceImageDialog && id && <ServiceImageDialog id={id} openDialog={serviceImageDialog} closeDialog={closeServiceImageDialog} />}
             <CustomDialog
                 open={openDialog.open}
                 handleClose={closeDialog}
@@ -246,6 +297,7 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                             icon={"add_photo_alternate"}
                             label={t("uploadImage")}
                             accept=".png,.jpg,.svg,jpeg"
+                            maxSize={openDialog.fileSize * 1024}
                             rules={{
                                 validate: {
                                     require: (value: any) =>
@@ -266,25 +318,25 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
             </Stack>
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
                 <Paper sx={{ padding: 3 }}>
-                    <Grid container spacing={2} m={0} justifyContent={"center"}>
+                    <Grid container spacing={2} m={0} justifyContent={"flex-start"}>
                         <Grid md={12} xs={12} display={"flex"} justifyContent={"center"}>
                             <Box width={"100%"}>
                                 <Grid container spacing={3} m={0}>
                                     <Grid md={4} xs={12}>
-                                        {(watch("icon") || watch("fileIcon")) &&
-                                            <Image
-                                                src={previewImage(watch("icon") || watch("fileIcon"))}
-                                                alt="icon"
-                                                width={100}
-                                                height={100}
-                                                objectFit='cover'
-                                                layout='responsive'
-                                                style={{
-                                                    width: "100%",
-                                                    maxHeight: "350px"
-                                                }}
-                                            />
-                                        }
+                                        <Image
+                                            src={previewImage(watch("icon") || watch("fileIcon"))}
+                                            alt="icon"
+                                            width={100}
+                                            height={100}
+                                            objectFit='cover'
+                                            layout='responsive'
+                                            style={{
+                                                width: "100%",
+                                                maxHeight: "350px",
+                                                border: "1px solid #cfcccc",
+                                                borderRadius: "20px",
+                                            }}
+                                        />
                                         {errors.icon && <Typography color="error">{errors.icon}</Typography>}
                                         <Button
                                             variant='contained'
@@ -299,28 +351,31 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                                                 setOpenDialog({
                                                     fileName: "fileIcon",
                                                     name: "icon",
-                                                    open: true
+                                                    open: true,
+                                                    fileSize: 10,
+                                                    buttonName: "addIcon"
                                                 })
                                             }}
                                         >
-                                            {t("addImage")}
+                                            {t("addIcon")}
                                         </Button>
                                     </Grid>
                                     <Grid md={8} xs={12}>
-                                        {(watch("coverImg") || watch("fileCover")) &&
-                                            <Image
-                                                src={previewImage(watch("coverImg") || watch("fileCover"))}
-                                                alt="coverImg"
-                                                width={100}
-                                                height={100}
-                                                objectFit='cover'
-                                                layout='responsive'
-                                                style={{
-                                                    width: "100%",
-                                                    maxHeight: "350px"
-                                                }}
-                                            />
-                                        }
+                                        <Image
+                                            src={previewImage(watch("coverImg") || watch("fileCover"))}
+                                            alt="coverImg"
+                                            width={100}
+                                            height={100}
+                                            objectFit='cover'
+                                            layout='responsive'
+                                            style={{
+                                                width: "100%",
+                                                maxHeight: "350px",
+                                                border: "1px solid #cfcccc",
+                                                borderRadius: "20px",
+                                            }}
+                                        />
+
                                         {errors.coverImg && <Typography color="error">{errors.coverImg}</Typography>}
                                         <Button
                                             variant='contained'
@@ -335,28 +390,31 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                                                 setOpenDialog({
                                                     fileName: "fileCover",
                                                     name: "coverImg",
-                                                    open: true
+                                                    open: true,
+                                                    fileSize: 250,
+                                                    buttonName: "addCover"
                                                 })
                                             }}
                                         >
-                                            {t("addImage")}
+                                            {t("addCover")}
                                         </Button>
                                     </Grid>
-                                    <Grid md={4} xs={12}>
-                                        {(watch("imgOne") || watch("fileImgOne")) &&
-                                            <Image
-                                                src={previewImage(watch("imgOne") || watch("fileImgOne"))}
-                                                alt="imgOne"
-                                                width={100}
-                                                height={100}
-                                                objectFit='cover'
-                                                layout='responsive'
-                                                style={{
-                                                    width: "100%",
-                                                    maxHeight: "350px"
-                                                }}
-                                            />
-                                        }
+                                    {/* <Grid md={4} xs={12}>
+                                        <Image
+                                            src={previewImage(watch("imgOne") || watch("fileImgOne"))}
+                                            alt="imgOne"
+                                            width={100}
+                                            height={100}
+                                            objectFit='cover'
+                                            layout='responsive'
+                                            style={{
+                                                width: "100%",
+                                                maxHeight: "350px",
+                                                border: "1px solid #cfcccc",
+                                                borderRadius: "20px",
+                                            }}
+                                        />
+
                                         {errors.imgOne && <Typography color="error">{errors.imgOne}</Typography>}
                                         <Button
                                             variant='contained'
@@ -371,7 +429,9 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                                                 setOpenDialog({
                                                     fileName: "fileImgOne",
                                                     name: "imgOne",
-                                                    open: true
+                                                    open: true,
+                                                    fileSize: 250,
+                                                    buttonName: "imageSlide"
                                                 })
                                             }}
                                         >
@@ -379,20 +439,21 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                                         </Button>
                                     </Grid>
                                     <Grid md={4} xs={12}>
-                                        {(watch("imgTwo") || watch("fileImgTwo")) &&
-                                            <Image
-                                                src={previewImage(watch("imgTwo") || watch("fileImgTwo"))}
-                                                alt="imgTwo"
-                                                width={100}
-                                                height={100}
-                                                objectFit='cover'
-                                                layout='responsive'
-                                                style={{
-                                                    width: "100%",
-                                                    maxHeight: "350px"
-                                                }}
-                                            />
-                                        }
+                                        <Image
+                                            src={previewImage(watch("imgTwo") || watch("fileImgTwo"))}
+                                            alt="imgTwo"
+                                            width={100}
+                                            height={100}
+                                            objectFit='cover'
+                                            layout='responsive'
+                                            style={{
+                                                width: "100%",
+                                                maxHeight: "350px",
+                                                border: "1px solid #cfcccc",
+                                                borderRadius: "20px",
+                                            }}
+                                        />
+
                                         {errors.imgTwo && <Typography color="error">{errors.imgTwo}</Typography>}
                                         <Button
                                             variant='contained'
@@ -407,7 +468,9 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                                                 setOpenDialog({
                                                     fileName: "fileImgTwo",
                                                     name: "imgTwo",
-                                                    open: true
+                                                    open: true,
+                                                    fileSize: 250,
+                                                    buttonName: "imageSlide"
                                                 })
                                             }}
                                         >
@@ -415,20 +478,21 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                                         </Button>
                                     </Grid>
                                     <Grid md={4} xs={12}>
-                                        {(watch("imgThree") || watch("fileImgThree")) &&
-                                            <Image
-                                                src={previewImage(watch("imgThree") || watch("fileImgThree"))}
-                                                alt="imgThree"
-                                                width={100}
-                                                height={100}
-                                                objectFit='cover'
-                                                layout='responsive'
-                                                style={{
-                                                    width: "100%",
-                                                    maxHeight: "350px"
-                                                }}
-                                            />
-                                        }
+                                        <Image
+                                            src={previewImage(watch("imgThree") || watch("fileImgThree"))}
+                                            alt="imgThree"
+                                            width={100}
+                                            height={100}
+                                            objectFit='cover'
+                                            layout='responsive'
+                                            style={{
+                                                width: "100%",
+                                                maxHeight: "350px",
+                                                border: "1px solid #cfcccc",
+                                                borderRadius: "20px",
+                                            }}
+                                        />
+
                                         {errors.imgThree && <Typography color="error">{errors.imgThree}</Typography>}
                                         <Button
                                             variant='contained'
@@ -443,13 +507,15 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                                                 setOpenDialog({
                                                     fileName: "fileImgThree",
                                                     name: "imgThree",
-                                                    open: true
+                                                    open: true,
+                                                    fileSize: 250,
+                                                    buttonName: "imageSlide"
                                                 })
                                             }}
                                         >
                                             {t("addImage")}
                                         </Button>
-                                    </Grid>
+                                    </Grid> */}
                                 </Grid>
                             </Box>
                         </Grid>
@@ -549,6 +615,33 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                                 </Grid>
                             </Box>
                         </Grid>
+                        <Stack spacing={2}>
+                            <Stack direction={"row"} spacing={1}>
+                                <TextField
+                                    label={t("youtubeId")}
+                                    value={youtubeIdsValue}
+                                    size='small'
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                                        const value = event.target.value.replace(/\s/g, ''); // Remove spaces
+                                        setYoutubeIdsValue(value);
+                                    }}
+
+                                    onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
+                                        if (event.key === 'Enter') {
+                                            // Call a function or perform some action
+                                            event.preventDefault();
+                                            addYoutubeId()
+                                        }
+                                    }}
+
+
+                                />
+                                <Button variant='contained' onClick={addYoutubeId}>{t("add")}</Button>
+                            </Stack>
+                            <Stack direction="row" spacing={1}>
+                                {servicesYoutubeIdsState.map(id => <Chip key={id} label={id} onDelete={() => handleDelete(id)} />)}
+                            </Stack>
+                        </Stack>
 
                         <Grid md={12} xs={12} display={"flex"} justifyContent={"flex-end"}>
                             <LoadingButton loading={loading} variant={"contained"} type={"submit"}>{t("save")}</LoadingButton>
@@ -556,6 +649,36 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                     </Grid>
                 </Paper>
             </form>
+
+            <Paper className={classes.imagesPaper}>
+                <Toolbar>
+                    <Typography variant='h5'>{t("images")}</Typography>
+                </Toolbar>
+                <Stack direction={"row"} px={3} spacing={2} flexWrap={"wrap"} useFlexGap>
+                    {servicesImagesState.map(e =>
+                        <Stack key={e.id} justifyContent={"center"} alignItems={"center"} className={classes.imageWrapper}>
+                            <Stack className={classes.deleteImageWrapper} justifyContent={"center"} alignItems={"center"}>
+                                <IconButton size='large' onClick={() => deleteServiceImageFun(e.id, e.imageName)}>
+                                    <Delete fontSize='inherit' color='error' />
+                                </IconButton>
+                            </Stack>
+                            <Image
+                                src={e.imagePath}
+                                alt={"service image"}
+                                width={200}
+                                height={200}
+                                objectFit='cover'
+                                style={{
+                                    borderRadius: "20px"
+                                }}
+                            />
+                        </Stack>
+                    )}
+                    <Stack justifyContent={"center"} alignItems={"center"} className={classes.imageWrapper}>
+                        <Button variant='contained' onClick={() => setServiceImageDialog(true)} disabled={!id}>{t("addNew")}</Button>
+                    </Stack>
+                </Stack>
+            </Paper>
         </Root>
     )
 }

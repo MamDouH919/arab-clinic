@@ -13,6 +13,8 @@ import { ModeContext } from './modeContext';
 import { config } from "@/config";
 import * as color from "@mui/material/colors";
 import { SnackbarProvider } from "notistack";
+import { getCookie } from 'cookies-next';
+import { useMediaQuery } from '@mui/material';
 
 export const muiCache = createCache({
     key: "mui",
@@ -31,10 +33,22 @@ const ThemeProv = ({ children, locale }: { children: React.ReactNode, locale: st
     const secondaryColor = darkMode ? config.theme.secondaryDark : config.theme.secondaryLight;
     const secondaryColorKey = secondaryColor as keyof typeof color;
 
+
+    const themeMode = getCookie("themeMode");
+    const isDarkModeEnabled = useMediaQuery('(prefers-color-scheme: dark)');
+
+    const ttt = themeMode
+        ? themeMode === 'dark'
+            ? true
+            : false
+        : isDarkModeEnabled
+
+    const ooo = ttt && darkMode    
+
     const theme = createTheme({
         direction: dir(locale),
         palette: {
-            mode: "dark",
+            mode: ooo ? "dark" : "light",
             primary: {
                 main: primaryColor.startsWith("#")
                     ? primaryColor
@@ -45,20 +59,16 @@ const ThemeProv = ({ children, locale }: { children: React.ReactNode, locale: st
                     ? secondaryColor
                     : color[secondaryColorKey][500 as keyof typeof color[typeof secondaryColorKey]],
             },
-            ...(true ? {
+            ...(ooo ? {
                 background: {
                     default: "#18191a",
                     paper: "#2f3031",
-                    // hover: "rgba(73, 73, 73)",
-                    // appTitle: "rgba(73, 73, 73)"
                 }
             }
                 : {
                     background: {
                         default: "#fafafa",
                         paper: "#fff",
-                        // hover: "#f5f5f5",
-                        // appTitle: "#f5f7f9"
                     }
                 })
         },
@@ -66,7 +76,7 @@ const ThemeProv = ({ children, locale }: { children: React.ReactNode, locale: st
             fontFamily: ['"Cairo"', "sans-serif"].join(","),
             fontSize: 12.5,
         }
-    });
+    });    
 
     return (
         <AppRouterCacheProvider options={{
@@ -75,7 +85,6 @@ const ThemeProv = ({ children, locale }: { children: React.ReactNode, locale: st
         }}>
 
             <ThemeProvider theme={theme}>
-                {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                 <CssBaseline />
                 <SnackbarProvider maxSnack={3}>
                     {children}

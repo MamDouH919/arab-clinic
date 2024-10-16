@@ -9,7 +9,16 @@ const Page = async ({ params: { id, locale } }: { params: { id: string, locale: 
     const data = await getServicesById(id)
     if (data == null) return <NoData label={t("noData")} />
 
-    return <Form id={id} data={data} />
+    let imageOne, imageTwo, imageThree
+
+    if (data.servicesImages.length) {
+        imageOne = data.servicesImages[0]
+        imageTwo = data.servicesImages[1]
+        imageThree = data.servicesImages[2]
+    }
+
+
+    return <Form id={id} data={data} imageOne={imageOne} imageTwo={imageTwo} imageThree={imageThree} servicesImages={data.servicesImages}/>
 }
 
 export default Page

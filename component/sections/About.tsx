@@ -24,7 +24,7 @@ const About = () => {
                                     {/* <Stack height={"120px"} alignItems={"center"} justifyContent={"center"}>about Image</Stack> */}
                                     <Image
                                         src={'/staticImages/about/about.webp'}
-                                        alt='ss'
+                                        alt={t("appName")}
                                         width={500}  // Set a specific width in pixels
                                         height={300} // Set a specific height in pixels
                                         style={{ borderRadius: "10px", width: '100%' }}

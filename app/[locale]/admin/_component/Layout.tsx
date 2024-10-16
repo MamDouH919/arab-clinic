@@ -12,6 +12,7 @@ import Image from "next/image";
 import useWidth, { isWidthDown } from '@/component/helperFunctions/useWidth';
 import NavDrawer from './NavDrawer';
 import LanguageMenu from '@/component/Language';
+import DarkModeIcon from '@/component/ui/DarkModeIcon';
 
 const drawerWidth = 240;
 
@@ -126,7 +127,10 @@ export default function DashboardLayout({
                                 />
                             </Link>
                         </Stack>
+                        <Stack direction={"row"} spacing={1}>
                         <LanguageMenu />
+                        <DarkModeIcon />
+                        </Stack>
                     </Stack>
                 </Toolbar>
             </AppBar>

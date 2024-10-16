@@ -60,7 +60,7 @@ interface inputProps {
         id: string,
         title: string,
         titleAr: string,
-        icon: string,
+        iconPath: string,
         description: string,
         descriptionAr: string
     }[]
@@ -87,7 +87,7 @@ const Services = (props: inputProps) => {
                                     <Grid md={4} sm={6} xs={12} key={index} className={classes.serviceGrid}>
                                         <Stack alignItems={"center"} spacing={3} width={"100%"} className={classes.serviceWrapper}>
                                             <Image
-                                                src={service.icon}
+                                                src={service.iconPath}
                                                 width={80}
                                                 height={80}
                                                 alt={service.title}
