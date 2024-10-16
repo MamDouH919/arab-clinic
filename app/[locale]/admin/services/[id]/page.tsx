@@ -18,7 +18,7 @@ const Page = async ({ params: { id, locale } }: { params: { id: string, locale: 
     }
 
 
-    return <Form id={id} data={data} imageOne={imageOne} imageTwo={imageTwo} imageThree={imageThree} servicesImages={data.servicesImages}/>
+    return <Form id={id} data={data} servicesImages={data.servicesImages}/>
 }
 
 export default Page
