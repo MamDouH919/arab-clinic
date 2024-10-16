@@ -105,17 +105,11 @@ export type imageType = {
 const Form = ({
     id,
     data,
-    imageOne,
-    imageTwo,
-    imageThree,
     servicesImages
 }: {
     id?: string,
     data?: Service,
-    imageOne?: { id: string; imagePath: string; imageName: string; serviceId: string; }
-    imageTwo?: { id: string; imagePath: string; imageName: string; serviceId: string; }
-    imageThree?: { id: string; imagePath: string; imageName: string; serviceId: string; }
-    servicesImages: imageType[]
+    servicesImages?: imageType[]
 }) => {
     const [servicesImagesState, setServicesImagesState] = useState(servicesImages ?? [])
     const [servicesYoutubeIdsState, setServicesYoutubeIdsState] = useState<string[]>(data?.videos ? JSON.parse(data?.videos) : [])
@@ -152,9 +146,6 @@ const Form = ({
             titleAr: data?.titleAr ?? '',
             title: data?.title ?? '',
             fileIcon: data?.iconPath ?? '',
-            fileImgOne: imageOne?.imagePath ?? '',
-            fileImgTwo: imageTwo?.imagePath ?? '',
-            fileImgThree: imageThree?.imagePath ?? '',
             fileCover: data?.coverImgPath ?? '',
             descriptionAr: data?.descriptionAr ?? '',
             description: data?.description ?? '',
