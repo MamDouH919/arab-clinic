@@ -10,8 +10,8 @@ export async function addUserMut() {
     const pass = await hashPassword("Arab!!!clinic123")
     await db.users.create({
         data: {
-            email: "arabclinic@arab.com",
-            password: "Arab!!!clinic123"
+            email: "arabclinic@arabclinic.com",
+            password: pass
         }
     });
 }
