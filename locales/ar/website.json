@@ -12,7 +12,7 @@
   "phone": "الهاتف",
   "governorate": "المحافظة",
   "insertFile": "أدخل ملف",
-  "submit": "تقديم",
+  "submit": "تأكيد",
   "ThePositionAppliedFor": "الوظيفة التي تقدمها",
   "noAvailableJobs": "لا توجد وظائف متاحة",
   "noNews": "لا توجد أخبار",
@@ -34,5 +34,6 @@
   "about": "معلومات عنا",
   "services": "الخدمات",
   "contact": "التواصل",
-  "forMoreInformation": "لمزيد من المعلومات"
+  "forMoreInformation": "لمزيد من المعلومات",
+  "password": "كلمة المرور"
 }

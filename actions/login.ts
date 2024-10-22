@@ -2,17 +2,18 @@
 import { redirect } from 'next/navigation';
 
 import { createAuthSession, destroySession } from '@/lib/auth';
-import { isValidPassword } from '@/lib/hashPassword';
+import { hashPassword, isValidPassword } from '@/lib/hashPassword';
 import db from '@/db/db';
 import { loginSchema } from '@/schemas';
 
 export async function addUserMut() {
+    const pass = await hashPassword("Arab!!!clinic123")
     await db.users.create({
-        data:{
-            email:"arabclinic@user.com",
-            password:"Arab!!!clinic123"
+        data: {
+            email: "arabclinic@arab.com",
+            password: "Arab!!!clinic123"
         }
-    });  
+    });
 }
 export async function login(email: string, password: string) {
     const result = loginSchema.safeParse({
@@ -26,9 +27,9 @@ export async function login(email: string, password: string) {
                 email: result.error.formErrors.fieldErrors.email
             },
         };
-    }    
+    }
 
-    const existingUser = await db.users.findUnique({ where: { email: email } });    
+    const existingUser = await db.users.findUnique({ where: { email: email } });
 
     if (!existingUser) {
         return {
@@ -38,7 +39,7 @@ export async function login(email: string, password: string) {
         };
     }
 
-    const isValidPasswords = await isValidPassword(existingUser.password, password);    
+    const isValidPasswords = await isValidPassword(existingUser.password, password);
 
     if (!isValidPasswords) {
         return {
