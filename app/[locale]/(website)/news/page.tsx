@@ -1,15 +1,11 @@
 import BreadCrumb from '@/component/ui/BreadCrumb'
 import React from 'react'
-// import EmploymentForm from './_component/EmploymentForm'
-// import { getAvailableJobs } from './_actions'
 import NoData from '@/component/ui/NoData'
 import initTranslations from '@/app/i18n'
 import db from '@/db/db'
 import Image from 'next/image'
-import { Container, IconButton, Paper, Stack, Typography } from '@mui/material'
-import { Edit } from '@mui/icons-material'
+import { Container, Paper, Stack, Typography } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
-import Link from 'next/link'
 import StyledLink from '@/component/ui/StyledLink'
 import { cache } from '@/lib/cache'
 
@@ -45,9 +41,7 @@ const NewsData = async ({ locale }: { locale: string }) => {
         })
     }, ["/products", "getProducts"])
 
-    const news = await getProducts()
-    console.log(news);
-    
+    const news = await getProducts()    
 
     if (news.length === 0) return <NoData label={t("noNews")} />
 

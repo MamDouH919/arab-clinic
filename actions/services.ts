@@ -260,14 +260,6 @@ export async function updateServices(formData: FormData, id: string) {
 
     if (service == null) return notFound()
 
-    // const serviceImages = await db.servicesImages.findMany({ where: { serviceId: id } })
-    // console.log(serviceImages);
-
-    // serviceImages.forEach(e => {
-    //     e.imageName === 
-    // })
-
-
     let prevIconName = service.iconName
     let prevCoverImgName = service.coverImgName
 

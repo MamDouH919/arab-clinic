@@ -15,13 +15,19 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-// model VideosLink {
-//   id        String   @id @default(uuid())
-//   title     String
-//   content   String
-//   serviceId String // Use @db.ObjectId to match the Services model
-//   service   Services @relation(fields: [serviceId], references: [id])
-// }
+model Users {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  password String
+  sessions Sessions[] @relation("UserSessions")
+}
+
+model Sessions {
+  id        String   @id
+  expires_at Int      // Store as a timestamp (integer)
+  user_id   Int      // Reference to Users model
+  user      Users    @relation("UserSessions", fields: [user_id], references: [id])
+}
 
 model ServicesImages {
   id        String   @id @default(uuid())

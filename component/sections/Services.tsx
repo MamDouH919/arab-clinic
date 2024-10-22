@@ -75,8 +75,7 @@ const Services = (props: inputProps) => {
     return (
         <Box sx={{ background: (theme) => theme.palette.background.default }} py={2} >
             <SectionTitle
-                sectionTitle={"sectionTitle"}
-                subSectionTitle={"subSectionTitle"}
+                sectionTitle={"services"}
             />
             <Root style={{ margin: "32px 0" }}>
                 <Container maxWidth={'lg'}>

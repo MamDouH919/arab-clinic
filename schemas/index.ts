@@ -249,3 +249,18 @@ export const UpdateServicesSchema = AddServicesSchema.extend({
 export const ServicesImagesSchema = z.object({
   image: imageSchema.refine(file => file.size < 250 * 1024, i18n.language === "en" ? "File must be smaller than 10KB" : "يجب أن يكون الملف أصغر من 10 كيلوبايت"),
 })
+
+export const loginSchema = z.object({
+  email: z.string({
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }).min(1, {
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }).email({
+    message: i18n.language === "en" ? "must be a valid email" : "يجب أن يكون بريد إلكتروني صحيح",
+  }),
+  password: z.string({
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }).min(1, {
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  })
+})

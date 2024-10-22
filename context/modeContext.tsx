@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { getCookie, setCookie } from "cookies-next";
 
@@ -10,13 +10,22 @@ interface ModeContextProps {
 
 export const ModeContext = createContext<ModeContextProps>({
     darkMode: false,
-    changeMode: () => {},
+    changeMode: () => { },
 });
 
-const ModeContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {    
+const ModeContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const themeMode = getCookie("themeMode");
 
     const isDarkModeEnabled = useMediaQuery('(prefers-color-scheme: dark)');
+
+    console.log(themeMode);
+    console.log("isDarkModeEnabled  :" + isDarkModeEnabled);
+
+    console.log(!!themeMode
+        ? themeMode === 'dark'
+            ? true
+            : false
+        : isDarkModeEnabled);
 
     const [darkMode, setDarkMode] = useState<boolean>(
         themeMode
@@ -26,7 +35,16 @@ const ModeContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
             : isDarkModeEnabled
     );
 
-    const changeMode = () => {        
+    useEffect(() => {
+        if (!themeMode) {
+            setDarkMode(isDarkModeEnabled)
+        }
+        return () => {}
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isDarkModeEnabled])
+
+
+    const changeMode = () => {
         darkMode
             ? setCookie("themeMode", 'light')
             : setCookie("themeMode", 'dark');

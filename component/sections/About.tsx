@@ -12,8 +12,7 @@ const About = () => {
     return (
         <Box sx={{ background: (theme) => theme.palette.background.paper }} py={2}>
             <SectionTitle
-                sectionTitle={t(`aboutTitle`)}
-                subSectionTitle={t(`aboutSubTitle`)}
+                sectionTitle={t(`about`)}
             />
             <div style={{ margin: "32px 0", }}>
                 <Container maxWidth={'lg'}>

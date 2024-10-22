@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import { styled } from "@mui/material/styles";
-import { Container, Divider, Stack, Typography } from '@mui/material';
+import { Container, Stack } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import SwiperSection from './swiper';
 import YouTube from 'react-youtube';
@@ -61,9 +61,6 @@ const ServicesProfile = (props: inputProps) => {
             <NoData />
         </Stack>
     }
-
-    console.log(data);
-
 
     return (
         <Root>

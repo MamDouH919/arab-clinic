@@ -119,8 +119,7 @@ const Contact = () => {
                 py={2}
             >
                 <SectionTitle
-                    sectionTitle={"contactUs"}
-                    subSectionTitle={"contactUs"}
+                    sectionTitle={t("contact")}
                 />
                 <div style={{ margin: "32px 0", }}>
                     <Container maxWidth={'md'}>

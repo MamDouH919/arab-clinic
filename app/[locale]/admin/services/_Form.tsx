@@ -1,19 +1,16 @@
 "use client"
 import { ListHeaderTitle } from '@/component/ui/ListHeader'
-import { AddNewsSchema, AddServicesSchema, UpdateNewsSchema, UpdateServicesSchema } from '@/schemas'
+import { AddServicesSchema, UpdateServicesSchema } from '@/schemas'
 import { Box, Button, Chip, IconButton, Paper, Skeleton, Stack, TextField, Toolbar, Typography } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { TextFieldElement } from 'react-hook-form-mui'
 import { useTranslation } from 'react-i18next'
 import { styled } from "@mui/material/styles";
 import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic';
 import * as z from 'zod'
-import UploadImage from '@/component/ui/UploadImage'
 import { useRouter } from 'next/navigation'
-import { addNews, updateNews } from '@/actions/new'
 import UploadFile from '@/component/ui/UploadFile'
 import ControlMUITextField from '@/component/ui/ControlMUItextField'
 import clsx from 'clsx'
@@ -22,9 +19,6 @@ import Image from 'next/image'
 import { addServices, deleteServiceImage, updateServices } from '@/actions/services'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { Delete } from '@mui/icons-material'
-import { deleteObject, ref } from 'firebase/storage'
-import { storage } from '@/firebase'
-import db from '@/db/db'
 import ServiceImageDialog from './_component/ServiceImageDialog'
 
 // Loading component to display while ReactQuill is being loaded
@@ -192,8 +186,6 @@ const Form = ({
 
 
     const onSubmit = async (data: z.infer<typeof schema>) => {
-        console.log(data);
-
         setLoading(true);
 
         const formData = new FormData();

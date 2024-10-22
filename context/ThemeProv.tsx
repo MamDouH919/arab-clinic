@@ -26,29 +26,17 @@ const cacheRtl = createCache({
 });
 
 const ThemeProv = ({ children, locale }: { children: React.ReactNode, locale: string }) => {
-    const { darkMode } = useContext(ModeContext)
+    const { darkMode } = useContext(ModeContext)    
 
     const primaryColor = darkMode ? config.theme.primaryDark : config.theme.primaryLight;
     const primaryColorKey = primaryColor as keyof typeof color;
     const secondaryColor = darkMode ? config.theme.secondaryDark : config.theme.secondaryLight;
-    const secondaryColorKey = secondaryColor as keyof typeof color;
-
-
-    const themeMode = getCookie("themeMode");
-    const isDarkModeEnabled = useMediaQuery('(prefers-color-scheme: dark)');
-
-    const ttt = themeMode
-        ? themeMode === 'dark'
-            ? true
-            : false
-        : isDarkModeEnabled
-
-    const ooo = ttt && darkMode    
+    const secondaryColorKey = secondaryColor as keyof typeof color;  
 
     const theme = createTheme({
         direction: dir(locale),
         palette: {
-            mode: ooo ? "dark" : "light",
+            mode: darkMode ? "dark" : "light",
             primary: {
                 main: primaryColor.startsWith("#")
                     ? primaryColor
@@ -59,7 +47,7 @@ const ThemeProv = ({ children, locale }: { children: React.ReactNode, locale: st
                     ? secondaryColor
                     : color[secondaryColorKey][500 as keyof typeof color[typeof secondaryColorKey]],
             },
-            ...(ooo ? {
+            ...(darkMode ? {
                 background: {
                     default: "#18191a",
                     paper: "#2f3031",

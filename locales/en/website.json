@@ -27,5 +27,11 @@
   "message": "message",
   "yorMessageHasBeenSent": "your message has been sent",
   "send": "send",
-  "viewAllClients":"view all clients"
+  "viewAllClients": "view all clients",
+  "emailNotExist": "email not exist",
+  "checkYourCredentials": "could not authenticate user, please check your credentials.",
+  "about": "about us",
+  "services": "services",
+  "contact": "contact us",
+  "forMoreInformation": "for more information"
 }

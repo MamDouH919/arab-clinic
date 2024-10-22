@@ -27,5 +27,12 @@
   "message": "الرسالة",
   "yorMessageHasBeenSent": "تم إرسال رسالتك",
   "send": "إرسال",
-  "viewAllClients": "عرض جميع العملاء"
+  "viewAllClients": "عرض جميع العملاء",
+  "login": "تسجيل الدخول",
+  "emailNotExist": "البريد الإلكتروني غير موجود",
+  "checkYourCredentials": "لم يتمكن المستخدم من المصادقة، يرجى التحقق من بيانات الدخول الخاصة بك.",
+  "about": "معلومات عنا",
+  "services": "الخدمات",
+  "contact": "التواصل",
+  "forMoreInformation": "لمزيد من المعلومات"
 }

@@ -66,8 +66,7 @@ const Clients = ({ data }: { data: { id: string, name: string, nameAr: string, i
     return (
         <Root sx={{ background: (theme) => theme.palette.background.default }} py={2}>
             <SectionTitle
-                sectionTitle={"sectionTitle"}
-                subSectionTitle={"subSectionTitle"}
+                sectionTitle={t("clients")}
             />
             <div className={classes.slider} style={{ direction: i18n.language === "ar" ? "ltr" : "rtl" }}>
 

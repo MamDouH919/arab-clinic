@@ -2,7 +2,7 @@
 "use server"
 
 import db from "@/db/db"
-import { notFound, redirect } from "next/navigation"
+import { notFound } from "next/navigation"
 import { revalidatePath } from "next/cache"
 import { AddClientsSchema, UpdateClientsSchema } from "@/schemas"
 import { storage } from '@/firebase'

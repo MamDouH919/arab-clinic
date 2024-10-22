@@ -110,7 +110,6 @@ const NavDrawer = (props: propsInput) => {
     const { open, DrawerHeader } = props;
     const { t } = useTranslation(["dashboard"])
     const pathname = usePathname()
-    console.log(pathname.split("/"));
 
     const linksList: LinksList[] = [
         {

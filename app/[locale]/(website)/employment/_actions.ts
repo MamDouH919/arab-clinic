@@ -42,7 +42,8 @@ export async function addNewJob(formData: FormData) {
     if (data.file) {
         await fs.mkdir("CVs", { recursive: true });
         const filePath = `CVs/${crypto.randomUUID()}-${data.file.name}`;
-        await fs.writeFile(filePath, Buffer.from(await data.file.arrayBuffer()));
+        // await fs.writeFile(filePath, Buffer.from(await data.file.arrayBuffer()));
+        await fs.writeFile(filePath, new Uint8Array(await data.file.arrayBuffer()));
 
         await db.jobs.create({
             data: {

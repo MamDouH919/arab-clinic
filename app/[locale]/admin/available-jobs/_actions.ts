@@ -2,8 +2,7 @@
 
 import db from "@/db/db"
 import { z } from "zod"
-import fs from "fs/promises"
-import { notFound, redirect } from "next/navigation"
+import { notFound } from "next/navigation"
 import { revalidatePath } from "next/cache"
 import { AddAvailableJobsSchema } from "@/schemas"
 
@@ -14,7 +13,6 @@ export async function getAvailableJob(id: string) {
 
 export async function addAvailableJob(formData: z.infer<typeof AddAvailableJobsSchema>) {
     const result = AddAvailableJobsSchema.safeParse(formData)
-    console.log(result)
 
     if (result.success === false) {
         return result.error.formErrors.fieldErrors

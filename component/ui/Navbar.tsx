@@ -9,10 +9,7 @@ import Container from '@mui/material/Container';
 import { Divider, MenuItem, Stack } from '@mui/material';
 import { Fragment, useEffect, useState } from 'react';
 import clsx from 'clsx';
-// import Settings from './Settings';
 import { styled } from "@mui/material/styles";
-// import LanguageMenu from './Language';
-// import DarkModeIcon from './DarkModeIcon';
 import { keyframes } from '@mui/system';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -21,8 +18,6 @@ import { config } from '@/config';
 import LanguageMenu from '../Language';
 import { useTranslation } from 'react-i18next';
 import DarkModeIcon from './DarkModeIcon';
-
-// import { useAppSelector } from '../store/store';
 
 const PREFIX = "Navbar";
 const classes = {
@@ -120,7 +115,6 @@ function Navbar() {
     const newPathName = pathname.includes("/ar")
         ? pathname.replace("/ar", pathname === "/ar" ? "/" : "")
         : pathname;
-    console.log(newPathName);
 
     const { t } = useTranslation();
 
@@ -192,7 +186,7 @@ function Navbar() {
                                 onClick={handleOpenNavMenu}
                                 color="default"
                             >
-                                <MenuIcon />
+                                <MenuIcon color='primary' />
                             </IconButton>
                             <Menu
                                 id="menu-appbar"

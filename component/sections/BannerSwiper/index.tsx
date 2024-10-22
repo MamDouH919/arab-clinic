@@ -1,7 +1,7 @@
 "use client";
 import React from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import { Box, Typography } from '@mui/material';
 
 // Import Swiper styles
@@ -63,6 +63,7 @@ const Root = styled(Box)(({ theme }) => ({
 
 const BannerSwiper = () => {
     const { t, i18n } = useTranslation("custom");
+    const { palette } = useTheme()
     return (
         <Root sx={{ height: { xs: "500px", md: "100dvh", lg: "100dvh" }, position: "relative" }}>
             <>
@@ -94,10 +95,10 @@ const BannerSwiper = () => {
                     ))}
                 </Swiper>
                 <div className="navigation-button next">
-                    {i18n.language === "en" ? <FaArrowRight /> : <FaArrowLeft />}
+                    {i18n.language === "en" ? <FaArrowRight color={palette.primary.main} /> : <FaArrowLeft color={palette.primary.main} />}
                 </div>
                 <div className="navigation-button prev">
-                    {i18n.language === "en" ? <FaArrowLeft /> : <FaArrowRight />}
+                    {i18n.language === "en" ? <FaArrowLeft color={palette.primary.main}/> : <FaArrowRight color={palette.primary.main}/>}
                 </div>
             </>
         </Root>

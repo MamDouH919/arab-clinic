@@ -73,8 +73,7 @@ const Branches = ({ data }: {
     return (
         <Root sx={{ background: (theme) => theme.palette.background.paper }} py={2}>
             <SectionTitle
-                sectionTitle={"sectionTitle"}
-                subSectionTitle={"subSectionTitle"}
+                sectionTitle={t("branches")}
             />
             <div style={{ margin: "32px 0", }}>
                 <div className={classes.bgStyle}></div>
