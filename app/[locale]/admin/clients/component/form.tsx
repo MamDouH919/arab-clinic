@@ -109,7 +109,7 @@ const FormItem = (props: InputProps) => {
                                 name="image"
                                 icon={"add_photo_alternate"}
                                 label={t("uploadImage")}
-                                accept=".png"
+                                accept=".png,.jpg"
                                 rules={{
                                     validate: {
                                         require: (value: any) =>
