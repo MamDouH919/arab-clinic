@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import * as z from "zod"
 import { IoMdLogIn } from "react-icons/io";
 import { styled } from "@mui/material/styles";
-import { addUserMut, login } from '@/actions/login'
+import { login } from '@/actions/login'
 // import bcrypt from 'bcrypt';
 
 
@@ -45,9 +45,9 @@ const LoginForm = () => {
             })
         }
     }
-    const addUser = async () => {
-        const res = await addUserMut()
-    }
+    // const addUser = async () => {
+    //     const res = await addUserMut()
+    // }
 
 
     return (
@@ -95,7 +95,7 @@ const LoginForm = () => {
                     </Grid>
                 </form>
 
-                <Button onClick={addUser}>add New</Button>
+                {/* <Button onClick={addUser}>add New</Button> */}
             </Paper>
         </Root>
     )
