@@ -1,6 +1,6 @@
 "use client"
 import CustomDialog from '@/component/ui/customDialog'
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Box, Button, InputAdornment, Stack, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Grid from '@mui/material/Unstable_Grid2'
@@ -13,6 +13,7 @@ import { AddBranchesSchema, UpdateBranchesSchema } from '@/schemas'
 import ControlMUITextField from '@/component/ui/ControlMUItextField'
 import { MuiTelInput } from 'mui-tel-input'
 import { addBranch, getBranchById, updateBranch } from '@/actions/branches'
+import { LocationOnOutlined } from '@mui/icons-material'
 
 const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: string, data?: z.infer<typeof AddBranchesSchema> }) => {
     const schema = id ? UpdateBranchesSchema : AddBranchesSchema;
@@ -32,6 +33,7 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: stri
                 setValue('whatsApp', data?.whatsApp ?? '')
                 setValue('mobile', data?.mobile ?? "")
                 setValue('fileName', data?.imageName ?? "")
+                setValue('gps', data?.gps ?? "")
                 // You can update your form's default values here
             })
         }
@@ -46,6 +48,7 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: stri
         formData.append("location", data.location);
         formData.append("whatsApp", data.whatsApp);
         formData.append("mobile", data.mobile);
+        formData.append("gps", data.gps);
 
         if (data.image) {
             formData.append("image", data?.image);
@@ -62,12 +65,12 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: stri
                         message: messages[0] // Assuming we take the first message
                     });
                 }
-                
+
                 setError(field as keyof z.infer<typeof schema>, {
                     type: "validate",
                     message: messages[0] // Assuming we take the first message
                 });
-                
+
             }
         } else {
             setLoading(false)
@@ -211,6 +214,23 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: stri
 
                                             />
                                         )
+                                    }}
+                                />
+                            </Grid>
+                            <Grid xs={12}>
+                                <ControlMUITextField
+                                    name='gps'
+                                    label={t('branchLocation')}
+                                    control={control}
+                                    rules={{
+                                        required: t("fieldIsRequired")
+                                    }}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="start">
+                                                <LocationOnOutlined />
+                                            </InputAdornment>
+                                        ),
                                     }}
                                 />
                             </Grid>

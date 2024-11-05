@@ -18,6 +18,7 @@ export async function GET(request: NextRequest) {
             whatsApp: true,
             imageName: true,
             imagePath: true,
+            gps: true
         },
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * pageSize,

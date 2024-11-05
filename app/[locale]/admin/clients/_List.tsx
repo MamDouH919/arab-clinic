@@ -84,15 +84,16 @@ export default function OrdersList({ totalClients }: { totalClients: number }) {
 
 
     const closeDialog = () => {
+        setId("")
         setOpenDialog(false)
     };
-    const afterUpdateFunction = async (data: any) => {        
+    const afterUpdateFunction = async (data: any) => {
         setData((prevData: any) =>
             prevData.map((item: any) =>
                 item.id === data.id ? { ...item, ...data } : item
             )
         );
-    };    
+    };
 
     const tableCellHeader = [
         "", "image", "nameEn", "nameAr", "type", "createdAt", "actions"
@@ -107,7 +108,8 @@ export default function OrdersList({ totalClients }: { totalClients: number }) {
                     closeDialog={closeDialog}
                     afterUpdateFunction={afterUpdateFunction}
                     id={id}
-                />}
+                />
+            }
             <Stack spacing={2} height={"100%"} overflow={"hidden"}>
                 <Stack direction={"row"} spacing={2} justifyContent={"space-between"} useFlexGap>
                     <ListHeaderTitle title={"clients"} />

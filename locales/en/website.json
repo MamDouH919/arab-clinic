@@ -34,5 +34,6 @@
   "services": "services",
   "contact": "contact us",
   "forMoreInformation": "for more information",
-  "password": "password"
+  "password": "password",
+  "location": "location"
 }

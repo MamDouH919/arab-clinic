@@ -61,6 +61,7 @@ export async function addBranch(formData: FormData) {
     const location = formData.get("location") as string;
     const whatsApp = formData.get("whatsApp") as string;
     const mobile = formData.get("mobile") as string;
+    const gps = formData.get("gps") as string;
     const image = formData.get("image") as File | null;
 
     const parsedData = {
@@ -70,6 +71,7 @@ export async function addBranch(formData: FormData) {
         location,
         whatsApp,
         mobile,
+        gps,
         image,
     };
 
@@ -94,6 +96,7 @@ export async function addBranch(formData: FormData) {
                 mobile: data.mobile,
                 imageName: imageName,
                 imagePath: imagePath,
+                gps: data.gps
             }
         })
     }
@@ -110,6 +113,7 @@ export async function updateBranch(formData: FormData, id: string) {
     const location = formData.get("location") as string;
     const whatsApp = formData.get("whatsApp") as string;
     const mobile = formData.get("mobile") as string;
+    const gps = formData.get("gps") as string;
     const image = formData.get("image") as File | null;
 
     const parsedData = {
@@ -119,6 +123,7 @@ export async function updateBranch(formData: FormData, id: string) {
         location,
         whatsApp,
         mobile,
+        gps,
         ...(image && { image })
     };
 
@@ -149,6 +154,7 @@ export async function updateBranch(formData: FormData, id: string) {
                 location: data.location,
                 whatsApp: data.whatsApp,
                 mobile: data.mobile,
+                gps: data.gps,
                 imageName: imageName,
                 imagePath: imagePath,
             },
@@ -162,6 +168,7 @@ export async function updateBranch(formData: FormData, id: string) {
                 locationAr: data.locationAr,
                 location: data.location,
                 whatsApp: data.whatsApp,
+                gps: data.gps,
                 mobile: data.mobile,
             },
         })
@@ -185,6 +192,7 @@ export async function getBranchById(id: string) {
             mobile: true,
             imageName: true,
             imagePath: true,
+            gps: true
         }
     });
     return branches;

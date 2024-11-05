@@ -35,8 +35,8 @@
   "jobName": "job name",
   "governorate": "governorate",
   "whatsApp": " WhatsApp",
-  "locationEn": "location in english",
-  "locationAr": "location in arabic",
+  "locationEn": "address in english",
+  "locationAr": "address in arabic",
   "createdAt": "created at",
   "contacts": "contacts",
   "branch": "branch",
@@ -49,5 +49,6 @@
   "addIcon": "add icon",
   "addCover": "add cover",
   "newImage": "new image",
-  "images": "images"
+  "images": "images",
+  "branchLocation": "branch location"
 }

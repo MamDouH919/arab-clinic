@@ -1,0 +1,21 @@
+{
+  "name": "Arab Clinic",
+  "short_name": "Arab Clinic",
+  "start_url": "index.html",
+  "description": "مركز أراب كلينك - نعمل من أجلك علي مدار اليوم Center Arab Clinic - We work for you around the clock.",
+  "icons": [
+    {
+      "src": "./logo192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./logo512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}

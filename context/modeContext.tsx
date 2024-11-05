@@ -18,15 +18,6 @@ const ModeContextProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const isDarkModeEnabled = useMediaQuery('(prefers-color-scheme: dark)');
 
-    console.log(themeMode);
-    console.log("isDarkModeEnabled  :" + isDarkModeEnabled);
-
-    console.log(!!themeMode
-        ? themeMode === 'dark'
-            ? true
-            : false
-        : isDarkModeEnabled);
-
     const [darkMode, setDarkMode] = useState<boolean>(
         themeMode
             ? themeMode === 'dark'

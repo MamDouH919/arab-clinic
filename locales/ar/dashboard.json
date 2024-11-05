@@ -35,8 +35,8 @@
   "jobName": "الوظيفة المقدم لها",
   "governorate": "المحافظة",
   "whatsApp": " WhatsApp",
-  "locationEn": "الموقع بالإنجليزي",
-  "locationAr": "الموقع بالعربي",
+  "locationEn": "العنوان بالإنجليزي",
+  "locationAr": "العنوان بالعربي",
   "createdAt": "تاريخ الإنشاء",
   "contacts": "التواصل",
   "branch": "الفرع",
@@ -49,5 +49,6 @@
   "addIcon": "إضافة آيكون",
   "addCover": "إضافة خلفية",
   "newImage": "صورة جديدة",
-  "images": "الصور"
+  "images": "الصور",
+  "branchLocation": "موقع الفرع"
 }

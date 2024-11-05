@@ -6,6 +6,7 @@ import { FaFacebookF, FaPhone, FaWhatsapp } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import SectionTitle from '../ui/SectionTitle';
 import Image from 'next/image';
+import { LocationOnOutlined } from '@mui/icons-material';
 
 const PREFIX = "Team";
 
@@ -48,6 +49,7 @@ const socialIcons = {
     whatsapp: <FaWhatsapp />,
     phone: <FaPhone />,
     facebook: <FaFacebookF />,
+    location: <LocationOnOutlined />
 };
 
 
@@ -61,9 +63,10 @@ const Branches = ({ data }: {
         mobile: string,
         whatsApp: string,
         imagePath: string,
+        gps: string
     }[]
 }) => {
-    const { t, i18n } = useTranslation()
+    const { t, i18n } = useTranslation(["dashboard"])
 
 
     if (data.length === 0 || !data) {
@@ -102,13 +105,18 @@ const Branches = ({ data }: {
                                         </Typography>
                                         <Stack direction={"row"} spacing={2} flexWrap={"wrap"} useFlexGap>
                                             <Stack justifyContent={"center"} alignItems={"center"} className={classes.social}>
-                                                <a rel="noopener noreferrer" href={`tel:${item.mobile}`}>
+                                                <a title={(i18n.language === "ar" ? item.nameAr : item.name) + " " + t("phone")} target='_blank' rel="noopener noreferrer" href={`tel:${item.mobile}`}>
                                                     {socialIcons.phone}
                                                 </a>
                                             </Stack>
                                             <Stack justifyContent={"center"} alignItems={"center"} className={classes.social}>
-                                                <a rel="noopener noreferrer" href={`https://wa.me/${item.whatsApp}`}>
+                                                <a title={(i18n.language === "ar" ? item.nameAr : item.name) + " " + t("whatsApp")} target='_blank' rel="noopener noreferrer" href={`https://wa.me/${item.whatsApp}`}>
                                                     {socialIcons.whatsapp}
+                                                </a>
+                                            </Stack>
+                                            <Stack justifyContent={"center"} alignItems={"center"} className={classes.social}>
+                                                <a title={(i18n.language === "ar" ? item.nameAr : item.name) + " " + t("location")} target='_blank' rel="noopener noreferrer" href={item.gps}>
+                                                    {socialIcons.location}
                                                 </a>
                                             </Stack>
                                             {/* {item.socials.map((link) => {

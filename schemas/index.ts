@@ -132,6 +132,11 @@ export const AddBranchesSchema = z.object({
   }).min(1, {
     message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
   }),
+  gps: z.string({
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }).min(1, {
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }),
   image: imageSchema.refine(file => file.size < 250 * 1024 && file.size > 0, i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250 كيلوبايت")
 })
 

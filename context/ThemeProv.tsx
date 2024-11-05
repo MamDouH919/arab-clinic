@@ -26,12 +26,12 @@ const cacheRtl = createCache({
 });
 
 const ThemeProv = ({ children, locale }: { children: React.ReactNode, locale: string }) => {
-    const { darkMode } = useContext(ModeContext)    
+    const { darkMode } = useContext(ModeContext)
 
     const primaryColor = darkMode ? config.theme.primaryDark : config.theme.primaryLight;
     const primaryColorKey = primaryColor as keyof typeof color;
     const secondaryColor = darkMode ? config.theme.secondaryDark : config.theme.secondaryLight;
-    const secondaryColorKey = secondaryColor as keyof typeof color;  
+    const secondaryColorKey = secondaryColor as keyof typeof color;
 
     const theme = createTheme({
         direction: dir(locale),
@@ -61,10 +61,13 @@ const ThemeProv = ({ children, locale }: { children: React.ReactNode, locale: st
                 })
         },
         typography: {
-            fontFamily: ['"Cairo"', "sans-serif"].join(","),
+            fontFamily: ['__Cairo_2664c3', '__Cairo_Fallback_2664c3'].join(","),
             fontSize: 12.5,
+            h1: {
+                lineHeight: "normal"
+            }
         }
-    });    
+    });
 
     return (
         <AppRouterCacheProvider options={{
