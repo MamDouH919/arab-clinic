@@ -14,7 +14,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: 'https://arabclinic.net/clinets',
       lastModified,
       changeFrequency: 'monthly',
-      priority: 1,
+      priority: 0.64,
+    },
+    {
+      url: 'https://arabclinic.net/employment',
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.64,
+    },
+    {
+      url: 'https://arabclinic.net/news',
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.64,
     },
   ]
 }
