@@ -112,7 +112,7 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: stri
                                     name="image"
                                     icon={"add_photo_alternate"}
                                     label={t("uploadImage")}
-                                    accept=".png,.jpg"
+                                    accept=".png,.jpg,.svg,.jpeg,.webp,.avif"
                                     rules={{
                                         validate: {
                                             require: (value: any) =>

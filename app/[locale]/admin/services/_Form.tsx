@@ -279,7 +279,7 @@ const Form = ({
                             fileName={openDialog.fileName}
                             icon={"add_photo_alternate"}
                             label={t("uploadImage")}
-                            accept=".png,.jpg,.svg,jpeg"
+                            accept=".png,.jpg,.svg,.jpeg,.webp,.avif"
                             maxSize={openDialog.fileSize * 1024}
                             rules={{
                                 validate: {

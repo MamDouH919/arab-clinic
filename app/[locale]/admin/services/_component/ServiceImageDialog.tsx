@@ -80,7 +80,7 @@ const ServiceImageDialog = (props: InputProps) => {
                         name={"image"}
                         icon={"add_photo_alternate"}
                         label={t("uploadImage")}
-                        accept=".png,.jpg,.jpeg"
+                        accept=".png,.jpg,.svg,.jpeg,.webp,.avif"
                         maxSize={250 * 1024}
                         rules={{
                             validate: {

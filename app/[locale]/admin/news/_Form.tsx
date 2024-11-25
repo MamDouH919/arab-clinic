@@ -150,7 +150,7 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                                 name="image"
                                 icon={"add_photo_alternate"}
                                 label={t("uploadImage")}
-                                accept=".png,.jpg,.jpeg"
+                                accept=".png,.jpg,.svg,.jpeg,.webp,.avif"
                                 rules={{
                                     validate: {
                                         require: (value: any) =>
