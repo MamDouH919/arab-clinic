@@ -7,7 +7,6 @@ import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { styled } from "@mui/material/styles";
-import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic';
 import * as z from 'zod'
 import { useRouter } from 'next/navigation'

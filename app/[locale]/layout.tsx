@@ -7,9 +7,7 @@ import i18nConfig from "@/i18nConfig";
 import { dir, t } from 'i18next';
 import ThemeProv from "@/context/ThemeProv";
 import ModeContextProvider from "@/context/modeContext";
-import 'froala-editor/css/froala_style.min.css';
-import 'froala-editor/css/froala_editor.pkgd.min.css';
-import { config } from "@/config";
+import 'react-quill/dist/quill.snow.css';
 
 const cairo = Cairo({ weight: ["600", "700", "800"], subsets: ["latin"] })
 

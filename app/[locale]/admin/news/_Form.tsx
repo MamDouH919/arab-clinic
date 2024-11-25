@@ -1,17 +1,14 @@
 "use client"
 import { ListHeaderTitle } from '@/component/ui/ListHeader'
 import { AddNewsSchema, UpdateNewsSchema } from '@/schemas'
-import { Box, Button, Paper, Skeleton, Stack, TextField, Typography } from '@mui/material'
+import { Box, Paper, Skeleton, Stack, Typography } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { TextFieldElement } from 'react-hook-form-mui'
 import { useTranslation } from 'react-i18next'
 import { styled } from "@mui/material/styles";
-import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic';
 import * as z from 'zod'
-import UploadImage from '@/component/ui/UploadImage'
 import { useRouter } from 'next/navigation'
 import { addNews, updateNews } from '@/actions/new'
 import UploadFile from '@/component/ui/UploadFile'
