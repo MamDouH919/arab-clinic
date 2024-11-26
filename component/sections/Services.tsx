@@ -2,13 +2,14 @@
 import { Box, Container, Stack, Typography } from '@mui/material'
 // import services1 from "../assets/images/services/services-1.png";
 import Grid from '@mui/material/Unstable_Grid2/Grid2';
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import clsx from 'clsx';
 import { GoDotFill } from "react-icons/go";
 import SectionTitle from '../ui/SectionTitle';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import StyledLink from '../ui/StyledLink';
+import DangerouslySetInnerHTML from '../DangerouslySetInnerHTML';
 
 const PREFIX = "Services";
 const classes = {
@@ -52,7 +53,7 @@ const Root = styled("div")(({ theme }) => ({
     },
     [`& .${classes.serviceGrid}`]: {
         display: "flex"
-    }
+    },
 }));
 
 interface inputProps {
@@ -68,7 +69,7 @@ interface inputProps {
 
 const Services = (props: inputProps) => {
     const { data } = props
-
+    const theme = useTheme()
     const { t, i18n } = useTranslation()
 
 
@@ -90,11 +91,10 @@ const Services = (props: inputProps) => {
                                                 width={80}
                                                 height={80}
                                                 alt={service.title}
+                                                className={clsx({ [classes.imageWhite]: theme.palette.mode === "dark" })}
                                             />
                                             <Typography variant='h6' textAlign={"center"}>{i18n.language === "en" ? service.title : service.titleAr}</Typography>
-                                            <div
-                                                dangerouslySetInnerHTML={{ __html: i18n.language === "en" ? service.description : service.descriptionAr }}
-                                            />
+                                            <DangerouslySetInnerHTML data={i18n.language === "en" ? service.description : service.descriptionAr} />
                                             <StyledLink href={`/services/${service.id}`}>
                                                 {t("readMore")} ...
                                             </StyledLink>

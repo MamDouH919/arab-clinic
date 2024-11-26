@@ -278,7 +278,7 @@ export async function updateServices(formData: FormData, id: string) {
             const desertRef = ref(storage, prevCoverImgName);
             deleteObject(desertRef)
 
-            const { imagePath, imageName } = await saveImage(data.icon!, "services")
+            const { imagePath, imageName } = await saveImage(data.coverImg!, "services")
             newCoverPath = imagePath
             newCoverName = imageName
         }

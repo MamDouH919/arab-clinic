@@ -1,5 +1,5 @@
 
-import { deleteObject, getDownloadURL, ref, uploadBytes, uploadString } from 'firebase/storage'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { storage } from '@/firebase'
 
 export const saveImage = async (image: File, fileName: string) => {

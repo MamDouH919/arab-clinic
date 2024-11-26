@@ -68,7 +68,7 @@ const SwiperSection = (props: inputProps) => {
     } = props
     return (
         <Root id={"id"}>
-            <Box sx={{ height: "100dvh", position: "relative" }}>
+            <Box sx={{ position: "relative" }}>
                 <Swiper
                     spaceBetween={0}
                     className="profileSwiper"
@@ -76,14 +76,21 @@ const SwiperSection = (props: inputProps) => {
                 >
                     {images.map((e, i) =>
                         <SwiperSlide key={i}>
-                            <Image
+                            {/* <Image
                                 src={e.imagePath}
                                 alt={title}
                                 width={1200}
                                 height={1200}
                                 layout="responsive"
                                 objectFit='contain'
-                                style={{ width: '100%', height: "100%" }}
+                                style={{ width: '80%', height: "80%" }}
+                            /> */}
+                            <Image
+                                src={e.imagePath}
+                                alt="logo"
+                                layout="intrinsic"
+                                width={600}
+                                height={100} // This sets the height to 50px, and the width scales accordingly.
                             />
                         </SwiperSlide>
                     )}

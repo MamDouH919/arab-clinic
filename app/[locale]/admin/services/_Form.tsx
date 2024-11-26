@@ -6,7 +6,7 @@ import Grid from '@mui/material/Unstable_Grid2'
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import dynamic from 'next/dynamic';
 import * as z from 'zod'
 import { useRouter } from 'next/navigation'
@@ -19,6 +19,7 @@ import { addServices, deleteServiceImage, updateServices } from '@/actions/servi
 import LoadingButton from '@mui/lab/LoadingButton'
 import { Delete } from '@mui/icons-material'
 import ServiceImageDialog from './_component/ServiceImageDialog'
+import { modules } from '@/component/helperFunctions/modulesQuill'
 
 // Loading component to display while ReactQuill is being loaded
 const Loading = () => <Skeleton height={"300px"} animation="wave" variant="rectangular" />;
@@ -110,6 +111,7 @@ const Form = ({
 
     const [serviceImageDialog, setServiceImageDialog] = useState(false)
     const [loading, setLoading] = useState(false)
+    const theme = useTheme()
 
     const [openDialog, setOpenDialog] = useState({
         open: false,
@@ -159,30 +161,6 @@ const Form = ({
         imgTwo: "",
         imgThree: ""
     });
-
-    const modules = {
-        toolbar: [
-            ['bold', 'italic', 'underline', 'strike'],
-            ['blockquote', 'code-block'],
-            ['link', 'image', 'video', 'formula'],
-
-            [{ 'header': 1 }, { 'header': 2 }],
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
-            [{ 'script': 'sub' }, { 'script': 'super' }],
-            [{ 'indent': '-1' }, { 'indent': '+1' }],
-            [{ 'direction': 'rtl' }],
-
-            [{ 'size': ['small', false, 'large', 'huge'] }],
-            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-            [{ 'color': ["#6999d5", "#bc161a", "red", "green", "blue"] }, { 'background': [] }],
-            [{ 'font': [] }],
-            [{ 'align': [] }],
-
-            ['clean']
-        ]
-    };
-
 
     const onSubmit = async (data: z.infer<typeof schema>) => {
         setLoading(true);

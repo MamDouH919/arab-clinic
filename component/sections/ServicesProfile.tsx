@@ -8,11 +8,13 @@ import YouTube from 'react-youtube';
 import { isMobile } from 'react-device-detect';
 import NoData from '../ui/NoData';
 import { useTranslation } from 'react-i18next';
+import DangerouslySetInnerHTML from '../DangerouslySetInnerHTML';
 
 const PREFIX = "Navbar";
 const classes = {
     bannerBackground: `${PREFIX}-bannerBackground`,
     video: `${PREFIX}-video`,
+    headerH: `${PREFIX}-headerH`,
 };
 
 const Root = styled("div")(({ theme }) => ({
@@ -30,13 +32,17 @@ const Root = styled("div")(({ theme }) => ({
             width: "100%",
         }
     },
+    [`& .${classes.headerH}`]: {
+        height: "112px",
+    },
 
     // Feature query for iOS devices
     "@supports (-webkit-overflow-scrolling: touch)": {
         [`& .${classes.bannerBackground}`]: {
             backgroundAttachment: "scroll",
         }
-    }
+    },
+
 }));
 
 interface inputProps {
@@ -64,19 +70,22 @@ const ServicesProfile = (props: inputProps) => {
 
     return (
         <Root>
-            <div className={classes.bannerBackground} style={{
-                backgroundImage: `url('${data.coverImgPath}')`,
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center center',
-                backgroundSize: 'cover',
-                backgroundAttachment: isMobile ? "inherit" : "fixed",
-            }}></div>
+            <div className={classes.headerH}></div>
+            <div className={classes.bannerBackground}
+                style={{
+                    backgroundImage: `url('${data.coverImgPath}')`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center center',
+                    backgroundSize: 'cover',
+                    backgroundAttachment: isMobile ? "inherit" : "fixed",
+                    maxHeight: "500px"
+                }}>
+
+            </div>
             <Container maxWidth={'lg'} sx={{ my: 20 }}>
                 <Stack spacing={5} alignItems={"center"}>
                     {/* <Typography variant="body1" sx={{ fontWeight: "bold" }} color={"text.secondary"}> */}
-                    <div
-                        dangerouslySetInnerHTML={{ __html: i18n.language === "en" ? data.description : data.descriptionAr }}
-                    />
+                    <DangerouslySetInnerHTML data={i18n.language === "en" ? data.description : data.descriptionAr} />
                     {/* </Typography> */}
                     {/* <Grid container spacing={4} m={0} alignItems={"center"} justifyContent={"center"}>
                         <Grid sm={12} md={3}>
@@ -126,25 +135,28 @@ const ServicesProfile = (props: inputProps) => {
                     </Grid> */}
                 </Stack>
             </Container>
-            {data.servicesImages && data.servicesImages.length && <SwiperSection
+            {data.servicesImages && data.servicesImages.length > 0 && <SwiperSection
                 title={i18n.language === "en" ? data.title : data.titleAr}
                 images={data.servicesImages}
             />}
-            {data.videos && <Container maxWidth={'lg'} sx={{ my: 20 }}>
-                <Grid container spacing={4} m={0}>
-                    {
-                        JSON.parse(data.videos).map((e: string) =>
-                            <Grid xs={12} md={6} key={e}>
-                                <YouTube
-                                    videoId={e}
-                                    className={classes.video}
-                                    title="Video string"
-                                />
-                            </Grid>
-                        )
-                    }
-                </Grid>
-            </Container>}
+            {data.videos && JSON.parse(data.videos).length > 0 ?
+                <Container maxWidth={'lg'} sx={{ my: 20 }}>
+                    <Grid container spacing={4} m={0}>
+                        {
+                            JSON.parse(data.videos).map((e: string) =>
+                                <Grid xs={12} md={6} key={e}>
+                                    <YouTube
+                                        videoId={e}
+                                        className={classes.video}
+                                        title="Video string"
+                                    />
+                                </Grid>
+                            )
+                        }
+                    </Grid>
+                </Container>
+                : <Stack m={2}/>
+            }
         </Root>
     )
 }
