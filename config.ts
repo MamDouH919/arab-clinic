@@ -39,8 +39,8 @@ export const config: Config = {
         },
     },
     theme: {
-        primaryDark: "#6999d5",
-        primaryLight: "#6999d5",
+        primaryDark: "#2778dd",
+        primaryLight: "#2778dd",
         secondaryDark: "#bc161a",
         secondaryLight: "#bc161a"
     },
