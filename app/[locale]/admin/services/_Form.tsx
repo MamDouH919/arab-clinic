@@ -312,7 +312,7 @@ const Form = ({
                                                     fileName: "fileIcon",
                                                     name: "icon",
                                                     open: true,
-                                                    fileSize: 10,
+                                                    fileSize: 50,
                                                     buttonName: "addIcon"
                                                 })
                                             }}
