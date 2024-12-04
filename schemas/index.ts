@@ -222,7 +222,7 @@ export const AddServicesSchema = z.object({
     message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
   }),
   videos: z.string().optional(),
-  icon: imageSchema.refine(file => file.size < 10 * 1024 && file.size > 0, i18n.language === "en" ? "File must be smaller than 10KB" : "يجب أن يكون الملف أصغر من 10 كيلوبايت"),
+  icon: imageSchema.refine(file => file.size < 50 * 1024 && file.size > 0, i18n.language === "en" ? "File must be smaller than 10KB" : "يجب أن يكون الملف أصغر من 10 كيلوبايت"),
   // imgOne: imageSchema.refine(file => file.size < 250 * 1024 && file.size > 0, i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250 كيلوبايت"),
   // imgTwo: imageSchema.refine(file => file.size < 250 * 1024 && file.size > 0, i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250 كيلوبايت"),
   coverImg: imageSchema.refine(file => file.size < 250 * 1024 && file.size > 0, i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250 كيلوبايت"),
@@ -247,7 +247,7 @@ export const AddServicesSchema = z.object({
 })
 
 export const UpdateServicesSchema = AddServicesSchema.extend({
-  icon: imageSchema.refine(file => file.size < 10 * 1024, i18n.language === "en" ? "File must be smaller than 10KB" : "يجب أن يكون الملف أصغر من 10 كيلوبايت").optional(),
+  icon: imageSchema.refine(file => file.size < 50 * 1024, i18n.language === "en" ? "File must be smaller than 10KB" : "يجب أن يكون الملف أصغر من 10 كيلوبايت").optional(),
   coverImg: imageSchema.refine(file => file.size < 250 * 1024, i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250 كيلوبايت").optional(),
 })
 

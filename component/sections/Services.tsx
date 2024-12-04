@@ -94,7 +94,7 @@ const Services = (props: inputProps) => {
                                                 className={clsx({ [classes.imageWhite]: theme.palette.mode === "dark" })}
                                             />
                                             <Typography variant='h6' textAlign={"center"}>{i18n.language === "en" ? service.title : service.titleAr}</Typography>
-                                            <DangerouslySetInnerHTML data={i18n.language === "en" ? service.description : service.descriptionAr} />
+                                            <DangerouslySetInnerHTML limit data={i18n.language === "en" ? service.description : service.descriptionAr} />
                                             <StyledLink href={`/services/${service.id}`}>
                                                 {t("readMore")} ...
                                             </StyledLink>
