@@ -13,7 +13,7 @@ export const modules = {
         [{ 'size': ['small', false, 'large', 'huge'] }],
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
-        [{ 'color': ["#6999d5", "#bc161a"] }, { 'background': [] }],
+        [{ 'color': ["#2778dd", "#bc161a"] }, { 'background': [] }],
         [{ 'font': [] }],
         [{ 'align': [] }],
 

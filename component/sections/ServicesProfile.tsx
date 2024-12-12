@@ -9,6 +9,7 @@ import { isMobile } from 'react-device-detect';
 import NoData from '../ui/NoData';
 import { useTranslation } from 'react-i18next';
 import DangerouslySetInnerHTML from '../DangerouslySetInnerHTML';
+import Image from 'next/image';
 
 const PREFIX = "Navbar";
 const classes = {
@@ -71,7 +72,16 @@ const ServicesProfile = (props: inputProps) => {
     return (
         <Root>
             <div className={classes.headerH}></div>
-            <div className={classes.bannerBackground}
+            <Stack width={"100%"} height={400}>
+                <img
+                    src={data.coverImgPath}
+                    alt={`${data.title}-cover`}
+                    width={"100%"}
+                    height={"100%"}
+                    style={{objectFit: "cover"}}
+                />
+            </Stack>
+            {/* <div className={classes.bannerBackground}
                 style={{
                     backgroundImage: `url('${data.coverImgPath}')`,
                     backgroundRepeat: 'no-repeat',
@@ -81,8 +91,8 @@ const ServicesProfile = (props: inputProps) => {
                     maxHeight: "500px"
                 }}>
 
-            </div>
-            <Container maxWidth={'lg'} sx={{ my: 20 }}>
+            </div> */}
+            <Container maxWidth={'lg'} sx={{ my: 10 }}>
                 <Stack spacing={5} alignItems={"center"}>
                     {/* <Typography variant="body1" sx={{ fontWeight: "bold" }} color={"text.secondary"}> */}
                     <DangerouslySetInnerHTML data={i18n.language === "en" ? data.description : data.descriptionAr} />
@@ -155,7 +165,7 @@ const ServicesProfile = (props: inputProps) => {
                         }
                     </Grid>
                 </Container>
-                : <Stack m={2}/>
+                : <Stack m={2} />
             }
         </Root>
     )

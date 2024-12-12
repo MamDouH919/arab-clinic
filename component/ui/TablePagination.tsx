@@ -34,8 +34,6 @@ const MUITablePagination = (props: any) => {
 
     const { i18n } = useTranslation();
 
-    // const Languages = config.app.languages;
-    // const lang = localStorage.getItem("i18nextLng") ? localStorage.getItem("i18nextLng") : Languages[0];
     return (
         <Root>
             <TablePagination
