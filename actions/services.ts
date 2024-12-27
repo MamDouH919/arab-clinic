@@ -8,6 +8,17 @@ import { saveImage } from "./saveImage";
 import { deleteObject, ref } from "firebase/storage";
 import { storage } from "@/firebase";
 
+export async function getServices() {
+    const services = await db.services.findMany({
+        select: {
+            id: true,
+            title: true,
+            titleAr: true,
+        }
+    });
+    return services;
+}
+
 export async function deleteServiceImage(id: string, imageName: string) {
     const desertRef = ref(storage, imageName);
     deleteObject(desertRef)

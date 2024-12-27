@@ -18,6 +18,7 @@ import { config } from '@/config';
 import LanguageMenu from '../Language';
 import { useTranslation } from 'react-i18next';
 import DarkModeIcon from './DarkModeIcon';
+import { ArrowDownward, ArrowDropDown, ArrowLeft } from '@mui/icons-material';
 
 const PREFIX = "Navbar";
 const classes = {
@@ -85,6 +86,44 @@ const StyledHeaderLinkPath = styled(Link)(({ theme }) => ({
         color: theme.palette.text.secondary,
     },
 }));
+const StyledHeaderLink = styled(Stack)(({ theme }) => ({
+    display: "inline-block",
+    textDecoration: "none",
+    textTransform: "uppercase",
+    fontSize: 15,
+    fontWeight: 500,
+    color: theme.palette.text.secondary,
+    whiteSpace: "nowrap",
+    [theme.breakpoints.up("md")]: {
+        margin: theme.spacing(0, 1.5),
+    },
+    "&:hover": {
+        color: `${theme.palette.primary.main} !important`,
+        cursor: "pointer",
+    },
+    [theme.breakpoints.down("md")]: {
+        textAlign: "center",
+        padding: theme.spacing(1, 0),
+
+        width: "100%",
+        color: theme.palette.text.secondary,
+    },
+}));
+const MenuItemStyle = styled(MenuItem)(({ theme }) => ({
+    padding: 0,
+    "& a": {
+        padding: theme.spacing(2),
+        textDecoration: "none",
+        color: "#fff",
+        "&:hover": {
+            color: `${theme.palette.primary.main} !important`,
+            cursor: "pointer",
+        },
+    }
+}));
+const StackStyle = styled(Stack)(({ theme }) => ({
+    cursor: "pointer"
+}));
 
 const HeaderLinkPath = (props: any) => {
     const { to, className, } = props;
@@ -104,9 +143,19 @@ const NavLinks = [
     { href: "/clients", label: "clients" },
     { href: "/employment", label: "employment" },
     { href: "/news", label: "news" },
+    { href: "/services", label: "services" },
+    { href: "contact-us", label: "contact" },
 ]
 
-function Navbar() {
+function Navbar({
+    servicesData
+}: {
+    servicesData: {
+        id: string,
+        title: string,
+        titleAr: string,
+    }[]
+}) {
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [shouldShowHeader, setShouldShowHeader] = useState<boolean>(false);
     const [animationClass, setAnimationClass] = useState<string>('');
@@ -116,7 +165,7 @@ function Navbar() {
         ? pathname.replace("/ar", pathname === "/ar" ? "/" : "")
         : pathname;
 
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -145,6 +194,80 @@ function Navbar() {
         }
     }, [shouldShowHeader]);
 
+    const [anchorService, setAnchorElService] = useState<null | HTMLElement>(null);
+    const open = Boolean(anchorService);
+    const handleOpenServices = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorElService(event.currentTarget);
+    };
+    const handleCloseServices = () => {
+        setAnchorElService(null);
+    };
+
+    const menuPaper = <Menu
+        anchorEl={anchorService}
+        id="account-menu"
+        open={open}
+        onClose={handleCloseServices}
+        onClick={handleCloseServices}
+        slotProps={{
+            paper: {
+                elevation: 0,
+                sx: {
+                    overflow: 'visible',
+                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                    mt: 1.5,
+                    '& .MuiAvatar-root': {
+                        width: 32,
+                        height: 32,
+                        ml: -0.5,
+                        mr: 1,
+                    },
+                    '&::before': {
+                        content: '""',
+                        display: 'block',
+                        position: 'absolute',
+                        top: 0,
+                        left: 14,
+                        width: 10,
+                        height: 10,
+                        bgcolor: 'background.paper',
+                        transform: 'translateY(-50%) rotate(45deg)',
+                        zIndex: 0,
+                    },
+                },
+            },
+        }}
+        transformOrigin={{ horizontal: i18n.dir() === "ltr" ? "right" : 'left', vertical: 'top' }}
+        anchorOrigin={{ horizontal: i18n.dir() === "ltr" ? "right" : 'left', vertical: 'bottom' }}
+    >
+        {servicesData.map(e =>
+            <MenuItemStyle key={e.id}>
+                <Link href={newPathName.startsWith("/services") ? (newPathName === "/services" ? ("services/" + e.id) : e.id) : "services/" + e.id} >
+                    {i18n.language === "ar" ? e.titleAr : e.title}
+                </Link>
+            </MenuItemStyle>
+        )}
+    </Menu>
+
+    const serviceMenuIcon = (link: any) => <StackStyle
+        onClick={handleOpenServices}
+        alignItems={"center"}
+        justifyContent={"center"}
+        color={"text.secondary"}
+    >
+        {anchorService ? <ArrowDropDown /> : <ArrowLeft />}
+    </StackStyle>
+
+
+    const handleScroll = (id: string) => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "start" });
+            handleCloseNavMenu()
+        }
+    };
+
+
     return (
         <Root
             position={shouldShowHeader ? "fixed" : "absolute"}
@@ -162,15 +285,44 @@ function Navbar() {
                     </Stack>
                     <Stack direction={"row"} spacing={1} useFlexGap alignItems={"center"}>
                         <Stack direction={"row"} alignItems={"center"} spacing={1} useFlexGap sx={{ display: { xs: 'none', md: 'flex' } }}>
-                            {NavLinks.map((link, index) => (
-                                <HeaderLinkPath
-                                    key={index}
-                                    to={link.href}
-                                    className={clsx({ [classes.activeLink]: newPathName === link.href, [classes.whiteColor]: !shouldShowHeader && newPathName !== link.href && newPathName === "/" })}
-                                >
-                                    {t(link.label)}
-                                </HeaderLinkPath>
-                            ))}
+                            {NavLinks.map((link, index) => {
+                                if (link.label === "contact") {
+                                    return (
+                                        <StyledHeaderLink
+                                            key={index}
+                                            direction={"row"}
+                                            alignItems={"center"}
+                                            onClick={() => handleScroll(link.href)}
+                                        >
+                                            {t(link.label)}
+                                        </StyledHeaderLink>
+                                    )
+                                }
+                                if (link.label === "services") {
+                                    return (
+                                        <Stack key={index} direction={"row"} alignItems={"center"}>
+                                            {menuPaper}
+                                            <HeaderLinkPath
+
+                                                to={link.href}
+                                                className={clsx({ [classes.activeLink]: newPathName === link.href, [classes.whiteColor]: !shouldShowHeader && newPathName !== link.href && newPathName === "/" })}
+                                            >
+                                                {t(link.label)}
+                                            </HeaderLinkPath>
+                                            {serviceMenuIcon(link)}
+                                        </Stack>
+                                    )
+                                }
+                                return (
+                                    <HeaderLinkPath
+                                        key={index}
+                                        to={link.href}
+                                        className={clsx({ [classes.activeLink]: newPathName === link.href, [classes.whiteColor]: !shouldShowHeader && newPathName !== link.href && newPathName === "/" })}
+                                    >
+                                        {t(link.label)}
+                                    </HeaderLinkPath>
+                                )
+                            })}
                             {/* {webLinks && webLinks()} */}
                             <Stack direction={"row"} spacing={1}>
                                 {/* {websiteData.app.key === "mountain" && <Settings />} */}
@@ -212,16 +364,49 @@ function Navbar() {
                                         <Divider orientation="vertical" flexItem />
                                         <DarkModeIcon />
                                     </Stack>
-                                    {NavLinks.map((link, index) => (
-                                        <Fragment key={index}>
-                                            <MenuItem onClick={handleCloseNavMenu}>
-                                                <HeaderLinkPath to={link.href} className={clsx({ [classes.activeLink]: newPathName === link.href })}>
+                                    {NavLinks.map((link, index) => {
+                                        if (link.label === "contact") {
+                                            return (
+                                                <StyledHeaderLink
+                                                    key={index}
+                                                    direction={"row"}
+                                                    alignItems={"center"}
+                                                    onClick={() => handleScroll(link.href)}
+                                                >
                                                     {t(link.label)}
-                                                </HeaderLinkPath>
-                                            </MenuItem>
-                                            {index !== NavLinks.length - 1 && <Divider flexItem />}
-                                        </Fragment>
-                                    ))}
+                                                </StyledHeaderLink>
+                                            )
+                                        }
+                                        if (link.label === "services") {
+                                            return (
+                                                <>
+                                                    <Stack key={index} direction={"row"} alignItems={"center"}>
+                                                        {menuPaper}
+                                                        <HeaderLinkPath
+
+                                                            to={link.href}
+                                                            className={clsx({ [classes.activeLink]: newPathName === link.href, [classes.whiteColor]: !shouldShowHeader && newPathName !== link.href && newPathName === "/" })}
+                                                        >
+                                                            {t(link.label)}
+                                                        </HeaderLinkPath>
+                                                        {serviceMenuIcon(link)}
+
+                                                    </Stack>
+                                                    {<Divider flexItem />}
+                                                </>
+                                            )
+                                        }
+                                        return (
+                                            <Fragment key={index}>
+                                                <MenuItem onClick={handleCloseNavMenu}>
+                                                    <HeaderLinkPath to={link.href} className={clsx({ [classes.activeLink]: newPathName === link.href })}>
+                                                        {t(link.label)}
+                                                    </HeaderLinkPath>
+                                                </MenuItem>
+                                                {index !== NavLinks.length - 1 && <Divider flexItem />}
+                                            </Fragment>
+                                        )
+                                    })}
                                 </Stack>
                             </Menu>
                         </Box>

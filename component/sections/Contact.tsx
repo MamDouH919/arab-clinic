@@ -106,7 +106,7 @@ const Contact = () => {
 
 
     return (
-        <Stack sx={{ background: (theme) => theme.palette.background.default }}>
+        <Stack sx={{ background: (theme) => theme.palette.background.default }} id="contact-us">
             {/* <a href="https://wa.me/+201157143609/?text=urlencodedtext" target='_blank' rel="noreferrer">sdfsd</a> */}
             <Root
                 sx={{
