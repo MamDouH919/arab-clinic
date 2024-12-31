@@ -19,7 +19,7 @@ const Layout = async ({
     if (!result.user) {
       return redirect('/login');
     }
-    await delay(2000); // 2-second delay
+    // await delay(2000); // 2-second delay
 
     return (
         <div>

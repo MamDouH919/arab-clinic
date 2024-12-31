@@ -10,6 +10,9 @@ const Page = async ({ params: { id, locale } }: { params: { id: string, locale: 
     const { t } = await initTranslations(locale, ['website'])
     const data = await getNewsById(id)
 
+    console.log(data);
+    
+
     if (data == null) return <NoData label={t("noData")} />
 
     return (

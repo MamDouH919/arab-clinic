@@ -1,5 +1,3 @@
-
-""
 import LanguageChanger from '@/component/ChangeLang';
 import initTranslations from '../i18n';
 import Test from './Test';

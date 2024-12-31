@@ -95,7 +95,7 @@ const Services = (props: inputProps) => {
                                             />
                                             <Typography variant='h6' textAlign={"center"}>{i18n.language === "en" ? service.title : service.titleAr}</Typography>
                                             <DangerouslySetInnerHTML limit data={i18n.language === "en" ? service.description : service.descriptionAr} />
-                                            <StyledLink href={`/services/${service.id}`}>
+                                            <StyledLink href={`/departments/${service.id}`}>
                                                 {t("readMore")} ...
                                             </StyledLink>
                                         </Stack>

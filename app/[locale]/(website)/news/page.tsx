@@ -39,7 +39,7 @@ const NewsData = async ({ locale }: { locale: string }) => {
             },
             orderBy: { createdAt: "asc" },
         })
-    }, ["/products", "getProducts"])
+    }, ["/news", "getProducts"])
 
     const news = await getProducts()    
 

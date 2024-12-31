@@ -4,7 +4,7 @@ import Branches from '@/component/sections/Branches'
 import Clients from '@/component/sections/Clients'
 import Contact from '@/component/sections/Contact'
 import Highlights from '@/component/sections/Highlights'
-import Services from '@/component/sections/Services'
+import ServiceArea from '@/component/sections/ServiceArea'
 import React from 'react'
 
 async function fetchHighlightsFromAPI() {
@@ -38,32 +38,32 @@ async function fetchClientsFromAPI() {
     }
     return response.json();
 }
-async function fetchServicesFromAPI() {
-    const response = await fetch(`${process.env.BACKEND}/api/services`, {
-        cache: 'no-store', // Disable caching
-    });
+// async function fetchServicesFromAPI() {
+//     const response = await fetch(`${process.env.BACKEND}/api/services`, {
+//         cache: 'no-store', // Disable caching
+//     });
 
-    if (!response.ok) {
-        throw new Error("Failed to fetch highlights data from API");
-    }
-    return response.json();
-}
+//     if (!response.ok) {
+//         throw new Error("Failed to fetch highlights data from API");
+//     }
+//     return response.json();
+// }
 
 
 const Page = async () => {
-    const [branchesData, clientsData, servicesData, highlightsData] = await Promise.all([
+    const [branchesData, clientsData, highlightsData] = await Promise.all([
         fetchBranchesFromAPI(),
         fetchClientsFromAPI(),
-        fetchServicesFromAPI(),
         fetchHighlightsFromAPI()
     ])
 
     return (
         <div>
             <BannerSwiper />
+            <ServiceArea branches={branchesData.data}/>
             {!!highlightsData.data.length && <Highlights data={highlightsData.data} />}
             <About />
-            {!!servicesData.data.length && <Services data={servicesData.data} />}
+            {/* {!!servicesData.data.length && <Services data={servicesData.data} />} */}
             <Contact />
             {!!branchesData.data.length && <Branches data={branchesData.data} />}
             {!!clientsData.data.length && <Clients data={clientsData.data} />}

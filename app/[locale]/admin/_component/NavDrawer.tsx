@@ -20,18 +20,15 @@ import { usePathname } from "next/navigation";
 // import { TfiLayoutSlider } from "react-icons/tfi";
 import {
     DashboardOutlined,
-    SwitchLeftOutlined,
     PeopleOutlineOutlined,
-    Inventory2Outlined,
-    InventoryOutlined,
-
     AutoFixHighOutlined,
     HouseOutlined,
     RecentActorsOutlined,
     SupervisorAccountOutlined,
     DescriptionOutlined,
     NewspaperOutlined,
-    ManageAccountsOutlined
+    ManageAccountsOutlined,
+    LocalHospitalOutlined
 } from '@mui/icons-material';
 
 import { useTranslation } from "react-i18next";
@@ -173,6 +170,13 @@ const NavDrawer = (props: propsInput) => {
             sectionName: "services",
             icon: ManageAccountsOutlined,
             primary: "services",
+        },
+        {
+            regex: /doctors/,
+            pathname: "/admin/doctors",
+            sectionName: "doctors",
+            icon: LocalHospitalOutlined,
+            primary: "doctors",
         },
     ];
 

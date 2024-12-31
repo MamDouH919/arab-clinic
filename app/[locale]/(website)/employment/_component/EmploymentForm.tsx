@@ -86,7 +86,6 @@ const EmploymentForm = ({
                                 name='name'
                                 label={t('fullName')}
                                 control={control}
-                                variant='filled'
                                 rules={{
                                     required: t("fieldIsRequired"),
                                 }}
@@ -95,7 +94,6 @@ const EmploymentForm = ({
                         <Grid xs={12}>
                             <ControlMUITextField
                                 name='email'
-                                variant='filled'
                                 label={t('email')}
                                 type='email'
                                 control={control}
@@ -120,7 +118,6 @@ const EmploymentForm = ({
                                             forceCallingCode
                                             sx={{ direction: (theme) => theme.direction }}
                                             label={t('phone')}
-                                            variant='filled'
                                             error={fieldState.invalid}
                                             helperText={fieldState.error && fieldState.error.message}
                                             fullWidth
@@ -135,7 +132,6 @@ const EmploymentForm = ({
                                 name='governorate'
                                 label={t('governorate')}
                                 control={control}
-                                variant='filled'
                                 data={governoratesOptions}
                                 rules={{
                                     required: t("fieldIsRequired"),
@@ -173,7 +169,6 @@ const EmploymentForm = ({
                                     return (
                                         <MuiFileInput
                                             {...field}
-                                            variant='filled'
                                             helperText={fieldState.error && fieldState.error.message}
                                             error={fieldState.invalid}
                                             fullWidth
@@ -182,12 +177,14 @@ const EmploymentForm = ({
                                                 title: "Remove",
                                                 children: <Close fontSize="small" />
                                             }}
+                                            label="cv"
+                                            variant='outlined'
                                             placeholder={t('insertFile')}
                                             InputProps={{
                                                 inputProps: {
                                                     accept: 'application/pdf',
                                                 },
-                                                startAdornment: <AttachFile sx={{ mb: "16px" }} />
+                                                endAdornment: <AttachFile sx={{  }} />
                                             }}
                                         />
                                     )

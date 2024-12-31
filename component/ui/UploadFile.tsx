@@ -16,7 +16,7 @@ interface UploadFileProps extends Omit<TextFieldProps, 'name' | 'control'> {
     accept: string;
     setValue: any;
     iconDisable?: boolean;
-    rules: any;
+    rules?: any;
     fileName?: string;
     maxSize: number; // Max file size in bytes
 }

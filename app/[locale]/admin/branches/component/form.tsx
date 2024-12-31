@@ -1,7 +1,7 @@
 "use client"
 import CustomDialog from '@/component/ui/customDialog'
 import { Box, Button, InputAdornment, Stack, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import Grid from '@mui/material/Unstable_Grid2'
 import * as z from 'zod'
@@ -19,9 +19,21 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: stri
     const schema = id ? UpdateBranchesSchema : AddBranchesSchema;
     const [openDialog, setOpenDialog] = useState(false)
     const router = useRouter()
-    const [loading, setLoading] = useState(false)
+    const [isPending, startTransition] = useTransition();
 
-    const { handleSubmit, setValue, control, setError, reset } = useForm<z.infer<typeof AddBranchesSchema> & { fileName: string }>();
+    const {
+        handleSubmit,
+        setValue,
+        control,
+        setError,
+        reset,
+        watch
+    } = useForm<z.infer<typeof AddBranchesSchema> & { fileName: string }>({
+        defaultValues: {
+            longitude: 0,
+            latitude: 0
+        }
+    });
 
     useEffect(() => {
         if (id && openDialog) {
@@ -33,51 +45,55 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: stri
                 setValue('whatsApp', data?.whatsApp ?? '')
                 setValue('mobile', data?.mobile ?? "")
                 setValue('fileName', data?.imageName ?? "")
+                setValue('longitude', data?.longitude ?? 0)
+                setValue('latitude', data?.latitude ?? 0)
                 setValue('gps', data?.gps ?? "")
                 // You can update your form's default values here
             })
         }
     }, [id, openDialog, setValue])
 
-    const onSubmit = async (data: z.infer<typeof schema>) => {
-        setLoading(true)
-        const formData = new FormData();
-        formData.append("name", data.name);
-        formData.append("nameAr", data.nameAr);
-        formData.append("locationAr", data.locationAr);
-        formData.append("location", data.location);
-        formData.append("whatsApp", data.whatsApp);
-        formData.append("mobile", data.mobile);
-        formData.append("gps", data.gps);
+    const onSubmit = (data: z.infer<typeof schema>) => {
+        startTransition(async () => {
+            const formData = new FormData();
+            formData.append("name", data.name);
+            formData.append("nameAr", data.nameAr);
+            formData.append("locationAr", data.locationAr);
+            formData.append("location", data.location);
+            formData.append("whatsApp", data.whatsApp);
+            formData.append("mobile", data.mobile);
+            formData.append("gps", data.gps);
+            formData.append("longitude", String(data.longitude));
+            formData.append("latitude", String(data.latitude));
 
-        if (data.image) {
-            formData.append("image", data?.image);
-        }
-
-        const result = id ? await updateBranch(formData, id) : await addBranch(formData);
-
-        if (result) {
-            setLoading(false)
-            for (const [field, messages] of Object.entries(result)) {
-                if (field === "image") {
-                    setError("fileName", {
-                        type: "validate",
-                        message: messages[0] // Assuming we take the first message
-                    });
-                }
-
-                setError(field as keyof z.infer<typeof schema>, {
-                    type: "validate",
-                    message: messages[0] // Assuming we take the first message
-                });
-
+            if (data.image) {
+                formData.append("image", data?.image);
             }
-        } else {
-            setLoading(false)
-            router.refresh()
-            closeDialog()
-        }
-    }
+
+            const result = id
+                ? await updateBranch(formData, id)
+                : await addBranch(formData);
+
+            if (result) {
+                for (const [field, messages] of Object.entries(result)) {
+                    if (field === "image") {
+                        setError("fileName", {
+                            type: "validate",
+                            message: messages[0],
+                        });
+                    } else {
+                        setError(field as keyof z.infer<typeof schema>, {
+                            type: "validate",
+                            message: messages[0],
+                        });
+                    }
+                }
+            } else {
+                router.refresh();
+                closeDialog();
+            }
+        });
+    };
 
     const closeDialog = () => {
         reset()
@@ -234,13 +250,35 @@ const FormItem = ({ children, id, data }: { children: React.ReactNode, id?: stri
                                     }}
                                 />
                             </Grid>
+                            <Grid xs={12} sm={6}>
+                                <ControlMUITextField
+                                    name='latitude'
+                                    label={t('latitude')}
+                                    control={control}
+                                    type='number'
+                                    rules={{
+                                        required: t("fieldIsRequired")
+                                    }}
+                                />
+                            </Grid>
+                            <Grid xs={12} sm={6}>
+                                <ControlMUITextField
+                                    name='longitude'
+                                    label={t('longitude')}
+                                    control={control}
+                                    rules={{
+                                        required: t("fieldIsRequired")
+                                    }}
+                                    type='number'
+                                />
+                            </Grid>
                         </Grid>
                     </Box>
                 }
                 actions={
                     <Stack justifyContent={"flex-end"} direction={"row"} spacing={1}>
-                        <Button variant='contained' color='inherit' onClick={closeDialog} disabled={loading}>{t("cancel")}</Button>
-                        <LoadingButton variant='contained' color='success' type='submit' loading={loading}>
+                        <Button variant='contained' color='inherit' onClick={closeDialog} disabled={isPending}>{t("cancel")}</Button>
+                        <LoadingButton variant='contained' color='success' type='submit' loading={isPending}>
                             {t("save")}
                         </LoadingButton>
                     </Stack>

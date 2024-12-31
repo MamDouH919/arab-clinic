@@ -17,8 +17,8 @@ import { usePathname } from 'next/navigation'
 import { config } from '@/config';
 import LanguageMenu from '../Language';
 import { useTranslation } from 'react-i18next';
-import DarkModeIcon from './DarkModeIcon';
-import { ArrowDownward, ArrowDropDown, ArrowLeft } from '@mui/icons-material';
+// import DarkModeIcon from './DarkModeIcon';
+import { ArrowDownward, ArrowDropDown, ArrowLeft, ArrowRight } from '@mui/icons-material';
 
 const PREFIX = "Navbar";
 const classes = {
@@ -63,11 +63,12 @@ const Root = styled(AppBar)(({ theme }) => ({
     },
 }));
 
+const LinkFontSize = 12
 const StyledHeaderLinkPath = styled(Link)(({ theme }) => ({
     display: "inline-block",
     textDecoration: "none",
     textTransform: "uppercase",
-    fontSize: 15,
+    fontSize: LinkFontSize,
     fontWeight: 500,
     color: theme.palette.text.secondary,
     whiteSpace: "nowrap",
@@ -86,35 +87,13 @@ const StyledHeaderLinkPath = styled(Link)(({ theme }) => ({
         color: theme.palette.text.secondary,
     },
 }));
-const StyledHeaderLink = styled(Stack)(({ theme }) => ({
-    display: "inline-block",
-    textDecoration: "none",
-    textTransform: "uppercase",
-    fontSize: 15,
-    fontWeight: 500,
-    color: theme.palette.text.secondary,
-    whiteSpace: "nowrap",
-    [theme.breakpoints.up("md")]: {
-        margin: theme.spacing(0, 1.5),
-    },
-    "&:hover": {
-        color: `${theme.palette.primary.main} !important`,
-        cursor: "pointer",
-    },
-    [theme.breakpoints.down("md")]: {
-        textAlign: "center",
-        padding: theme.spacing(1, 0),
 
-        width: "100%",
-        color: theme.palette.text.secondary,
-    },
-}));
 const MenuItemStyle = styled(MenuItem)(({ theme }) => ({
     padding: 0,
     "& a": {
         padding: theme.spacing(2),
         textDecoration: "none",
-        color: "#fff",
+        color: theme.palette.text.secondary,
         "&:hover": {
             color: `${theme.palette.primary.main} !important`,
             cursor: "pointer",
@@ -138,13 +117,13 @@ const HeaderLinkPath = (props: any) => {
     );
 };
 
-const NavLinks = [
+export const NavLinks = [
     { href: "/", label: "home" },
     { href: "/clients", label: "clients" },
     { href: "/employment", label: "employment" },
     { href: "/news", label: "news" },
-    { href: "/services", label: "services" },
-    { href: "contact-us", label: "contact" },
+    { href: "/departments", label: "services" },
+    { href: "/contact-us", label: "contact" },
 ]
 
 function Navbar({
@@ -209,53 +188,27 @@ function Navbar({
         open={open}
         onClose={handleCloseServices}
         onClick={handleCloseServices}
-        slotProps={{
-            paper: {
-                elevation: 0,
-                sx: {
-                    overflow: 'visible',
-                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                    mt: 1.5,
-                    '& .MuiAvatar-root': {
-                        width: 32,
-                        height: 32,
-                        ml: -0.5,
-                        mr: 1,
-                    },
-                    '&::before': {
-                        content: '""',
-                        display: 'block',
-                        position: 'absolute',
-                        top: 0,
-                        left: 14,
-                        width: 10,
-                        height: 10,
-                        bgcolor: 'background.paper',
-                        transform: 'translateY(-50%) rotate(45deg)',
-                        zIndex: 0,
-                    },
-                },
-            },
-        }}
+
         transformOrigin={{ horizontal: i18n.dir() === "ltr" ? "right" : 'left', vertical: 'top' }}
         anchorOrigin={{ horizontal: i18n.dir() === "ltr" ? "right" : 'left', vertical: 'bottom' }}
     >
         {servicesData.map(e =>
             <MenuItemStyle key={e.id}>
-                <Link href={newPathName.startsWith("/services") ? (newPathName === "/services" ? ("services/" + e.id) : e.id) : "services/" + e.id} >
+                <Link href={newPathName.startsWith("/departments") ? (newPathName === "/departments" ? ("departments/" + e.id) : e.id) : "departments/" + e.id} >
                     {i18n.language === "ar" ? e.titleAr : e.title}
                 </Link>
             </MenuItemStyle>
         )}
     </Menu>
 
-    const serviceMenuIcon = (link: any) => <StackStyle
+    const serviceMenuIcon = (href: string) => <StackStyle
         onClick={handleOpenServices}
         alignItems={"center"}
         justifyContent={"center"}
         color={"text.secondary"}
+        className={clsx({ [classes.whiteColor]: !shouldShowHeader && newPathName !== href && newPathName === "/" })}
     >
-        {anchorService ? <ArrowDropDown /> : <ArrowLeft />}
+        {anchorService ? <ArrowDropDown /> : i18n.language === "ar" ? <ArrowLeft /> : <ArrowRight />}
     </StackStyle>
 
 
@@ -271,45 +224,42 @@ function Navbar({
     return (
         <Root
             position={shouldShowHeader ? "fixed" : "absolute"}
-            sx={{ background: (theme) => pathname.includes("/services") ? theme.palette.background.default : "transparent" }}
+            sx={{ background: (theme) => pathname.includes("/departments") ? theme.palette.background.default : "transparent" }}
             className={clsx({
                 [classes.stickyHeader]: shouldShowHeader,
                 [animationClass]: shouldShowHeader,
             })}
         >
             <Container maxWidth="xl">
-                <Toolbar disableGutters sx={{ justifyContent: "space-between", py: 2 }}>
+                <Toolbar disableGutters sx={{ justifyContent: "space-between", py: 1 }}>
                     <Stack mx={2}>
-                        <Image src={"/logo.webp"} alt="logo" width={80} height={80} objectFit='contain' />
-                        {/* <img src={logo} alt='logo' height={80} srcSet={logo} /> */}
+                        <Link href='/' passHref>
+                            <Image
+                                src={"/logo.webp"}
+                                alt="logo"
+                                width={150}
+                                height={55}
+                            />
+
+                        </Link>
                     </Stack>
                     <Stack direction={"row"} spacing={1} useFlexGap alignItems={"center"}>
                         <Stack direction={"row"} alignItems={"center"} spacing={1} useFlexGap sx={{ display: { xs: 'none', md: 'flex' } }}>
                             {NavLinks.map((link, index) => {
-                                if (link.label === "contact") {
-                                    return (
-                                        <StyledHeaderLink
-                                            key={index}
-                                            direction={"row"}
-                                            alignItems={"center"}
-                                            onClick={() => handleScroll(link.href)}
-                                        >
-                                            {t(link.label)}
-                                        </StyledHeaderLink>
-                                    )
-                                }
                                 if (link.label === "services") {
                                     return (
                                         <Stack key={index} direction={"row"} alignItems={"center"}>
                                             {menuPaper}
                                             <HeaderLinkPath
-
                                                 to={link.href}
-                                                className={clsx({ [classes.activeLink]: newPathName === link.href, [classes.whiteColor]: !shouldShowHeader && newPathName !== link.href && newPathName === "/" })}
+                                                className={clsx({
+                                                    [classes.activeLink]: newPathName === link.href,
+                                                    [classes.whiteColor]: !shouldShowHeader && newPathName !== link.href && newPathName === "/"
+                                                })}
                                             >
                                                 {t(link.label)}
                                             </HeaderLinkPath>
-                                            {serviceMenuIcon(link)}
+                                            {serviceMenuIcon(link.href)}
                                         </Stack>
                                     )
                                 }
@@ -327,7 +277,7 @@ function Navbar({
                             <Stack direction={"row"} spacing={1}>
                                 {/* {websiteData.app.key === "mountain" && <Settings />} */}
                                 {config.app.languages.length !== 1 && <LanguageMenu />}
-                                <DarkModeIcon />
+                                {/* <DarkModeIcon /> */}
                             </Stack>
                         </Stack>
                         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
@@ -361,22 +311,10 @@ function Navbar({
                                 <Stack p={2} spacing={1}>
                                     <Stack direction={"row"} spacing={1} justifyContent={"center"}>
                                         {config.app.languages.length !== 1 && <LanguageMenu />}
-                                        <Divider orientation="vertical" flexItem />
-                                        <DarkModeIcon />
+                                        {/* <Divider orientation="vertical" flexItem />
+                                        <DarkModeIcon /> */}
                                     </Stack>
                                     {NavLinks.map((link, index) => {
-                                        if (link.label === "contact") {
-                                            return (
-                                                <StyledHeaderLink
-                                                    key={index}
-                                                    direction={"row"}
-                                                    alignItems={"center"}
-                                                    onClick={() => handleScroll(link.href)}
-                                                >
-                                                    {t(link.label)}
-                                                </StyledHeaderLink>
-                                            )
-                                        }
                                         if (link.label === "services") {
                                             return (
                                                 <>
@@ -389,8 +327,7 @@ function Navbar({
                                                         >
                                                             {t(link.label)}
                                                         </HeaderLinkPath>
-                                                        {serviceMenuIcon(link)}
-
+                                                        {serviceMenuIcon(link.href)}
                                                     </Stack>
                                                     {<Divider flexItem />}
                                                 </>

@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import { styled } from "@mui/material/styles";
-import { Container, Stack } from '@mui/material';
+import { Container, Paper, Stack, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import SwiperSection from './swiper';
 import YouTube from 'react-youtube';
@@ -10,8 +10,10 @@ import NoData from '../ui/NoData';
 import { useTranslation } from 'react-i18next';
 import DangerouslySetInnerHTML from '../DangerouslySetInnerHTML';
 import Image from 'next/image';
+import clsx from 'clsx';
+import Doctor from './Doctor';
 
-const PREFIX = "Navbar";
+const PREFIX = "ServicesProfile";
 const classes = {
     bannerBackground: `${PREFIX}-bannerBackground`,
     video: `${PREFIX}-video`,
@@ -34,7 +36,7 @@ const Root = styled("div")(({ theme }) => ({
         }
     },
     [`& .${classes.headerH}`]: {
-        height: "112px",
+        height: "71px",
     },
 
     // Feature query for iOS devices
@@ -56,6 +58,7 @@ interface inputProps {
         coverImgPath: string;
         videos: string | null
         servicesImages: []
+        Doctors: []
     } | null
 }
 
@@ -69,6 +72,9 @@ const ServicesProfile = (props: inputProps) => {
         </Stack>
     }
 
+    console.log(data.Doctors);
+
+
     return (
         <Root>
             <div className={classes.headerH}></div>
@@ -78,7 +84,7 @@ const ServicesProfile = (props: inputProps) => {
                     alt={`${data.title}-cover`}
                     width={"100%"}
                     height={"100%"}
-                    style={{objectFit: "cover"}}
+                    style={{ objectFit: "cover" }}
                 />
             </Stack>
             {/* <div className={classes.bannerBackground}
@@ -145,11 +151,33 @@ const ServicesProfile = (props: inputProps) => {
                     </Grid> */}
                 </Stack>
             </Container>
+            <Stack bgcolor={"primary.light"} py={4}>
+                <Container maxWidth="lg">
+                    <Grid container spacing={4} justifyContent={"center"}>
+                        <Grid xs={12}>
+                            <Typography textAlign={"center"} variant='h5' textTransform={"capitalize"} color={"#fff"}>
+                                {t("doctors")} {t("in")} {i18n.language === "ar" ? data.titleAr : data.title}
+                            </Typography>
+                        </Grid>
+
+                        {
+                            data.Doctors.length > 0 ? data.Doctors.map((doctor: any) =>
+                                <Grid xs={12} md={4} sm={6} key={doctor.id}>
+                                    <Doctor doctor={doctor} />
+                                </Grid>
+                            ) : <Grid>
+                                <NoData label={"noDoctors"} height='160px' />
+                            </Grid>
+                        }
+
+                    </Grid>
+                </Container>
+            </Stack>
             {data.servicesImages && data.servicesImages.length > 0 && <SwiperSection
                 title={i18n.language === "en" ? data.title : data.titleAr}
                 images={data.servicesImages}
             />}
-            {data.videos && JSON.parse(data.videos).length > 0 ?
+            {data.videos && JSON.parse(data.videos).length > 0 &&
                 <Container maxWidth={'lg'} sx={{ my: 20 }}>
                     <Grid container spacing={4} m={0}>
                         {
@@ -165,7 +193,6 @@ const ServicesProfile = (props: inputProps) => {
                         }
                     </Grid>
                 </Container>
-                : <Stack m={2} />
             }
         </Root>
     )

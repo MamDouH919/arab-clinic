@@ -9,7 +9,7 @@ import {
     SelectChangeEvent,
     TextFieldProps,
 } from "@mui/material";
-import { useController, Control, FieldValues, FieldError } from "react-hook-form";
+import { useController, FieldError } from "react-hook-form";
 
 interface MUIselectProps extends Omit<TextFieldProps, 'name' | 'control'> {
     control: any;
@@ -59,11 +59,12 @@ const MUIselect: React.FC<MUIselectProps> = (props) => {
     const isRequired = (rules && rules.required) || (rules && rules.validate);
 
     return (
-        <FormControl margin={margin} variant="filled" fullWidth size="small">
+        <FormControl margin={margin} fullWidth size="small">
             <InputLabel id={name}>{isRequired ? label + " *" : label}</InputLabel>
 
             <Select
                 {...fieldProps}
+                variant="outlined"
                 inputProps={{
                     readOnly: readOnly,
                 }}

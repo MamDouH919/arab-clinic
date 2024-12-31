@@ -76,6 +76,10 @@ type Props = {
 
 const i18nNamespaces = ['website', 'dashboard', 'custom']
 
+async function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export default async function RootLayout({
   children,
   params: { locale }
@@ -88,24 +92,25 @@ export default async function RootLayout({
 
   // metadata.title = config.app.name[locale];
   // metadata.description = resources.website.description;
+  await delay(2000); // 2-second delay
 
   return (
     <html lang={locale} dir={dir(locale)}>
       <head>
-       
+
       </head>
       <body className={cairo.className}>
-        <ModeContextProvider>
-          <ThemeProv locale={locale}>
-            <TranslationsProvider
-              namespaces={i18nNamespaces}
-              locale={locale}
-              resources={resources}
-            >
-              {children}
-            </TranslationsProvider>
-          </ThemeProv>
-        </ModeContextProvider>
+        {/* <ModeContextProvider> */}
+        <ThemeProv locale={locale}>
+          <TranslationsProvider
+            namespaces={i18nNamespaces}
+            locale={locale}
+            resources={resources}
+          >
+            {children}
+          </TranslationsProvider>
+        </ThemeProv>
+        {/* </ModeContextProvider> */}
       </body>
     </html>
   );

@@ -79,7 +79,7 @@ const ControlMUITextField: React.FC<ControlMUITextFieldProps> = (props) => {
       defaultValue={defaultValue}
       autoComplete="off"
       id={name}
-      variant={variant || "filled"}
+      variant={variant || "outlined"}
       fullWidth
       multiline={!!props.rows}
       error={Boolean(fieldError || serverValidation?.[serverError])}

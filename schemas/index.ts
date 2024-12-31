@@ -137,6 +137,22 @@ export const AddBranchesSchema = z.object({
   }).min(1, {
     message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
   }),
+  latitude: z
+    .number({
+      invalid_type_error: i18n.language === "en" ? "Must be a number" : "يجب أن يكون رقمًا",
+      required_error: i18n.language === "en" ? "Field is required" : "الحقل مطلوب",
+    })
+    .min(1, {
+      message: i18n.language === "en" ? "Must be greater than 0" : "يجب أن يكون أكبر من 0",
+    }),
+  longitude: z
+    .number({
+      invalid_type_error: i18n.language === "en" ? "Must be a number" : "يجب أن يكون رقمًا",
+      required_error: i18n.language === "en" ? "Field is required" : "الحقل مطلوب",
+    })
+    .min(1, {
+      message: i18n.language === "en" ? "Must be greater than 0" : "يجب أن يكون أكبر من 0",
+    }),
   image: imageSchema.refine(file => file.size < 250 * 1024 && file.size > 0, i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250 كيلوبايت")
 })
 
@@ -268,4 +284,43 @@ export const loginSchema = z.object({
   }).min(1, {
     message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
   })
+})
+
+export const AddDoctorsSchema = z.object({
+  name: z.string({
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }).min(1, {
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }),
+  nameAr: z.string({
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }).min(1, {
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }),
+  expertise: z.string({
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }).min(1, {
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }),
+  expertiseAr: z.string({
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }).min(1, {
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }),
+  branchId: z.string({
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }).min(1, {
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }),
+  serviceId: z.string({
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }).min(1, {
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }),
+  image: imageSchema
+    .optional()
+    .refine(
+      file => !file || (file.size < 150 * 1024 && file.size > 0), // Allow undefined, null, or empty string
+      { message: i18n.language === "en" ? "File must be smaller than 150KB" : "يجب أن يكون الملف أصغر من 150 كيلوبايت" }
+    )
 })

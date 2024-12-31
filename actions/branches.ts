@@ -62,6 +62,8 @@ export async function addBranch(formData: FormData) {
     const whatsApp = formData.get("whatsApp") as string;
     const mobile = formData.get("mobile") as string;
     const gps = formData.get("gps") as string;
+    const latitude = Number(formData.get("latitude"));
+    const longitude = Number(formData.get("longitude"));
     const image = formData.get("image") as File | null;
 
     const parsedData = {
@@ -73,6 +75,8 @@ export async function addBranch(formData: FormData) {
         mobile,
         gps,
         image,
+        latitude,
+        longitude
     };
 
     const result = AddBranchesSchema.safeParse(parsedData)
@@ -96,7 +100,9 @@ export async function addBranch(formData: FormData) {
                 mobile: data.mobile,
                 imageName: imageName,
                 imagePath: imagePath,
-                gps: data.gps
+                gps: data.gps,
+                latitude: data.latitude,
+                longitude: data.longitude,
             }
         })
     }
@@ -115,6 +121,8 @@ export async function updateBranch(formData: FormData, id: string) {
     const mobile = formData.get("mobile") as string;
     const gps = formData.get("gps") as string;
     const image = formData.get("image") as File | null;
+    const latitude = Number(formData.get("latitude"));
+    const longitude = Number(formData.get("longitude"));
 
     const parsedData = {
         name,
@@ -124,6 +132,8 @@ export async function updateBranch(formData: FormData, id: string) {
         whatsApp,
         mobile,
         gps,
+        latitude,
+        longitude,
         ...(image && { image })
     };
 
@@ -157,6 +167,8 @@ export async function updateBranch(formData: FormData, id: string) {
                 gps: data.gps,
                 imageName: imageName,
                 imagePath: imagePath,
+                latitude: data.latitude,
+                longitude: data.longitude,
             },
         })
     } else {
@@ -170,6 +182,8 @@ export async function updateBranch(formData: FormData, id: string) {
                 whatsApp: data.whatsApp,
                 gps: data.gps,
                 mobile: data.mobile,
+                latitude: data.latitude,
+                longitude: data.longitude,
             },
         })
     }
@@ -192,7 +206,9 @@ export async function getBranchById(id: string) {
             mobile: true,
             imageName: true,
             imagePath: true,
-            gps: true
+            gps: true,
+            latitude: true,
+            longitude: true
         }
     });
     return branches;

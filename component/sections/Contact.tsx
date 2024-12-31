@@ -127,7 +127,7 @@ const Contact = () => {
                             <Grid md={4} xs={12}>
                                 <Stack alignItems={"center"} spacing={2}>
                                     <Image src={'/staticImages/arab-clinic-qr.png'} alt='Qr' width={"150"} height={"150"} />
-                                    <a href={''} rel="noopener noreferrer" target="_blank">
+                                    <a href={'https://qr.mountain-egy.site/arab-clinic'} rel="noopener noreferrer" target="_blank">
                                         <Button variant='contained'>{t("forMoreInformation")}</Button>
                                     </a>
                                 </Stack>

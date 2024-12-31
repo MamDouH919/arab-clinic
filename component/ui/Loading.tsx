@@ -17,9 +17,9 @@ const Root = styled(Stack)(({ theme }) => ({
 }));
 
 
-const Loading = () => {
+const Loading = ({ height }: { height?: string }) => {
     return (
-        <Root height={"100dvh"} width={"100%"} justifyContent={"center"} alignItems={"center"} >
+        <Root height={height ?? "100dvh"} width={"100%"} justifyContent={"center"} alignItems={"center"} >
             <FallingLines
                 // color={"red"}
                 width="50"

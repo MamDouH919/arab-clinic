@@ -119,17 +119,17 @@ export default function DashboardLayout({
                             </IconButton>
                             <Link href='/' passHref>
                                 <Image
-                                    alt='logo'
-                                    src='/logo.webp'
-                                    width={60}
-                                    height={60}
-                                    objectFit='cover'
+                                    src={"/logo.webp"}
+                                    alt="logo"
+                                    width={150}
+                                    height={55}
                                 />
+
                             </Link>
                         </Stack>
                         <Stack direction={"row"} spacing={1}>
-                        <LanguageMenu />
-                        <DarkModeIcon />
+                            <LanguageMenu />
+                            <DarkModeIcon />
                         </Stack>
                     </Stack>
                 </Toolbar>

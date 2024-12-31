@@ -35,8 +35,18 @@ const ThemeProv = ({ children, locale }: { children: React.ReactNode, locale: st
 
     const theme = createTheme({
         direction: dir(locale),
+        shape: {
+            borderRadius: 10,
+        },
+        components: {
+            MuiTextField: {
+                defaultProps: {
+                    size: "small"
+                }
+            },
+        },
         palette: {
-            mode: darkMode ? "dark" : "light",
+            mode: "light",
             primary: {
                 main: primaryColor.startsWith("#")
                     ? primaryColor
@@ -47,7 +57,8 @@ const ThemeProv = ({ children, locale }: { children: React.ReactNode, locale: st
                     ? secondaryColor
                     : color[secondaryColorKey][500 as keyof typeof color[typeof secondaryColorKey]],
             },
-            ...(darkMode ? {
+
+            ...(false ? {
                 background: {
                     default: "#18191a",
                     paper: "#2f3031",

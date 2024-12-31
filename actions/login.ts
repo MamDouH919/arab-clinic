@@ -6,15 +6,15 @@ import { hashPassword, isValidPassword } from '@/lib/hashPassword';
 import db from '@/db/db';
 import { loginSchema } from '@/schemas';
 
-// export async function addUserMut() {
-//     const pass = await hashPassword("Arab!!!clinic123")
-//     await db.users.create({
-//         data: {
-//             email: "arabclinic@arabclinic.com",
-//             password: pass
-//         }
-//     });
-// }
+export async function addUserMut() {
+    const pass = await hashPassword("Arab!!!clinic123")
+    await db.users.create({
+        data: {
+            email: "arabclinic@arabclinic.com",
+            password: pass
+        }
+    });
+}
 export async function login(email: string, password: string) {
     const result = loginSchema.safeParse({
         email,

@@ -28,6 +28,16 @@ export async function GET(request: NextRequest) {
                         imagePath: true
                     }
                 },
+                Doctors: {
+                    select: {
+                        id: true,
+                        name: true,
+                        nameAr: true,
+                        imagePath: true,
+                        expertise: true,
+                        expertiseAr: true
+                    }
+                }
             })
         },
     });

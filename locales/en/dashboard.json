@@ -43,12 +43,14 @@
   "type": "type",
   "emptyData": "no data available",
   "actions": "actions",
-  "service": "service",
-  "services": "services",
+  "service": "department",
+  "services": "departments",
   "errorInDelete": "An error occurred while deleting",
   "addIcon": "add icon",
   "addCover": "add cover",
   "newImage": "new image",
   "images": "images",
-  "branchLocation": "branch location"
+  "branchLocation": "branch location",
+  "expertiseEn": "expertise in english",
+  "expertiseAr": "expertise in arabic"
 }

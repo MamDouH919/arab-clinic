@@ -43,12 +43,14 @@
   "type": "النوع",
   "emptyData": "لا توجد بيانات متاحة",
   "actions": "الإجراءات",
-  "service": "الخدمة",
-  "services": "الخدمات",
+  "service": "القسم",
+  "services": "الآقسام",
   "errorInDelete": "حدث خطأ اثناء الحذف",
   "addIcon": "إضافة آيكون",
   "addCover": "إضافة خلفية",
   "newImage": "صورة جديدة",
   "images": "الصور",
-  "branchLocation": "موقع الفرع"
+  "branchLocation": "موقع الفرع",
+  "expertiseEn": "التخصص باللغة الإنجليزية",
+  "expertiseAr": "التخصص باللغة العربية"
 }
