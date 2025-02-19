@@ -118,8 +118,8 @@ model Branches {
   mobile     String
   whatsApp   String
   gps        String      @default("")
-  latitude   Float?       @default(0)
-  longitude  Float?      @default(0)
+  latitude   Float       @default(0)
+  longitude  Float       @default(0)
   imagePath  String
   imageName  String
   createdAt  DateTime    @default(now())
