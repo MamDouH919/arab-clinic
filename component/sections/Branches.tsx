@@ -1,5 +1,5 @@
 "use client"
-import { Box, Container, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Container, Paper, Stack, Typography } from '@mui/material'
 import { styled } from "@mui/material/styles";
 import Grid from '@mui/material/Unstable_Grid2/Grid2';
 import { FaFacebookF, FaPhone, FaWhatsapp } from 'react-icons/fa';
@@ -27,12 +27,12 @@ const Root = styled(Box)(({ theme }) => ({
         zIndex: 1,
     },
     [`& .${classes.social}`]: {
-        display: "flex",
-        flexWrap: "wrap",
-        width: 40,
-        height: 40,
+        // display: "flex",
+        // flexWrap: "wrap",
+        // width: 40,
+        // height: 40,
         background: theme.palette.divider,
-        borderRadius: "50%",
+        // borderRadius: "50%",
         "& a": {
             color: theme.palette.secondary.main,
             fontSize: 22,
@@ -47,9 +47,9 @@ const Root = styled(Box)(({ theme }) => ({
 
 const socialIcons = {
     whatsapp: <FaWhatsapp />,
-    phone: <FaPhone />,
+    phone: <FaPhone size={18} />,
     facebook: <FaFacebookF />,
-    location: <LocationOnOutlined />
+    location: <LocationOnOutlined fontSize='inherit' />
 };
 
 
@@ -78,7 +78,7 @@ const Branches = ({ data }: {
             <SectionTitle
                 sectionTitle={t("branches")}
             />
-            <div style={{ margin: "32px 0", }}>
+            <Box my={4}>
                 <div className={classes.bgStyle}></div>
                 <Container maxWidth={'lg'} style={{ position: "relative", zIndex: 2 }}>
                     <Grid container spacing={2} m={0} justifyContent={"center"} alignItems={"stretch"}>
@@ -87,14 +87,13 @@ const Branches = ({ data }: {
                                 <Grid md={4} xs={12} key={index}>
                                     <Stack
                                         alignItems={"center"}
+                                        component={Paper}
                                         spacing={2}
                                         pb={2}
                                         height={"100%"}
                                         px={2}
-                                        sx={{
-                                            background: (theme) => `linear-gradient(to bottom, ${theme.palette.background.paper} ${i18n.language === "ar" ? "100%" : "0%"}, ${theme.palette.background.default} 100%) !important`,
-                                            borderRadius: "20px"
-                                        }}
+                                        elevation={3}
+
                                     >
                                         <Image src={item.imagePath} height={220} alt='ss' width={210} style={{ borderRadius: "10px" }} />
                                         <Typography variant='body1' fontSize={"20px"}>
@@ -104,39 +103,30 @@ const Branches = ({ data }: {
                                             {i18n.language === "ar" ? item.locationAr : item.location}
                                         </Typography>
                                         <Stack direction={"row"} spacing={2} flexWrap={"wrap"} useFlexGap>
-                                            <Stack justifyContent={"center"} alignItems={"center"} className={classes.social}>
+                                            <Avatar className={classes.social}>
                                                 <a title={(i18n.language === "ar" ? item.nameAr : item.name) + " " + t("phone")} target='_blank' rel="noopener noreferrer" href={`tel:${item.mobile}`}>
                                                     {socialIcons.phone}
                                                 </a>
-                                            </Stack>
-                                            <Stack justifyContent={"center"} alignItems={"center"} className={classes.social}>
+                                            </Avatar>
+                                            <Avatar className={classes.social}>
                                                 <a title={(i18n.language === "ar" ? item.nameAr : item.name) + " " + t("whatsApp")} target='_blank' rel="noopener noreferrer" href={`https://wa.me/${item.whatsApp}`}>
                                                     {socialIcons.whatsapp}
                                                 </a>
-                                            </Stack>
-                                            <Stack justifyContent={"center"} alignItems={"center"} className={classes.social}>
+                                            </Avatar>
+                                            <Avatar className={classes.social}>
                                                 <a title={(i18n.language === "ar" ? item.nameAr : item.name) + " " + t("location")} target='_blank' rel="noopener noreferrer" href={item.gps}>
                                                     {socialIcons.location}
                                                 </a>
-                                            </Stack>
-                                            {/* {item.socials.map((link) => {
-                                                const Icon = socialIcons[link.icon];
-                                                return (
-                                                    <Stack justifyContent={"center"} alignItems={"center"} key={link.icon} className={classes.social}>
-                                                        <a rel="noopener noreferrer" href={link.link}>
-                                                            {Icon}
-                                                        </a>
-                                                    </Stack>
-                                                );
-                                            })} */}
+                                            </Avatar>
                                         </Stack>
+
                                     </Stack>
                                 </Grid>
                             )
                         })}
                     </Grid>
                 </Container>
-            </div>
+            </Box>
 
         </Root>
     )

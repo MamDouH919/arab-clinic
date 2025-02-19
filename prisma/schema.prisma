@@ -38,20 +38,22 @@ model ServicesImages {
 }
 
 model Services {
-  id             String           @id @default(uuid())
-  title          String
-  titleAr        String
-  description    String
-  descriptionAr  String
-  iconName       String
-  coverImgPath   String
-  iconPath       String
-  coverImgName   String
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  videos         String?
-  servicesImages ServicesImages[]
-  Doctors        Doctors[]
+  id               String           @id @default(uuid())
+  title            String
+  titleAr          String
+  description      String
+  descriptionAr    String
+  iconName         String
+  coverImgPath     String
+  iconPath         String
+  minDescriptionAr String           @default("")
+  minDescription   String           @default("")
+  coverImgName     String
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  videos           String?
+  servicesImages   ServicesImages[]
+  Doctors          Doctors[]
 }
 
 model highlights {
@@ -108,21 +110,22 @@ model Contacts {
 }
 
 model Branches {
-  id         String    @id @default(uuid())
+  id         String      @id @default(uuid())
   name       String
   nameAr     String
   location   String
   locationAr String
   mobile     String
   whatsApp   String
-  gps        String    @default("")
-  latitude   Float     @default(0)
-  longitude  Float     @default(0)
+  gps        String      @default("")
+  latitude   Float       @default(0)
+  longitude  Float       @default(0)
   imagePath  String
   imageName  String
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
   Doctors    Doctors[]
+  Schedules  Schedules[]
 }
 
 // enum ClientType {
@@ -157,4 +160,14 @@ model Doctors {
   branchId    String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Schedules {
+  id        String   @id @default(uuid())
+  imagePath String
+  imageName String
+  branch    Branches @relation(fields: [branchId], references: [id])
+  branchId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

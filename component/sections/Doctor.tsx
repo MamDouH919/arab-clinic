@@ -20,7 +20,21 @@ const classes = {
 };
 
 const Root = styled("div")(({ theme }) => ({
-    width:"100%",
+    '&:hover': {
+        [`& .${classes.bgPaper}`]: {
+            width: "100%",
+            transition: "width 0.3s ease-in-out", // Smooth transition
+        },
+        [`& .${classes.bgPaperLeft}`]: {
+            transition: "all 0.3s ease-in-out", // Smooth transition
+            borderTopLeftRadius: "17px"
+        },
+        [`& .${classes.bgPaperRight}`]: {
+            transition: "all 0.3s ease-in-out", // Smooth transition
+            borderBottomRightRadius: "17px"
+        },
+    },
+    width: "100%",
     [`& .${classes.image}`]: {
         objectFit: "contain"
     },
@@ -41,16 +55,19 @@ const Root = styled("div")(({ theme }) => ({
         zIndex: -1,
         width: 70,
         height: 30,
+        transition: "width 0.3s ease-in-out", // Smooth transition
     },
     [`& .${classes.bgPaperLeft}`]: {
         top: "-3px",
         right: "-3px",
-        borderTopRightRadius: "17px"
+        borderTopRightRadius: "17px",
+        transition: "all 0.3s ease-in-out", // Smooth transition
     },
     [`& .${classes.bgPaperRight}`]: {
         bottom: "-3px",
         left: "-3px",
-        borderBottomLeftRadius: "17px"
+        borderBottomLeftRadius: "17px",
+        transition: "all 0.3s ease-in-out", // Smooth transition
     },
 }));
 
@@ -71,7 +88,7 @@ const Doctor = ({
         <Root>
             <Stack component={Paper} width={"100%"} height={400} position={"relative"}>
                 <img
-                    src={doctor.filePath ?? "/staticImages/doc-profile.jpg"}
+                    src={doctor.filePath ?? "/logo-footer.webp"}
                     alt={i18n.language === "ar" ? doctor.nameAr : doctor.name}
                     width={"100%"}
                     height={"100%"}

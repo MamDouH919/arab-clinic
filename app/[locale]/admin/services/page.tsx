@@ -38,6 +38,8 @@ const Page = async ({
 export default Page
 
 const NewsData = async ({ locale }: { locale: string }) => {
+    const { t } = await initTranslations(locale, ['dashboard']);
+
     const services = await db.services.findMany({
         select: {
             id: true,
@@ -65,15 +67,23 @@ const NewsData = async ({ locale }: { locale: string }) => {
                     />
                     <Typography variant="h6" fontSize={25} textAlign={"center"}>{locale === "en" ? item.title : item.titleAr}</Typography>
 
-                    <Stack direction={"row"} spacing={1} >
-                        <IconButton size="small" component={Link} href={`/admin/services/${item.id}`}>
-                            <EditIcon fontSize='small' />
-                        </IconButton>
-                        <DeleteItem deleteFun={deleteService} id={item.id}>
-                            <IconButton size="small">
-                                <DeleteIcon fontSize='small' color='error' />
-                            </IconButton>
-                        </DeleteItem>
+                    <Stack direction={"row"} spacing={1}>
+                        <Stack width={"100%"}>
+                            <ButtonLink
+                                size="small"
+                                fullWidth
+                                href={`/admin/services/${item.id}`}
+                                linkLabel={t("edit")}
+                                startIcon={<EditIcon fontSize='small' />}
+                            />
+                        </Stack>
+                        <Stack width={"100%"}>
+                            <DeleteItem deleteFun={deleteService} id={item.id}>
+                                <Button size="small" variant='contained' fullWidth color="error" endIcon={<DeleteIcon fontSize='small' />}>
+                                    {t("delete")}
+                                </Button>
+                            </DeleteItem>
+                        </Stack>
                     </Stack>
                 </Stack>
             </Paper>

@@ -1,5 +1,8 @@
+import { getUserById } from '@/actions/login'
+import BackupToGoogleDrive from '@/component/Backup'
 import DataCounter from '@/component/ui/DataCounter'
 import db from '@/db/db'
+import { verifyAuth } from '@/lib/auth'
 import { cache } from '@/lib/cache'
 import {
     AutoFixHighOutlined,
@@ -27,6 +30,15 @@ async function fetchHighlightsFromAPI() {
 
 const Page = async () => {
     const counts = await fetchHighlightsFromAPI()
+    const result = await verifyAuth();
+
+    console.log(result)
+    
+
+    const user = result.user ? await getUserById(Number(result.user.id)) : null
+
+    console.log(user);
+    
 
     return (
         <Container maxWidth={"xl"}>
@@ -53,6 +65,7 @@ const Page = async () => {
                     <DataCounter icon={<ManageAccountsOutlined fontSize='large' />} title='services' total={counts.servicesCount} />
                 </Grid>
             </Grid>
+            {user && user.email === "admin@gmail.com" && <BackupToGoogleDrive />}
         </Container>
     )
 }

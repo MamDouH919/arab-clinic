@@ -12,9 +12,9 @@ const Root = styled("div")(({ theme }) => ({
     [`& .${classes.titleDivider}`]: {
         borderRadius: "20px",
         direction: "rtl",
-        width: "100px",
+        width: "80px",
         margin: "auto",
-        height: 4,
+        height: 3,
         background: `linear-gradient(90deg,${theme.palette.secondary.main} 52%, ${theme.palette.primary.main} 52%)`,
         marginTop: theme.spacing(2),
     }

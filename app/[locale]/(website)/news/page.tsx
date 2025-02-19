@@ -12,10 +12,10 @@ import { cache } from '@/lib/cache'
 const Page = async ({ params: { locale } }: { params: { locale: string } }) => {
     return (
         <div>
-            <BreadCrumb pageLink={"news"} />
-            <div style={{ margin: "80px 0" }}>
+            <BreadCrumb pageLink={"news"} bgImage='/staticImages/news-bg.webp' />
+            <Stack py={10}>
                 <NewsData locale={locale} />
-            </div>
+            </Stack>
         </div>
     )
 }
@@ -41,12 +41,12 @@ const NewsData = async ({ locale }: { locale: string }) => {
         })
     }, ["/news", "getProducts"])
 
-    const news = await getProducts()    
+    const news = await getProducts()
 
     if (news.length === 0) return <NoData label={t("noNews")} />
 
     return <Container maxWidth="lg">
-        <Grid container spacing={2} m={0} alignItems={"stretch"}>
+        <Grid container spacing={2} m={0} alignItems={"stretch"} justifyContent={"center"}>
             {news.map((item) => (
                 <Grid display={"flex"} key={item.id} xs={12} md={4}>
                     <Paper sx={{ padding: "20px", width: "100%" }}>

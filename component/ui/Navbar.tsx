@@ -45,6 +45,8 @@ const Root = styled(AppBar)(({ theme }) => ({
     borderBottom: `none`,
     boxShadow: "none",
     top: 0,
+    zIndex: 1049,
+    background: theme.palette.background.default,
     [`&.${classes.animationFade}`]: {
         display: "flex !important",
         animation: `${animationFade} 1s both`,
@@ -56,7 +58,7 @@ const Root = styled(AppBar)(({ theme }) => ({
         boxShadow: theme.shadows[5]
     },
     [`& .${classes.activeLink}`]: {
-        color: theme.palette.primary.main,
+        color: `${theme.palette.primary.main} !important`,
     },
     [`& .${classes.whiteColor}`]: {
         color: "#fff",
@@ -124,6 +126,7 @@ export const NavLinks = [
     { href: "/news", label: "news" },
     { href: "/departments", label: "services" },
     { href: "/contact-us", label: "contact" },
+    { href: "/clinics-schedule", label: "schedules" },
 ]
 
 function Navbar({
@@ -206,7 +209,7 @@ function Navbar({
         alignItems={"center"}
         justifyContent={"center"}
         color={"text.secondary"}
-        className={clsx({ [classes.whiteColor]: !shouldShowHeader && newPathName !== href && newPathName === "/" })}
+        // className={clsx({ [classes.whiteColor]: !shouldShowHeader })}
     >
         {anchorService ? <ArrowDropDown /> : i18n.language === "ar" ? <ArrowLeft /> : <ArrowRight />}
     </StackStyle>
@@ -224,7 +227,6 @@ function Navbar({
     return (
         <Root
             position={shouldShowHeader ? "fixed" : "absolute"}
-            sx={{ background: (theme) => pathname.includes("/departments") ? theme.palette.background.default : "transparent" }}
             className={clsx({
                 [classes.stickyHeader]: shouldShowHeader,
                 [animationClass]: shouldShowHeader,
@@ -254,7 +256,7 @@ function Navbar({
                                                 to={link.href}
                                                 className={clsx({
                                                     [classes.activeLink]: newPathName === link.href,
-                                                    [classes.whiteColor]: !shouldShowHeader && newPathName !== link.href && newPathName === "/"
+                                                    // [classes.whiteColor]: !shouldShowHeader
                                                 })}
                                             >
                                                 {t(link.label)}
@@ -267,17 +269,17 @@ function Navbar({
                                     <HeaderLinkPath
                                         key={index}
                                         to={link.href}
-                                        className={clsx({ [classes.activeLink]: newPathName === link.href, [classes.whiteColor]: !shouldShowHeader && newPathName !== link.href && newPathName === "/" })}
+                                        className={clsx({
+                                            [classes.activeLink]: newPathName === link.href,
+                                            // [classes.whiteColor]: !shouldShowHeader
+                                        })}
                                     >
                                         {t(link.label)}
                                     </HeaderLinkPath>
                                 )
                             })}
-                            {/* {webLinks && webLinks()} */}
                             <Stack direction={"row"} spacing={1}>
-                                {/* {websiteData.app.key === "mountain" && <Settings />} */}
                                 {config.app.languages.length !== 1 && <LanguageMenu />}
-                                {/* <DarkModeIcon /> */}
                             </Stack>
                         </Stack>
                         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
@@ -323,7 +325,10 @@ function Navbar({
                                                         <HeaderLinkPath
 
                                                             to={link.href}
-                                                            className={clsx({ [classes.activeLink]: newPathName === link.href, [classes.whiteColor]: !shouldShowHeader && newPathName !== link.href && newPathName === "/" })}
+                                                            className={clsx({
+                                                                [classes.activeLink]: newPathName === link.href,
+                                                                // [classes.whiteColor]: !shouldShowHeader && newPathName !== link.href && newPathName === "/"
+                                                            })}
                                                         >
                                                             {t(link.label)}
                                                         </HeaderLinkPath>

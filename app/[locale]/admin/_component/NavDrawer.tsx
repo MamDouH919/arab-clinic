@@ -178,6 +178,13 @@ const NavDrawer = (props: propsInput) => {
             icon: LocalHospitalOutlined,
             primary: "doctors",
         },
+        {
+            regex: /schedules/,
+            pathname: "/admin/schedules",
+            sectionName: "schedules",
+            icon: LocalHospitalOutlined,
+            primary: "schedules",
+        },
     ];
 
     return (

@@ -4,6 +4,7 @@ import { getAvailableBranches } from './_actions'
 import NoData from '@/component/ui/NoData'
 import initTranslations from '@/app/i18n'
 import ContactForm from './_component/ContactForm'
+import { Stack } from '@mui/material'
 
 const Page = async ({ params: { locale } }: { params: { locale: string } }) => {
     const availableBranches = await getAvailableBranches()
@@ -21,10 +22,10 @@ const Page = async ({ params: { locale } }: { params: { locale: string } }) => {
 
     return (
         <div>
-            <BreadCrumb pageLink={"contact"} />
-            <div style={{ margin: "80px 0" }}>
+            <BreadCrumb pageLink={"contact"} bgImage='/staticImages/contact-bg.webp' />
+            <Stack py={10}>
                 {data.length === 0 ? <NoData label={t("noData")} /> : <ContactForm availableBranches={data} />}
-            </div>
+            </Stack>
         </div>
     )
 }

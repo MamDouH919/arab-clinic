@@ -6,6 +6,17 @@ import { hashPassword, isValidPassword } from '@/lib/hashPassword';
 import db from '@/db/db';
 import { loginSchema } from '@/schemas';
 
+export async function getUserById(id: number) {
+    const user = await db.users.findUnique({
+        where: { id },
+        select: {
+            id: true,
+            email: true,
+        }
+    });
+    return user;
+}
+
 export async function addUserMut() {
     const pass = await hashPassword("Arab!!!clinic123")
     await db.users.create({

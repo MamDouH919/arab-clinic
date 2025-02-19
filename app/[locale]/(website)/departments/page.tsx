@@ -8,7 +8,7 @@ import Services from '@/component/sections/Services'
 const Page = async ({ params: { locale } }: { params: { locale: string } }) => {
     return (
         <div>
-            <BreadCrumb pageLink={"services"} />
+            <BreadCrumb pageLink={"services"} bgImage='/staticImages/departments-bg.webp'/>
             <div style={{ margin: "80px 0" }}>
                 <ServicesData locale={locale} />
             </div>

@@ -74,7 +74,7 @@ const UploadFile: React.FC<UploadFileProps> = (props) => {
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">
-                            <label htmlFor="icon-button-file">
+                            <label htmlFor={"icon-button-" + fileName}>
                                 <Input
                                     {...fieldProps}
                                     name={name}
@@ -98,7 +98,7 @@ const UploadFile: React.FC<UploadFileProps> = (props) => {
                                         }
                                     }}
                                     accept={accept}
-                                    id="icon-button-file"
+                                    id={"icon-button-" + fileName}
                                     type="file"
                                 />
                                 <IconButton
@@ -106,7 +106,7 @@ const UploadFile: React.FC<UploadFileProps> = (props) => {
                                     color="default"
                                     aria-label="upload"
                                     component="span"
-                                    size="large"
+                                    size="small"
                                 >
                                     <Icon>{icon}</Icon>
                                 </IconButton>
@@ -116,11 +116,11 @@ const UploadFile: React.FC<UploadFileProps> = (props) => {
                 }}
             />
             {/* Display file name and size */}
-            {fileInfo.name && fileInfo.size !== null && (
-                <p>
+            {/* {fileInfo.name && fileInfo.size !== null && (
+                <Typography py={1}>
                     size: {(fileInfo.size / 1024).toFixed(2)} KB
-                </p>
-            )}
+                </Typography>
+            )} */}
             {fileError && <Typography color={"error.main"}>{fileError}</Typography>}
         </Stack>
     );

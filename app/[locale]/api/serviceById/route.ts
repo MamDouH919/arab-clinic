@@ -22,6 +22,8 @@ export async function GET(request: NextRequest) {
                 description: true,
                 descriptionAr: true,
                 coverImgPath: true,
+                minDescription: true,
+                minDescriptionAr: true,
                 videos: true,
                 servicesImages: {
                     select: {

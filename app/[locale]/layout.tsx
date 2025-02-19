@@ -92,12 +92,13 @@ export default async function RootLayout({
 
   // metadata.title = config.app.name[locale];
   // metadata.description = resources.website.description;
-  await delay(2000); // 2-second delay
+  // await delay(2000); // 2-second delay
 
   return (
     <html lang={locale} dir={dir(locale)}>
       <head>
-
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       </head>
       <body className={cairo.className}>
         {/* <ModeContextProvider> */}

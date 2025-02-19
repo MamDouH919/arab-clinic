@@ -1,22 +1,23 @@
 "use client";
 import React from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { styled, useTheme } from "@mui/material/styles";
-import { Box, Typography } from '@mui/material';
+// import { Swiper, SwiperSlide } from 'swiper/react';
+import { styled } from "@mui/material/styles";
+import { Box } from '@mui/material';
 
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import './style.css';
+// // Import Swiper styles
+// import 'swiper/css';
+// import 'swiper/css/pagination';
+// import 'swiper/css/navigation';
+// import './style.css';
 
-import 'swiper/css/effect-fade';
+// import 'swiper/css/effect-fade';
 
-import { EffectFade, Navigation, Pagination, Autoplay } from 'swiper/modules';
-import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
-import { useTranslation } from 'react-i18next';
+// import { EffectFade, Navigation, Pagination, Autoplay } from 'swiper/modules';
+// import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
+// import { useTranslation } from 'react-i18next';
 
 const Root = styled(Box)(({ theme }) => ({
+    // backgroundImage: `url('/staticImages/about/banner.mp4')`,
     [`& .swiper-pagination-bullet`]: {
         width: "20px",
         height: "20px",
@@ -58,15 +59,21 @@ const Root = styled(Box)(({ theme }) => ({
     [`& .navigation-button.prev`]: {
         left: "0",
     },
+    [`& video`]: {
+        objectFit: "cover",
+    },
 }));
 
 
 const BannerSwiper = () => {
-    const { t, i18n } = useTranslation("custom");
-    const { palette } = useTheme()
+    // const { t, i18n } = useTranslation("custom");
+    // const { palette } = useTheme()
     return (
-        <Root sx={{ height: { xs: "500px", md: "100dvh", lg: "100dvh" }, position: "relative" }}>
-            <>
+        <Root sx={{ height: { xs: "400px", md: "100dvh", lg: "100dvh" }, position: "relative" }}>
+            <video autoPlay muted loop id="myVideo" height={"100%"} width={"100%"}>
+                <source src="/staticImages/banner.mp4" type="video/mp4" />
+            </video>
+            {/* <>
                 <Swiper
                     spaceBetween={0}
                     pagination={{
@@ -89,7 +96,6 @@ const BannerSwiper = () => {
                     {[1, 2].map((item, index) => (
                         <SwiperSlide key={index}>
                             <div className='content-background'></div>
-                            {/* <Typography variant='h1' fontSize={{ xs: "35px", md: "60px", lg: "80px" }} width={"80%"} className='content'>{"sdfsd"}</Typography> */}
                             <img src={'/staticImages/about/about.webp'} alt={"dksfjkd"} srcSet={'/staticImages/about/about.webp'} />
                         </SwiperSlide>
                     ))}
@@ -100,7 +106,7 @@ const BannerSwiper = () => {
                 <div className="navigation-button prev">
                     {i18n.language === "en" ? <FaArrowLeft color={palette.primary.main}/> : <FaArrowRight color={palette.primary.main}/>}
                 </div>
-            </>
+            </> */}
         </Root>
     )
 }

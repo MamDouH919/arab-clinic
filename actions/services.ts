@@ -70,6 +70,8 @@ export async function getServicesById(id: string) {
             iconName: true,
             iconPath: true,
             servicesImages: true,
+            minDescription: true,
+            minDescriptionAr: true,
             videos: true
         }
     });
@@ -124,6 +126,8 @@ export async function deleteService(id: string) {
 export async function addServices(formData: FormData) {
     const titleAr = formData.get("titleAr") as string;
     const title = formData.get("title") as string;
+    const minDescriptionAr = formData.get("minDescriptionAr") as string;
+    const minDescription = formData.get("minDescription") as string;
     const descriptionAr = formData.get("descriptionAr") as string;
     const description = formData.get("description") as string;
     const icon = formData.get("icon") as string;
@@ -141,6 +145,8 @@ export async function addServices(formData: FormData) {
         icon,
         coverImg,
         videos,
+        minDescriptionAr,
+        minDescription,
         ...(imgOne && { imgOne: imgOne }),
         ...(imgTwo && { imgTwo: imgTwo }),
         ...(imgThree && { imgThree: imgThree }),
@@ -158,32 +164,13 @@ export async function addServices(formData: FormData) {
         const { imagePath: iconImagePath, imageName: iconImageName } = await saveImage(data.icon!, "services");
         const { imagePath: coverImagePath, imageName: coverImageName } = await saveImage(data.coverImg!, "services");
 
-        // Save imgOne if it exists
-        // if (imgOne) {
-        //     const { imagePath, imageName } = await saveImage(data.imgOne!, "services");
-        //     imgOnePath = imagePath
-        //     imageOneName = imageName
-        // }
-
-        // // Save imgTwo if it exists
-        // if (imgTwo) {
-        //     const { imagePath, imageName } = await saveImage(data.imgTwo!, "services");
-        //     imgTwoPath = imagePath
-        //     imageTwoName = imageName
-        // }
-
-        // // Save imgThree if it exists
-        // if (imgThree) {
-        //     const { imagePath, imageName } = await saveImage(data.imgThree!, "services");
-        //     imgThreePath = imagePath
-        //     imageThreeName = imageName
-        // }
-
         // Create the service in the database
         await db.services.create({
             data: {
                 title: data.title,
                 titleAr: data.titleAr,
+                minDescriptionAr: data.minDescriptionAr,
+                minDescription: data.minDescription,
                 descriptionAr: data.descriptionAr,
                 description: data.description,
                 iconPath: iconImagePath,
@@ -193,40 +180,6 @@ export async function addServices(formData: FormData) {
                 videos: data.videos
             },
         });
-
-        // Insert related services images into the ServicesImages table
-        // const images = [];
-
-        // if (imgOnePath && imageOneName) {
-        //     images.push({
-        //         imageName: imageOneName,
-        //         imagePath: imgOnePath,
-        //         serviceId: createdService.id,
-        //     });
-        // }
-
-        // if (imgTwoPath && imageTwoName) {
-        //     images.push({
-        //         imagePath: imgTwoPath,
-        //         imageName: imageTwoName,
-        //         serviceId: createdService.id,
-        //     });
-        // }
-
-        // if (imgThreePath && imageThreeName) {
-        //     images.push({
-        //         imagePath: imgThreePath,
-        //         imageName: imageThreeName,
-        //         serviceId: createdService.id,
-        //     });
-        // }
-
-        // // Save all images related to the service
-        // if (images.length > 0) {
-        //     await db.servicesImages.createMany({
-        //         data: images ?? [],
-        //     });
-        // }
     }
 
     // Revalidate paths to update the frontend
@@ -246,12 +199,16 @@ export async function updateServices(formData: FormData, id: string) {
     const imgThree = formData.get("imgThree") as File | null;
     const coverImg = formData.get("coverImg") as File | null;
     const videos = formData.get("videos") as string | null;
+    const minDescriptionAr = formData.get("minDescriptionAr") as string;
+    const minDescription = formData.get("minDescription") as string;    
 
     const parsedData = {
         titleAr,
         title,
         descriptionAr,
         description,
+        minDescriptionAr,
+        minDescription,
         ...(imgOne && { imgOne }),
         ...(imgTwo && { imgTwo }),
         ...(imgThree && { imgThree }),
@@ -260,7 +217,7 @@ export async function updateServices(formData: FormData, id: string) {
         videos,
     };
 
-    const result = UpdateServicesSchema.safeParse(parsedData)
+    const result = UpdateServicesSchema.safeParse(parsedData)    
 
     if (!result.success) {
         return result.error.formErrors.fieldErrors;
@@ -300,6 +257,8 @@ export async function updateServices(formData: FormData, id: string) {
             data: {
                 title: data.title,
                 titleAr: data.titleAr,
+                minDescriptionAr: data.minDescriptionAr,
+                minDescription: data.minDescription,
                 descriptionAr: data.descriptionAr,
                 description: data.description,
                 videos: data.videos,
@@ -319,6 +278,8 @@ export async function updateServices(formData: FormData, id: string) {
             where: { id },
             data: {
                 title: data.title,
+                minDescription: data.minDescription,
+                minDescriptionAr: data.minDescriptionAr,
                 titleAr: data.titleAr,
                 descriptionAr: data.descriptionAr,
                 description: data.description,

@@ -44,11 +44,9 @@ const StackImageTitle = (props: inputProps) => {
     const { t, i18n } = useTranslation(["custom"])
 
     return (
-        <Box py={2}>
-            <SectionTitle
-                sectionTitle={t(sectionTitle)}
-            />
-            <Root style={{ margin: "32px 0", }}>
+        <Box py={10}>
+            <SectionTitle sectionTitle={t(sectionTitle)} />
+            <Root>
                 <Container maxWidth={'lg'}>
                     <Grid container spacing={2} m={0} justifyContent={"center"} >
                         {data.map((item, index) => (

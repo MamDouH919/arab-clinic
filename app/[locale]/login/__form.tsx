@@ -2,15 +2,15 @@
 import ControlMUITextField from '@/component/ui/ControlMUItextField'
 import { loginSchema } from '@/schemas'
 import LoadingButton from '@mui/lab/LoadingButton'
-import { Avatar, Button, Paper, Stack, Typography } from '@mui/material'
+import { Avatar, Paper, Stack, Typography } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import * as z from "zod"
 import { IoMdLogIn } from "react-icons/io";
 import { styled } from "@mui/material/styles";
-import { addUserMut, login } from '@/actions/login'
+import { login } from '@/actions/login'
 // import bcrypt from 'bcrypt';
 
 
@@ -27,28 +27,32 @@ const Root = styled(Stack)(({ theme }) => ({
 }));
 
 const LoginForm = () => {
+    const [loading, setLoading] = useState(false)
     const { t } = useTranslation()
     const { control, handleSubmit, setError, reset } = useForm<z.infer<typeof loginSchema>>()
 
     const onSubmit = async (data: z.infer<typeof loginSchema>) => {
+        setLoading(true)
         const res = await login(data.email, data.password)
         if (res?.errors?.email) {
             setError("email", {
                 type: "validate",
                 message: t(res.errors.email)
             })
+            setLoading(false)
         }
         if (res?.errors?.password) {
             setError("password", {
                 type: "validate",
                 message: t(res.errors.password)
             })
+            setLoading(false)
         }
     }
-    const addUser = async () => {
-        const res = await addUserMut()
-    }
 
+    // const addUser = async () => {
+    //     const res = await addUserMut()
+    // }
 
     return (
         <Root justifyContent={"center"} alignItems={"center"} height={"100vh"} width={"100%"}>
@@ -88,7 +92,7 @@ const LoginForm = () => {
                         </Grid>
 
                         <Grid xs={12}>
-                            <LoadingButton variant='contained' type='submit' fullWidth loading={false}>
+                            <LoadingButton variant='contained' type='submit' fullWidth loading={loading}>
                                 {t('submit')}
                             </LoadingButton>
                         </Grid>

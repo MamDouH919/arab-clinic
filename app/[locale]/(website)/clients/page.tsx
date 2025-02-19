@@ -66,7 +66,7 @@ const Page = async () => {
 
     return (
         <div>
-            <BreadCrumb pageLink={"clients"} />
+            <BreadCrumb pageLink={"clients"} bgImage={"/staticImages/clients-bg.webp"} />
             {(clientsNqData.length === 0 && clientsCoData.length === 0 && clientsHcData.length === 0 && clientsDcData.length === 0) &&
                 <NoData label={"noData"} />}
             {clientsNqData.length > 0 && <StackImageTitle

@@ -62,7 +62,7 @@ const ServiceArea = ({ branches }: { branches: BranchType[] }) => {
     };
 
     return (
-        <Root py={3} >
+        <Root py={5} >
             {open && <CustomDialog
                 open={open}
                 handleClose={handleClose}
@@ -110,7 +110,7 @@ const ServiceArea = ({ branches }: { branches: BranchType[] }) => {
                 }
             />}
             <Container maxWidth="lg">
-                <Grid container spacing={2} m={0}>
+                <Grid container spacing={2} m={0} justifyContent={"center"} alignItems={"center"}>
                     <ServiceData
                         title={t("bookYourAppointment")}
                         src="/staticImages/appo.png"
@@ -121,7 +121,6 @@ const ServiceArea = ({ branches }: { branches: BranchType[] }) => {
                             </Button>
                         }
                     />
-
                     <ServiceData
                         desc={t("serviceDataDesc2")}
                         title={t("findADoctor")}
@@ -158,21 +157,23 @@ const ServiceData = ({
     desc: string
     btn: any
 }) => {
-    return <Grid md={4} sm={6} xs={12} display={"flex"}>
-        <Stack alignItems={"flex-start"} spacing={1}>
-            <Image
-                src={src}
-                alt={title}
-                width={50}
-                height={50}
-            />
-            <Typography className={classes.title} fontSize={19}>
-                {title}
-            </Typography>
-            <Typography className={classes.desc} fontSize={15} >
-                {desc}
-            </Typography>
-            {btn}
-        </Stack>
-    </Grid>
+    return (
+        <Grid md={4} sm={6} xs={12} display={"flex"} justifyContent={"center"} alignItems={"center"}>
+            <Stack alignItems={"center"} spacing={1}>
+                <Image
+                    src={src}
+                    alt={title}
+                    width={50}
+                    height={50}
+                />
+                <Typography className={classes.title} fontSize={19}>
+                    {title}
+                </Typography>
+                <Typography className={classes.desc} fontSize={15} textAlign={"center"}>
+                    {desc}
+                </Typography>
+                {btn}
+            </Stack>
+        </Grid>
+    )
 }

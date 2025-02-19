@@ -40,6 +40,8 @@ const Page = async ({
 export default Page
 
 const HighlightsData = async ({ locale }: { locale: string }) => {
+    const { t } = await initTranslations(locale, ['dashboard']);
+
     const availableJobs = await db.availableJobs.findMany({
         select: {
             id: true,
@@ -62,17 +64,26 @@ const HighlightsData = async ({ locale }: { locale: string }) => {
                             <CheckCircleOutline fontSize='large' sx={{ color: "green" }} />
                             : <HighlightOff fontSize='large' sx={{ color: "red" }} />}
                     </Stack>
-                    <Stack direction={"row"} spacing={1} >
-                        <FormItem id={job.id}>
-                            <IconButton size="small">
-                                <EditIcon fontSize='small' />
-                            </IconButton>
-                        </FormItem>
-                        <DeleteItem id={job.id} deleteFun={deleteAvailableJob}>
-                            <IconButton size="small">
-                                <DeleteIcon fontSize='small' color='error' />
-                            </IconButton>
-                        </DeleteItem>
+                    <Stack direction={"row"} spacing={1}>
+                        <Stack width={"100%"}>
+                            <FormItem id={job.id}>
+                                <Button
+                                    size="small"
+                                    variant='contained'
+                                    fullWidth
+                                    endIcon={<EditIcon fontSize='small' />}
+                                >
+                                    {t("edit")}
+                                </Button>
+                            </FormItem>
+                        </Stack>
+                        <Stack width={"100%"}>
+                            <DeleteItem deleteFun={deleteAvailableJob} id={job.id}>
+                                <Button size="small" variant='contained' fullWidth color="error" endIcon={<DeleteIcon fontSize='small' />}>
+                                    {t("delete")}
+                                </Button>
+                            </DeleteItem>
+                        </Stack>
                     </Stack>
                 </Stack>
             </Paper>

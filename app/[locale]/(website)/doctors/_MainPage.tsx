@@ -54,7 +54,7 @@ const MainPage = ({
 
     return (
         <div>
-            <BreadCrumb pageLink={"doctors"} />
+            <BreadCrumb pageLink={"doctors"} bgImage='/staticImages/doctors-bg.webp' />
             <Container maxWidth="lg">
                 <Stack py={5} spacing={2} alignItems={"center"}>
                     <Typography textAlign={"center"} variant='h1' fontSize={28} textTransform={"capitalize"}>

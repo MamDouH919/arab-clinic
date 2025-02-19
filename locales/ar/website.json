@@ -3,7 +3,7 @@
   "poweredDate": "٢٠٢٤",
   "poweredBy": "تطوير",
   "home": "الرئيسية",
-  "clients": "العملاء",
+  "clients": "التعاقدات",
   "employment": "الوظايف",
   "news": "الأخبار",
   "PersonalData": "البيانات الشخصية",
@@ -49,5 +49,6 @@
   "search": "بحث",
   "doctorList": "قائمة الآطباء",
   "makeAnAppointment": "احجز موعد",
-  "servicesList": "قائمة الأقسام"
+  "servicesList": "قائمة الأقسام",
+  "schedules": "الجداول"
 }

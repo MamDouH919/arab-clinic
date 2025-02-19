@@ -38,6 +38,8 @@ const Page = async ({
 export default Page
 
 const NewsData = async ({ locale }: { locale: string }) => {
+    const { t } = await initTranslations(locale, ['dashboard']);
+
     const news = await db.news.findMany({
         select: {
             id: true,
@@ -77,15 +79,24 @@ const NewsData = async ({ locale }: { locale: string }) => {
                         }}
                         dangerouslySetInnerHTML={{ __html: locale === "en" ? item.description : item.descriptionAr }}
                     />
-                    <Stack direction={"row"} spacing={1} >
-                        <IconButton size="small" component={Link} href={`/admin/news/${item.id}`}>
-                            <EditIcon fontSize='small' />
-                        </IconButton>
-                        <DeleteItem deleteFun={deleteNews} id={item.id}>
-                            <IconButton size="small">
-                                <DeleteIcon fontSize='small' color='error' />
-                            </IconButton>
-                        </DeleteItem>
+
+                    <Stack direction={"row"} spacing={1}>
+                        <Stack width={"100%"}>
+                            <ButtonLink
+                                size="small"
+                                fullWidth
+                                href={`/admin/news/${item.id}`}
+                                linkLabel={t("edit")}
+                                startIcon={<EditIcon fontSize='small' />}
+                            />
+                        </Stack>
+                        <Stack width={"100%"}>
+                            <DeleteItem deleteFun={deleteNews} id={item.id}>
+                                <Button size="small" variant='contained' fullWidth color="error" endIcon={<DeleteIcon fontSize='small' />}>
+                                    {t("delete")}
+                                </Button>
+                            </DeleteItem>
+                        </Stack>
                     </Stack>
                 </Stack>
             </Paper>

@@ -14,7 +14,9 @@ export async function GET(request: NextRequest) {
             titleAr: true,
             iconPath: true,
             description: true,
-            descriptionAr: true
+            descriptionAr: true,
+            minDescription: true,
+            minDescriptionAr: true,
         },
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * pageSize,

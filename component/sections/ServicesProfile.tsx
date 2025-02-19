@@ -18,6 +18,7 @@ const classes = {
     bannerBackground: `${PREFIX}-bannerBackground`,
     video: `${PREFIX}-video`,
     headerH: `${PREFIX}-headerH`,
+    container: `${PREFIX}-container`,
 };
 
 const Root = styled("div")(({ theme }) => ({
@@ -48,6 +49,39 @@ const Root = styled("div")(({ theme }) => ({
 
 }));
 
+interface ImageWrapperProps {
+    image: string;
+}
+
+const ImageWrapper = styled(Stack)<ImageWrapperProps>(({ theme, image }) => ({
+    // background: theme.palette.background.paper,
+    backgroundImage: `url(${image})`,
+    paddingTop: "70px",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    height: 500,
+    position: "relative",
+    [theme.breakpoints.down("sm")]: {
+        height: 300,
+    },
+    "&:before": {
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: `rgba(0, 0, 0, 0.65)`,
+    },
+    [`& .${classes.container}`]: {
+        position: "relative",
+        zIndex: 10,
+        color: "#fff",
+        height: "100%",
+    },
+}));
+
 interface inputProps {
     data: {
         title: string;
@@ -56,6 +90,8 @@ interface inputProps {
         description: string;
         descriptionAr: string;
         coverImgPath: string;
+        minDescription: string;
+        minDescriptionAr: string;
         videos: string | null
         servicesImages: []
         Doctors: []
@@ -65,90 +101,31 @@ interface inputProps {
 const ServicesProfile = (props: inputProps) => {
     const { data } = props
     const { t, i18n } = useTranslation()
-
+    
     if (!data) {
         return <Stack height={"100vh"}>
             <NoData />
         </Stack>
     }
 
-    console.log(data.Doctors);
-
-
     return (
         <Root>
-            <div className={classes.headerH}></div>
-            <Stack width={"100%"} height={400}>
-                <img
-                    src={data.coverImgPath}
-                    alt={`${data.title}-cover`}
-                    width={"100%"}
-                    height={"100%"}
-                    style={{ objectFit: "cover" }}
-                />
-            </Stack>
-            {/* <div className={classes.bannerBackground}
-                style={{
-                    backgroundImage: `url('${data.coverImgPath}')`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'center center',
-                    backgroundSize: 'cover',
-                    backgroundAttachment: isMobile ? "inherit" : "fixed",
-                    maxHeight: "500px"
-                }}>
-
-            </div> */}
+            {/* <div className={classes.headerH}></div> */}
+            <ImageWrapper image={data.coverImgPath}>
+                <Container maxWidth={"lg"} className={classes.container}>
+                    <Stack pt={15} spacing={2} height={"100%"}>
+                        <Typography variant="h1" fontSize={{ xs: 24, md: 40 }} textTransform="capitalize" lineHeight={1}>
+                            {i18n.language === "en" ? data.title : data.titleAr}
+                        </Typography>
+                        <Typography  fontSize={16} textTransform="capitalize" width={"60%"}>
+                            {i18n.language === "en" ? data.minDescription : data.minDescriptionAr}
+                        </Typography>
+                    </Stack>
+                </Container>
+            </ImageWrapper>
             <Container maxWidth={'lg'} sx={{ my: 10 }}>
                 <Stack spacing={5} alignItems={"center"}>
-                    {/* <Typography variant="body1" sx={{ fontWeight: "bold" }} color={"text.secondary"}> */}
                     <DangerouslySetInnerHTML data={i18n.language === "en" ? data.description : data.descriptionAr} />
-                    {/* </Typography> */}
-                    {/* <Grid container spacing={4} m={0} alignItems={"center"} justifyContent={"center"}>
-                        <Grid sm={12} md={3}>
-                            <Stack alignContent={"center"} justifyContent={"center"} spacing={2}>
-                                <Typography textAlign={"center"}>
-                                    SERVICES
-                                </Typography>
-                                <Divider orientation="horizontal" flexItem />
-                                <Typography textAlign={"center"}>
-                                    {dataFiltered.data?.services}
-                                </Typography>
-                            </Stack>
-                        </Grid>
-                        <Grid sm={12} md={3}>
-                            <Stack alignContent={"center"} justifyContent={"center"} spacing={2}>
-                                <Typography textAlign={"center"}>
-                                    Creative Director
-                                </Typography>
-                                <Divider orientation="horizontal" flexItem />
-                                <Typography textAlign={"center"}>
-                                    {dataFiltered.data?.creativeDirector}
-                                </Typography>
-                            </Stack>
-                        </Grid>
-                        <Grid sm={12} md={3}>
-                            <Stack alignContent={"center"} justifyContent={"center"} spacing={2}>
-                                <Typography textAlign={"center"}>
-                                    Destination
-                                </Typography>
-                                <Divider orientation="horizontal" flexItem />
-                                <Typography textAlign={"center"}>
-                                    {dataFiltered.data?.destination}
-                                </Typography>
-                            </Stack>
-                        </Grid>
-                        <Grid sm={12} md={3}>
-                            <Stack alignContent={"center"} justifyContent={"center"} spacing={2}>
-                                <Typography textAlign={"center"}>
-                                    YEAR
-                                </Typography>
-                                <Divider orientation="horizontal" flexItem />
-                                <Typography textAlign={"center"}>
-                                    {dataFiltered.data?.year}
-                                </Typography>
-                            </Stack>
-                        </Grid>
-                    </Grid> */}
                 </Stack>
             </Container>
             <Stack bgcolor={"primary.light"} py={4}>

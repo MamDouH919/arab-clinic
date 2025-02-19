@@ -154,7 +154,7 @@ export async function updateBranch(formData: FormData, id: string) {
         const desertRef = ref(storage, prevImageName);
         deleteObject(desertRef)
 
-        const { imagePath, imageName } = await saveImage(data.image!, "clients")
+        const { imagePath, imageName } = await saveImage(data.image!, "branches")
         await db.branches.update({
             where: { id },
             data: {

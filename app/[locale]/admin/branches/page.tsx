@@ -41,9 +41,11 @@ const Page = async ({
 export default Page
 
 const BranchesData = async ({ locale }: { locale: string }) => {
+    const { t } = await initTranslations(locale, ['dashboard']);
+
     const branches = await getBranches()
 
-    if (branches.length === 0) return <NoData />    
+    if (branches.length === 0) return <NoData />
 
     return branches.map((branch) => (
         <Grid display={"flex"} key={branch.id} xs={12} sm={6} md={4} lg={3} xl={2}>
@@ -64,17 +66,26 @@ const BranchesData = async ({ locale }: { locale: string }) => {
                     <Typography variant="body1" sx={{ direction: locale === "en" ? "ltr" : "rtl" }}>{branch.whatsApp}</Typography>
 
 
-                    <Stack direction={"row"} spacing={1} >
-                        <FormItem id={branch.id}>
-                            <IconButton size="small">
-                                <EditIcon fontSize='small' />
-                            </IconButton>
-                        </FormItem>
-                        <DeleteItem id={branch.id} deleteFun={deleteBranch}>
-                            <IconButton size="small">
-                                <DeleteIcon fontSize='small' color='error' />
-                            </IconButton>
-                        </DeleteItem>
+                    <Stack direction={"row"} spacing={1}>
+                        <Stack width={"100%"}>
+                            <FormItem id={branch.id}>
+                                <Button
+                                    size="small"
+                                    variant='contained'
+                                    fullWidth
+                                    endIcon={<EditIcon fontSize='small' />}
+                                >
+                                    {t("edit")}
+                                </Button>
+                            </FormItem>
+                        </Stack>
+                        <Stack width={"100%"}>
+                            <DeleteItem deleteFun={deleteBranch} id={branch.id}>
+                                <Button size="small" variant='contained' fullWidth color="error" endIcon={<DeleteIcon fontSize='small' />}>
+                                    {t("delete")}
+                                </Button>
+                            </DeleteItem>
+                        </Stack>
                     </Stack>
                 </Stack>
             </Paper>

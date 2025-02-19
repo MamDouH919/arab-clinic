@@ -23,7 +23,7 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
     const service = serviceData.data
 
     return {
-        title: params.locale === "ar" ? service?.titleAr ?? "لا يوجد خدمة" : service?.title ?? "No Service",
+        title: params.locale === "ar" ? service?.titleAr ?? "لا يوجد قسم" : service?.title ?? "No Department",
     };
 };
 

@@ -48,5 +48,6 @@
   "search": "search",
   "doctorList": "doctor list",
   "makeAnAppointment": "make an appointment",
-  "servicesList": "services list"
+  "servicesList": "services list",
+  "schedules": "schedules"
 }

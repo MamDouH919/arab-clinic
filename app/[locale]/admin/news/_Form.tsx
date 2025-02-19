@@ -98,6 +98,8 @@ const Form = ({ id, data }: { id?: string, data?: News }) => {
                     });
                 }
 
+                //! make t(messages[0]) to translate
+
                 setError(field as keyof z.infer<typeof schema>, {
                     type: "validate",
                     message: messages[0] // Assuming we take the first message

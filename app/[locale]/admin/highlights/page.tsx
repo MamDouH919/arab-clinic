@@ -38,6 +38,8 @@ const Page = async ({
 export default Page
 
 const HighlightsData = async ({ locale }: { locale: string }) => {
+    const { t } = await initTranslations(locale, ['dashboard']);
+
     const highlights = await db.highlights.findMany({
         select: {
             id: true,
@@ -57,17 +59,26 @@ const HighlightsData = async ({ locale }: { locale: string }) => {
                 <Stack spacing={2}>
                     <Typography variant="h6" fontSize={30}>{locale === "en" ? highlight.nameEn : highlight.nameAr}</Typography>
                     <Typography variant="h6" fontSize={30}>{highlight.number}</Typography>
-                    <Stack direction={"row"} spacing={1} >
-                        <FormItem id={highlight.id}>
-                            <IconButton size="small">
-                                <EditIcon fontSize='small' />
-                            </IconButton>
-                        </FormItem>
-                        <DeleteItem id={highlight.id} deleteFun={deleteHighlights}>
-                            <IconButton size="small">
-                                <DeleteIcon fontSize='small' color='error' />
-                            </IconButton>
-                        </DeleteItem>
+                    <Stack direction={"row"} spacing={1}>
+                        <Stack width={"100%"}>
+                            <FormItem id={highlight.id}>
+                                <Button
+                                    size="small"
+                                    variant='contained'
+                                    fullWidth
+                                    endIcon={<EditIcon fontSize='small' />}
+                                >
+                                    {t("edit")}
+                                </Button>
+                            </FormItem>
+                        </Stack>
+                        <Stack width={"100%"}>
+                            <DeleteItem deleteFun={deleteHighlights} id={highlight.id}>
+                                <Button size="small" variant='contained' fullWidth color="error" endIcon={<DeleteIcon fontSize='small' />}>
+                                    {t("delete")}
+                                </Button>
+                            </DeleteItem>
+                        </Stack>
                     </Stack>
                 </Stack>
             </Paper>

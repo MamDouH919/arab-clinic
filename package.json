@@ -3,16 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3004",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
+  },
+  "prisma": {
+    "seed": "ts-node ./prisma/seed.ts"
   },
   "dependencies": {
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "11.11.1",
     "@emotion/server": "11.11.0",
     "@emotion/styled": "11.11.0",
+    "@fancyapps/ui": "^5.0.36",
     "@lottiefiles/react-lottie-player": "^3.5.4",
     "@lucia-auth/adapter-sqlite": "^3.0.2",
     "@mui/icons-material": "5.15.15",
@@ -20,6 +24,7 @@
     "@mui/material": "^5.16.6",
     "@mui/material-nextjs": "^5.16.6",
     "@prisma/client": "^5.21.0",
+    "@react-oauth/google": "^0.12.1",
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
@@ -27,6 +32,7 @@
     "clsx": "^2.1.1",
     "cookies-next": "^4.2.1",
     "firebase": "^10.13.2",
+    "gapi-script": "^1.2.0",
     "i18next": "^23.12.2",
     "i18next-resources-to-backend": "^1.2.1",
     "lucia": "^3.2.1",
@@ -55,7 +61,8 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/better-sqlite3": "^7.6.11",
-    "@types/node": "^20",
+    "@types/fancybox": "^3.5.7",
+    "@types/node": "^20.17.12",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/stylis": "^4.2.6",
@@ -63,6 +70,6 @@
     "eslint-config-next": "14.2.5",
     "prisma": "^5.21.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5"
+    "typescript": "^5.7.3"
   }
 }

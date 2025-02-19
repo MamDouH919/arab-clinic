@@ -6,14 +6,13 @@ import Grid from '@mui/material/Unstable_Grid2'
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import dynamic from 'next/dynamic';
 import * as z from 'zod'
 import { useRouter } from 'next/navigation'
 import UploadFile from '@/component/ui/UploadFile'
 import ControlMUITextField from '@/component/ui/ControlMUItextField'
 import clsx from 'clsx'
-import CustomDialog from '@/component/ui/customDialog'
 import Image from 'next/image'
 import { addServices, deleteServiceImage, updateServices } from '@/actions/services'
 import LoadingButton from '@mui/lab/LoadingButton'
@@ -89,6 +88,8 @@ interface Service {
     iconPath: string
     coverImgName: string
     coverImgPath: string
+    minDescriptionAr: string
+    minDescription: string
     videos: string | null
 }
 
@@ -111,19 +112,7 @@ const Form = ({
 
     const [serviceImageDialog, setServiceImageDialog] = useState(false)
     const [loading, setLoading] = useState(false)
-    const theme = useTheme()
 
-    const [openDialog, setOpenDialog] = useState({
-        open: false,
-        fileName: "",
-        name: "",
-        fileSize: 0,
-        buttonName: "",
-    })
-
-    const closeDialog = () => {
-        setOpenDialog({ open: false, fileName: "", name: "", buttonName: "", fileSize: 0 })
-    }
     const closeServiceImageDialog = (data?: imageType) => {
         if (data) {
             setServicesImagesState(prev => [...prev, data])
@@ -144,6 +133,8 @@ const Form = ({
             fileCover: data?.coverImgPath ?? '',
             descriptionAr: data?.descriptionAr ?? '',
             description: data?.description ?? '',
+            minDescriptionAr: data?.minDescriptionAr ?? '',
+            minDescription: data?.minDescription ?? '',
         }
     });
 
@@ -164,12 +155,13 @@ const Form = ({
 
     const onSubmit = async (data: z.infer<typeof schema>) => {
         setLoading(true);
-
         const formData = new FormData();
         formData.append("titleAr", data.titleAr);
         formData.append("title", data.title);
         formData.append("descriptionAr", data.descriptionAr);
         formData.append("description", data.description);
+        formData.append("minDescriptionAr", data.minDescriptionAr);
+        formData.append("minDescription", data.minDescription);
         formData.append("videos", JSON.stringify(servicesYoutubeIdsState));
 
         if (!!data.icon) {
@@ -185,14 +177,11 @@ const Form = ({
         if (result) {
             setLoading(false)
             for (const [field, messages] of Object.entries(result)) {
-                if (field === "icon" || field === "coverImg" || field === "imgOne" || field === "imgTwo" || field === "imgThree") {
+                if (field === "icon" || field === "coverImg") {
                     setErrors(prevErrors => ({
                         ...prevErrors, // Keep the previous error state
                         icon: field === "icon" ? messages[0] : prevErrors.icon || "",
                         coverImg: field === "coverImg" ? messages[0] : prevErrors.coverImg || "",
-                        imgOne: field === "imgOne" ? messages[0] : prevErrors.imgOne || "",
-                        imgTwo: field === "imgTwo" ? messages[0] : prevErrors.imgTwo || "",
-                        imgThree: field === "imgThree" ? messages[0] : prevErrors.imgThree || "",
                     }));
                 }
 
@@ -206,20 +195,6 @@ const Form = ({
             router.push("/admin/services")
         }
     }
-
-    const previewImage = (file: File | string) => {
-        let previewUrl
-        if (file && typeof file === "string") {
-            previewUrl = file
-            return previewUrl
-        }
-        if (typeof file !== "string") {
-            previewUrl = URL.createObjectURL(file);
-            return previewUrl
-        }
-        return "/noImage.jpg"
-    }
-
 
     const deleteServiceImageFun = async (id: string, imageName: string) => {
         const deleteItem = await deleteServiceImage(id, imageName)
@@ -242,37 +217,7 @@ const Form = ({
     return (
         <Root spacing={2}>
             {serviceImageDialog && id && <ServiceImageDialog id={id} openDialog={serviceImageDialog} closeDialog={closeServiceImageDialog} />}
-            <CustomDialog
-                open={openDialog.open}
-                handleClose={closeDialog}
-                title={t("addImage")}
-                maxWidth='sm'
-                content={
-                    <Box p={2}>
-                        <UploadFile
-                            control={control}
-                            setValue={setValue}
-                            name={openDialog.name}
-                            fileName={openDialog.fileName}
-                            icon={"add_photo_alternate"}
-                            label={t("uploadImage")}
-                            accept=".png,.jpg,.svg,.jpeg,.webp,.avif"
-                            maxSize={openDialog.fileSize * 1024}
-                            rules={{
-                                validate: {
-                                    require: (value: any) =>
-                                        value ? true : t("fieldIsRequired"),
-                                },
-                            }}
-                        />
-                    </Box>
-                }
-                actions={
-                    <Stack justifyContent={"flex-end"} direction={"row"} spacing={1}>
-                        <Button variant={'contained'} color='inherit' onClick={closeDialog} disabled={loading}>{t("done")}</Button>
-                    </Stack>
-                }
-            />
+
             <Stack direction={"row"} spacing={2} justifyContent={"space-between"} useFlexGap>
                 <ListHeaderTitle title={id ? "edit" : "addNew"} />
             </Stack>
@@ -283,199 +228,41 @@ const Form = ({
                             <Box width={"100%"}>
                                 <Grid container spacing={3} m={0}>
                                     <Grid md={4} xs={12}>
-                                        <Image
-                                            src={previewImage(watch("icon") || watch("fileIcon"))}
-                                            alt="icon"
-                                            width={100}
-                                            height={100}
-                                            objectFit='cover'
-                                            layout='responsive'
-                                            style={{
-                                                width: "100%",
-                                                maxHeight: "350px",
-                                                border: "1px solid #cfcccc",
-                                                borderRadius: "20px",
+                                        <UploadFile
+                                            control={control}
+                                            setValue={setValue}
+                                            name={"icon"}
+                                            fileName={"fileIcon"}
+                                            icon={"add_photo_alternate"}
+                                            label={t("uploadImage")}
+                                            accept=".png,.jpg,.svg,.jpeg,.webp,.avif"
+                                            maxSize={200 * 1024}
+                                            rules={{
+                                                validate: {
+                                                    require: (value: any) =>
+                                                        value ? true : t("fieldIsRequired"),
+                                                },
                                             }}
                                         />
-                                        {errors.icon && <Typography color="error">{errors.icon}</Typography>}
-                                        <Button
-                                            variant='contained'
-                                            fullWidth
-                                            color='primary'
-                                            size='medium'
-                                            onClick={() => {
-                                                setErrors(prevErrors => ({
-                                                    ...prevErrors, // Keep the previous error state
-                                                    icon: ""
-                                                }));
-                                                setOpenDialog({
-                                                    fileName: "fileIcon",
-                                                    name: "icon",
-                                                    open: true,
-                                                    fileSize: 50,
-                                                    buttonName: "addIcon"
-                                                })
-                                            }}
-                                        >
-                                            {t("addIcon")}
-                                        </Button>
                                     </Grid>
                                     <Grid md={8} xs={12}>
-                                        <Image
-                                            src={previewImage(watch("coverImg") || watch("fileCover"))}
-                                            alt="coverImg"
-                                            width={100}
-                                            height={100}
-                                            objectFit='cover'
-                                            layout='responsive'
-                                            style={{
-                                                width: "100%",
-                                                maxHeight: "350px",
-                                                border: "1px solid #cfcccc",
-                                                borderRadius: "20px",
+                                        <UploadFile
+                                            control={control}
+                                            setValue={setValue}
+                                            name={"coverImg"}
+                                            fileName={"fileCover"}
+                                            icon={"add_photo_alternate"}
+                                            label={t("uploadImage")}
+                                            accept=".png,.jpg,.svg,.jpeg,.webp,.avif"
+                                            maxSize={250 * 1024}
+                                            rules={{
+                                                validate: {
+                                                    require: (value: any) =>
+                                                        value ? true : t("fieldIsRequired"),
+                                                },
                                             }}
                                         />
-
-                                        {errors.coverImg && <Typography color="error">{errors.coverImg}</Typography>}
-                                        <Button
-                                            variant='contained'
-                                            fullWidth
-                                            color='primary'
-                                            size='medium'
-                                            onClick={() => {
-                                                setErrors(prevErrors => ({
-                                                    ...prevErrors, // Keep the previous error state
-                                                    coverImg: ""
-                                                }));
-                                                setOpenDialog({
-                                                    fileName: "fileCover",
-                                                    name: "coverImg",
-                                                    open: true,
-                                                    fileSize: 250,
-                                                    buttonName: "addCover"
-                                                })
-                                            }}
-                                        >
-                                            {t("addCover")}
-                                        </Button>
                                     </Grid>
-                                    {/* <Grid md={4} xs={12}>
-                                        <Image
-                                            src={previewImage(watch("imgOne") || watch("fileImgOne"))}
-                                            alt="imgOne"
-                                            width={100}
-                                            height={100}
-                                            objectFit='cover'
-                                            layout='responsive'
-                                            style={{
-                                                width: "100%",
-                                                maxHeight: "350px",
-                                                border: "1px solid #cfcccc",
-                                                borderRadius: "20px",
-                                            }}
-                                        />
-
-                                        {errors.imgOne && <Typography color="error">{errors.imgOne}</Typography>}
-                                        <Button
-                                            variant='contained'
-                                            fullWidth
-                                            color='primary'
-                                            size='medium'
-                                            onClick={() => {
-                                                setErrors(prevErrors => ({
-                                                    ...prevErrors, // Keep the previous error state
-                                                    imgOne: ""
-                                                }));
-                                                setOpenDialog({
-                                                    fileName: "fileImgOne",
-                                                    name: "imgOne",
-                                                    open: true,
-                                                    fileSize: 250,
-                                                    buttonName: "imageSlide"
-                                                })
-                                            }}
-                                        >
-                                            {t("addImage")}
-                                        </Button>
-                                    </Grid>
-                                    <Grid md={4} xs={12}>
-                                        <Image
-                                            src={previewImage(watch("imgTwo") || watch("fileImgTwo"))}
-                                            alt="imgTwo"
-                                            width={100}
-                                            height={100}
-                                            objectFit='cover'
-                                            layout='responsive'
-                                            style={{
-                                                width: "100%",
-                                                maxHeight: "350px",
-                                                border: "1px solid #cfcccc",
-                                                borderRadius: "20px",
-                                            }}
-                                        />
-
-                                        {errors.imgTwo && <Typography color="error">{errors.imgTwo}</Typography>}
-                                        <Button
-                                            variant='contained'
-                                            fullWidth
-                                            color='primary'
-                                            size='medium'
-                                            onClick={() => {
-                                                setErrors(prevErrors => ({
-                                                    ...prevErrors, // Keep the previous error state
-                                                    imgTwo: ""
-                                                }));
-                                                setOpenDialog({
-                                                    fileName: "fileImgTwo",
-                                                    name: "imgTwo",
-                                                    open: true,
-                                                    fileSize: 250,
-                                                    buttonName: "imageSlide"
-                                                })
-                                            }}
-                                        >
-                                            {t("addImage")}
-                                        </Button>
-                                    </Grid>
-                                    <Grid md={4} xs={12}>
-                                        <Image
-                                            src={previewImage(watch("imgThree") || watch("fileImgThree"))}
-                                            alt="imgThree"
-                                            width={100}
-                                            height={100}
-                                            objectFit='cover'
-                                            layout='responsive'
-                                            style={{
-                                                width: "100%",
-                                                maxHeight: "350px",
-                                                border: "1px solid #cfcccc",
-                                                borderRadius: "20px",
-                                            }}
-                                        />
-
-                                        {errors.imgThree && <Typography color="error">{errors.imgThree}</Typography>}
-                                        <Button
-                                            variant='contained'
-                                            fullWidth
-                                            color='primary'
-                                            size='medium'
-                                            onClick={() => {
-                                                setErrors(prevErrors => ({
-                                                    ...prevErrors, // Keep the previous error state
-                                                    imgThree: ""
-                                                }));
-                                                setOpenDialog({
-                                                    fileName: "fileImgThree",
-                                                    name: "imgThree",
-                                                    open: true,
-                                                    fileSize: 250,
-                                                    buttonName: "imageSlide"
-                                                })
-                                            }}
-                                        >
-                                            {t("addImage")}
-                                        </Button>
-                                    </Grid> */}
                                 </Grid>
                             </Box>
                         </Grid>
@@ -489,6 +276,17 @@ const Form = ({
                                         <ControlMUITextField
                                             name='titleAr'
                                             label={t('titleAr')}
+                                            control={control}
+                                            variant='outlined'
+                                            rules={{
+                                                required: t("fieldIsRequired"),
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid xs={12}>
+                                        <ControlMUITextField
+                                            name='minDescriptionAr'
+                                            label={t('minDescriptionAr')}
                                             control={control}
                                             variant='outlined'
                                             rules={{
@@ -537,6 +335,17 @@ const Form = ({
                                         <ControlMUITextField
                                             name='title'
                                             label={t('titleEn')}
+                                            control={control}
+                                            variant='outlined'
+                                            rules={{
+                                                required: t("fieldIsRequired"),
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid xs={12}>
+                                        <ControlMUITextField
+                                            name='minDescription'
+                                            label={t('minDescriptionEn')}
                                             control={control}
                                             variant='outlined'
                                             rules={{

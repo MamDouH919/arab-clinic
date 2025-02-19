@@ -1,0 +1,15 @@
+.f-carousel {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.f-carousel__slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.f-carousel__slide img {
+    width: 100%;
+    height: auto;
+}

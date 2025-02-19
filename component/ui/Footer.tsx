@@ -65,7 +65,7 @@ const socialIcons: { [key: string]: JSX.Element } = {
 
 
 const Footer = () => {
-    const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation(["custom"]);
     const [services, setServices] = useState<{ id: string; title: string; titleAr: string }[]>([]);
     const [branches, setBranches] = useState<{ id: string; name: string; nameAr: string }[]>([]);
     const [loading, setLoading] = useState(true);
@@ -119,8 +119,7 @@ const Footer = () => {
                                     height={80}
                                 />
                                 <Typography>
-                                    Located in the heart of New Cairo, we are here to fill in the widening gap within the health care sector.
-                                    Our facilities, equipment, and physicians are of the highest standards.
+                                    {t("footerDescription")}
                                 </Typography>
                                 <Stack direction={"row"} spacing={2} flexWrap={"wrap"} useFlexGap>
                                     {config.socialLinks.map((link) => {
