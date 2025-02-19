@@ -1,5 +1,5 @@
 "use client";
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 // import { Swiper, SwiperSlide } from 'swiper/react';
 import { styled } from "@mui/material/styles";
 import { Box } from '@mui/material';
@@ -66,11 +66,27 @@ const Root = styled(Box)(({ theme }) => ({
 
 
 const BannerSwiper = () => {
-    // const { t, i18n } = useTranslation("custom");
-    // const { palette } = useTheme()
+    const videoRef = useRef<HTMLVideoElement | null>(null);
+
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        const handleVideoEnd = () => {
+            video.currentTime = 0;
+            video.play();
+        };
+
+        video.addEventListener("ended", handleVideoEnd);
+
+        return () => {
+            video.removeEventListener("ended", handleVideoEnd);
+        };
+    }, []);
+
     return (
         <Root sx={{ height: { xs: "400px", md: "100dvh", lg: "100dvh" }, position: "relative" }}>
-            <video autoPlay muted playsInline loop id="myVideo" height={"100%"} width={"100%"}>
+            <video ref={videoRef} autoPlay muted playsInline loop id="myVideo" height={"100%"} width={"100%"}>
                 <source src="/staticImages/banner.mp4" type="video/mp4" />
             </video>
             {/* <>
