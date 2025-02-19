@@ -70,7 +70,7 @@ const BannerSwiper = () => {
     // const { palette } = useTheme()
     return (
         <Root sx={{ height: { xs: "400px", md: "100dvh", lg: "100dvh" }, position: "relative" }}>
-            <video autoPlay muted loop id="myVideo" height={"100%"} width={"100%"}>
+            <video autoPlay muted playsInline loop id="myVideo" height={"100%"} width={"100%"}>
                 <source src="/staticImages/banner.mp4" type="video/mp4" />
             </video>
             {/* <>
