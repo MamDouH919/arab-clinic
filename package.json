@@ -9,8 +9,7 @@
     "lint": "next lint"
   },
   "prisma": {
-    "seed": "ts-node ./prisma/seed.ts",
-    "updateBranchSeed": "ts-node ./prisma/updateBranchSeed.ts"
+    "seed": "ts-node ./prisma/seed.ts"
   },
   "dependencies": {
     "@emotion/cache": "^11.11.0",
