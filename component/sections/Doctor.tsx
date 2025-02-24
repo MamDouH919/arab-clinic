@@ -72,7 +72,8 @@ const Root = styled("div")(({ theme }) => ({
 }));
 
 const Doctor = ({
-    doctor
+    doctor,
+    showService = false
 }: {
     doctor: {
         imagePath?: string
@@ -80,9 +81,16 @@ const Doctor = ({
         name: string
         expertiseAr: string
         expertise: string
-    }
+        service: {
+            title: string
+            titleAr: string
+        }
+    },
+    showService: boolean
 }) => {
     const { t, i18n } = useTranslation()
+
+    console.log(doctor);
 
     return (
         <Root>
@@ -110,6 +118,7 @@ const Doctor = ({
                         <Stack className={clsx(classes.bgPaper, classes.bgPaperLeft)} />
                         <Typography fontSize={15}>{i18n.language === "ar" ? doctor.nameAr : doctor.name}</Typography>
                         <Typography fontSize={12} color={"text.secondary"}>{i18n.language === "ar" ? doctor.expertiseAr : doctor.expertise}</Typography>
+                        {showService && <Typography fontSize={12} color={"text.secondary"}>{i18n.language === "ar" ? doctor.service.titleAr : doctor.service.title}</Typography>}
                     </Stack>
                 </Stack>
             </Stack>

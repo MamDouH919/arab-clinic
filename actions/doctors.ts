@@ -58,6 +58,7 @@ export async function getDoctors(filters?: {
             imagePath: true,
             expertise: true,
             expertiseAr: true,
+            service: true
         }
     });
     return doctor;
