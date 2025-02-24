@@ -20,7 +20,7 @@ interface RootProps {
 
 const Root = styled(Stack)<RootProps>(({ theme, image }) => ({
     // background: theme.palette.background.paper,
-    backgroundImage: image ? `url(${image})` : theme.palette.background.default,
+    backgroundImage: image ? `url("${image}")` : theme.palette.background.default,
     paddingTop: "70px",
     backgroundSize: "cover",
     backgroundPosition: "center",
@@ -67,7 +67,10 @@ const Root = styled(Stack)<RootProps>(({ theme, image }) => ({
 
 interface inputProps {
     pageLink: string;
-    prevLink?: string;
+    prevLink?: {
+        name: string;
+        link: string;
+    };
     description?: string;
     bgImage?: string;
 }
@@ -102,9 +105,9 @@ const BreadCrumb = (props: inputProps) => {
                             <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
                             {t("home")}
                         </Link>
-                        {prevLink && <Link href={`/${prevLink}`} className={classes.activeLink}>
+                        {prevLink && <Link href={`/${prevLink.link}`} className={classes.activeLink}>
                             <GrainIcon sx={{ mr: 0.5 }} fontSize="inherit" />
-                            {t(prevLink)}
+                            {t(prevLink.name)}
                         </Link>}
                         <Stack
                             direction={"row"}

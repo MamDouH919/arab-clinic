@@ -60,17 +60,19 @@ const Services = (props: inputProps) => {
                                                     objectFit="cover" // Adjust this if needed (cover, contain, etc.)
                                                 />
                                             </Box>
-                                            <Typography textAlign={"center"} fontSize={25}>
-                                                {i18n.language === "en" ? service.title : service.titleAr}
-                                            </Typography>
-                                            <Typography textAlign={"center"} fontSize={15} color={"text.secondary"} minHeight={"50px"}>
-                                                {i18n.language === "en" ? service.minDescription : service.minDescriptionAr}
-                                            </Typography>
-                                            {/* <DangerouslySetInnerHTML limit data={i18n.language === "en" ? service.description : service.descriptionAr} /> */}
-                                            <Stack pb={1}>
-                                                <StyledLink href={`/departments/${service.id}`}>
-                                                    {t("readMore")} ...
-                                                </StyledLink>
+                                            <Stack spacing={2} px={2} alignItems={"center"}>
+                                                <Typography textAlign={"center"} fontSize={25}>
+                                                    {i18n.language === "en" ? service.title : service.titleAr}
+                                                </Typography>
+                                                <Typography textAlign={"center"} fontSize={15} color={"text.secondary"}>
+                                                    {i18n.language === "en" ? service.minDescription : service.minDescriptionAr}
+                                                </Typography>
+                                                {/* <DangerouslySetInnerHTML limit data={i18n.language === "en" ? service.description : service.descriptionAr} /> */}
+                                                <Stack pb={1}>
+                                                    <StyledLink href={`/departments/${service.id}`}>
+                                                        {t("readMore")} ...
+                                                    </StyledLink>
+                                                </Stack>
                                             </Stack>
                                         </Stack>
                                     </Grid>

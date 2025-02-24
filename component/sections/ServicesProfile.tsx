@@ -12,6 +12,7 @@ import DangerouslySetInnerHTML from '../DangerouslySetInnerHTML';
 import Image from 'next/image';
 import clsx from 'clsx';
 import Doctor from './Doctor';
+import BreadCrumb from '../ui/BreadCrumb';
 
 const PREFIX = "ServicesProfile";
 const classes = {
@@ -53,34 +54,34 @@ interface ImageWrapperProps {
     image: string;
 }
 
-const ImageWrapper = styled(Stack)<ImageWrapperProps>(({ theme, image }) => ({
-    // background: theme.palette.background.paper,
-    backgroundImage: `url(${image})`,
-    paddingTop: "70px",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    height: 500,
-    position: "relative",
-    [theme.breakpoints.down("sm")]: {
-        height: 300,
-    },
-    "&:before": {
-        content: '""',
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        background: `rgba(0, 0, 0, 0.65)`,
-    },
-    [`& .${classes.container}`]: {
-        position: "relative",
-        zIndex: 10,
-        color: "#fff",
-        height: "100%",
-    },
-}));
+// const ImageWrapper = styled(Stack)<ImageWrapperProps>(({ theme, image }) => ({
+//     // background: theme.palette.background.paper,
+//     backgroundImage: `url("${image}")`,
+//     paddingTop: "70px",
+//     backgroundSize: "cover",
+//     backgroundPosition: "center",
+//     backgroundRepeat: "no-repeat",
+//     height: 600,
+//     position: "relative",
+//     [theme.breakpoints.down("sm")]: {
+//         height: 300,
+//     },
+//     "&:before": {
+//         content: '""',
+//         position: "absolute",
+//         top: 0,
+//         left: 0,
+//         width: "100%",
+//         height: "100%",
+//         background: `rgba(0, 0, 0, 0.65)`,
+//     },
+//     [`& .${classes.container}`]: {
+//         position: "relative",
+//         zIndex: 10,
+//         color: "#fff",
+//         height: "100%",
+//     },
+// }));
 
 interface inputProps {
     data: {
@@ -101,7 +102,7 @@ interface inputProps {
 const ServicesProfile = (props: inputProps) => {
     const { data } = props
     const { t, i18n } = useTranslation()
-    
+
     if (!data) {
         return <Stack height={"100vh"}>
             <NoData />
@@ -110,19 +111,15 @@ const ServicesProfile = (props: inputProps) => {
 
     return (
         <Root>
-            {/* <div className={classes.headerH}></div> */}
-            <ImageWrapper image={data.coverImgPath}>
-                <Container maxWidth={"lg"} className={classes.container}>
-                    <Stack pt={15} spacing={2} height={"100%"}>
-                        <Typography variant="h1" fontSize={{ xs: 24, md: 40 }} textTransform="capitalize" lineHeight={1}>
-                            {i18n.language === "en" ? data.title : data.titleAr}
-                        </Typography>
-                        <Typography  fontSize={16} textTransform="capitalize" width={"60%"}>
-                            {i18n.language === "en" ? data.minDescription : data.minDescriptionAr}
-                        </Typography>
-                    </Stack>
-                </Container>
-            </ImageWrapper>
+            <BreadCrumb
+                prevLink={{
+                    name: "services",
+                    link: "departments",
+                }}
+                pageLink={i18n.language === "en" ? data.title : data.titleAr}
+                bgImage={data.coverImgPath}
+                description={i18n.language === "en" ? data.minDescription : data.minDescriptionAr}
+            />
             <Container maxWidth={'lg'} sx={{ my: 10 }}>
                 <Stack spacing={5} alignItems={"center"}>
                     <DangerouslySetInnerHTML data={i18n.language === "en" ? data.description : data.descriptionAr} />

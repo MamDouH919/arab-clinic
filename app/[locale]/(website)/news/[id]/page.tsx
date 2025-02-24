@@ -10,14 +10,17 @@ const Page = async ({ params: { id, locale } }: { params: { id: string, locale: 
     const { t } = await initTranslations(locale, ['website'])
     const data = await getNewsById(id)
 
-    console.log(data);
-    
-
     if (data == null) return <NoData label={t("noData")} />
 
     return (
         <>
-            <BreadCrumb prevLink={"news"} pageLink={locale === "en" ? data.title : data.titleAr} />
+            <BreadCrumb
+                prevLink={{
+                    name: "news",
+                    link: "news",
+                }}
+                pageLink={locale === "en" ? data.title : data.titleAr}
+            />
             <PageInfo data={data} locale={locale} />
         </>
     )
