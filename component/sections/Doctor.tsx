@@ -36,7 +36,7 @@ const Root = styled("div")(({ theme }) => ({
     },
     width: "100%",
     [`& .${classes.image}`]: {
-        objectFit: "contain"
+        objectFit: "cover"
     },
     [`& .${classes.docName}`]: {
         position: "absolute",
@@ -86,7 +86,7 @@ const Doctor = ({
 
     return (
         <Root>
-            <Stack component={Paper} width={"100%"} height={400} position={"relative"}>
+            <Stack component={Paper} width={"100%"} height={400} position={"relative"} overflow={"hidden"}>
                 <img
                     src={doctor.imagePath ?? "/logo-footer.webp"}
                     alt={i18n.language === "ar" ? doctor.nameAr : doctor.name}
