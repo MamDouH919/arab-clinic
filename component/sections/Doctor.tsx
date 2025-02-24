@@ -75,7 +75,7 @@ const Doctor = ({
     doctor
 }: {
     doctor: {
-        filePath?: string
+        imagePath?: string
         nameAr: string
         name: string
         expertiseAr: string
@@ -88,7 +88,7 @@ const Doctor = ({
         <Root>
             <Stack component={Paper} width={"100%"} height={400} position={"relative"}>
                 <img
-                    src={doctor.filePath ?? "/logo-footer.webp"}
+                    src={doctor.imagePath ?? "/logo-footer.webp"}
                     alt={i18n.language === "ar" ? doctor.nameAr : doctor.name}
                     width={"100%"}
                     height={"100%"}

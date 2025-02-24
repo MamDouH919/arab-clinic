@@ -16,7 +16,8 @@ export async function GET(request: NextRequest) {
             service: true,
             createdAt: true,
             expertise: true,
-            expertiseAr: true
+            expertiseAr: true,
+            imagePath: true,
         },
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * pageSize,
