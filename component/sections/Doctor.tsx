@@ -86,7 +86,7 @@ const Doctor = ({
             titleAr: string
         }
     },
-    showService: boolean
+    showService?: boolean
 }) => {
     const { t, i18n } = useTranslation()
 
