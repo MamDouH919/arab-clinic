@@ -39,7 +39,7 @@ export async function saveServiceImage(id: string, formData: FormData) {
             errors: result.error.formErrors.fieldErrors
         }
     } else {
-        const { imagePath, imageName } = await saveImage(data?.image!, "services");
+        const { imagePath, imageName } = await saveImage(data?.image!, "services", "services-image");
 
         const imageData = await db.servicesImages.create({
             data: {
@@ -161,8 +161,8 @@ export async function addServices(formData: FormData) {
 
     if (data.icon && data.coverImg) {
         // Save the icon and cover image
-        const { imagePath: iconImagePath, imageName: iconImageName } = await saveImage(data.icon!, "services");
-        const { imagePath: coverImagePath, imageName: coverImageName } = await saveImage(data.coverImg!, "services");
+        const { imagePath: iconImagePath, imageName: iconImageName } = await saveImage(data.icon!, "services", data.title + "-" + data.titleAr);
+        const { imagePath: coverImagePath, imageName: coverImageName } = await saveImage(data.coverImg!, "services", data.title + "-" + data.titleAr);
 
         // Create the service in the database
         await db.services.create({
@@ -200,7 +200,7 @@ export async function updateServices(formData: FormData, id: string) {
     const coverImg = formData.get("coverImg") as File | null;
     const videos = formData.get("videos") as string | null;
     const minDescriptionAr = formData.get("minDescriptionAr") as string;
-    const minDescription = formData.get("minDescription") as string;    
+    const minDescription = formData.get("minDescription") as string;
 
     const parsedData = {
         titleAr,
@@ -217,7 +217,7 @@ export async function updateServices(formData: FormData, id: string) {
         videos,
     };
 
-    const result = UpdateServicesSchema.safeParse(parsedData)    
+    const result = UpdateServicesSchema.safeParse(parsedData)
 
     if (!result.success) {
         return result.error.formErrors.fieldErrors;
@@ -238,7 +238,7 @@ export async function updateServices(formData: FormData, id: string) {
             const desertRef = ref(storage, prevIconName);
             deleteObject(desertRef)
 
-            const { imagePath, imageName } = await saveImage(data.icon!, "services")
+            const { imagePath, imageName } = await saveImage(data.icon!, "services", data.title + "-" + data.titleAr)
             newIconPath = imagePath
             newIconName = imageName
         }
@@ -246,7 +246,7 @@ export async function updateServices(formData: FormData, id: string) {
             const desertRef = ref(storage, prevCoverImgName);
             deleteObject(desertRef)
 
-            const { imagePath, imageName } = await saveImage(data.coverImg!, "services")
+            const { imagePath, imageName } = await saveImage(data.coverImg!, "services", data.title + "-" + data.titleAr)
             newCoverPath = imagePath
             newCoverName = imageName
         }

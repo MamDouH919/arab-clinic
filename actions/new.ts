@@ -46,7 +46,7 @@ export async function addNews(formData: FormData) {
     const data = result.data;
 
     if (data.image) {
-        const { imagePath, imageName } = await saveImage(data.image!, "news")
+        const { imagePath, imageName } = await saveImage(data.image!, "news", data.title + "-" + data.titleAr)
         await db.news.create({
             data: {
                 titleAr: data.titleAr,
@@ -96,7 +96,7 @@ export async function updateNews(formData: FormData, id: string) {
         const desertRef = ref(storage, prevImageName);
         deleteObject(desertRef)
 
-        const { imagePath, imageName } = await saveImage(data.image!, "clients")
+        const { imagePath, imageName } = await saveImage(data.image!, "news", data.title + "-" + data.titleAr)
         await db.news.update({
             where: { id },
             data: {

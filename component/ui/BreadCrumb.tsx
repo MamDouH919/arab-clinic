@@ -90,7 +90,7 @@ const BreadCrumb = (props: inputProps) => {
                     >
                         {t(pageLink)}
                     </Typography>
-                    {description && <Typography fontSize={22} textTransform="capitalize">
+                    {description && <Typography fontSize={18} color={"#ababab"} textTransform="capitalize">
                         {t(description)}
                     </Typography>}
                     <Breadcrumbs

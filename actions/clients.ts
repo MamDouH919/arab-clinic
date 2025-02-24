@@ -65,7 +65,7 @@ export async function addClient(formData: FormData) {
     const data = result.data;
 
     if (data.image) {
-        const { imagePath, imageName } = await saveImage(data.image!, "clients")
+        const { imagePath, imageName } = await saveImage(data.image!, "clients", data.name + "-" + data.nameAr)
 
         await db.clients.create({
             data: {
@@ -116,7 +116,7 @@ export async function updateClient(formData: FormData, id: string) {
         const desertRef = ref(storage, prevImageName);
         deleteObject(desertRef)
 
-        const { imagePath, imageName } = await saveImage(data.image!, "clients")
+        const { imagePath, imageName } = await saveImage(data.image!, "clients", data.name + "-" + data.nameAr)
         await db.clients.update({
             where: { id },
             data: {

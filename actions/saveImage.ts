@@ -2,8 +2,8 @@
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { storage } from '@/firebase'
 
-export const saveImage = async (image: File, fileName: string) => {
-    const imageName = `${fileName}/${crypto.randomUUID()}-${image.name}`;
+export const saveImage = async (image: File, fileName: string, name?: string) => {
+    const imageName = `${fileName}/${crypto.randomUUID()}-${name}.${image.type.split('/')[1]}`;
     const storageRef = ref(storage, imageName);
     // Convert the file to an array buffer and then to a buffer for server-side use
     const arrayBuffer = await image.arrayBuffer();

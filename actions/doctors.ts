@@ -111,7 +111,7 @@ export async function addDoctor(formData: FormData) {
     const data = result.data;
 
     if (data.image) {
-        const { imagePath, imageName } = await saveImage(data.image!, "doctors")
+        const { imagePath, imageName } = await saveImage(data.image!, "doctors", data.name + "-" + data.nameAr)
 
         await db.doctors.create({
             data: {
@@ -182,7 +182,7 @@ export async function updateDoctor(formData: FormData, id: string) {
         const desertRef = ref(storage, prevImageName);
         deleteObject(desertRef)
 
-        const { imagePath, imageName } = await saveImage(data.image!, "doctors")
+        const { imagePath, imageName } = await saveImage(data.image!, "doctors", data.name + "-" + data.nameAr)
         await db.doctors.update({
             where: { id },
             data: {

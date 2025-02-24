@@ -88,7 +88,7 @@ export async function addBranch(formData: FormData) {
     const data = result.data;
 
     if (data.image) {
-        const { imagePath, imageName } = await saveImage(data.image!, "branches")
+        const { imagePath, imageName } = await saveImage(data.image!, "branches", data.name + "-" + data.nameAr)
 
         await db.branches.create({
             data: {
@@ -154,7 +154,7 @@ export async function updateBranch(formData: FormData, id: string) {
         const desertRef = ref(storage, prevImageName);
         deleteObject(desertRef)
 
-        const { imagePath, imageName } = await saveImage(data.image!, "branches")
+        const { imagePath, imageName } = await saveImage(data.image!, "branches", data.name + "-" + data.nameAr)
         await db.branches.update({
             where: { id },
             data: {

@@ -31,7 +31,7 @@ export async function getSchedules(filters?: {
     })
 
     console.log(schedules);
-    
+
 
     return schedules
 }
@@ -68,7 +68,7 @@ export async function addSchedule(formData: FormData) {
     const data = result.data;
 
     if (data.image) {
-        const { imagePath, imageName } = await saveImage(data.image!, "schedules")
+        const { imagePath, imageName } = await saveImage(data.image!, "schedules", "schedules")
 
         await db.schedules.create({
             data: {
@@ -110,7 +110,7 @@ export async function updateSchedule(formData: FormData, id: string) {
         const desertRef = ref(storage, prevImageName);
         deleteObject(desertRef)
 
-        const { imagePath, imageName } = await saveImage(data.image!, "schedules")
+        const { imagePath, imageName } = await saveImage(data.image!, "schedules", "schedules")
         await db.schedules.update({
             where: { id },
             data: {
