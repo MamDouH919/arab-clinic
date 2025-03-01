@@ -91,7 +91,7 @@ const MainPage = ({
                     {!loading && doctors.length > 0 &&
                         <Grid container spacing={4} justifyContent={"center"} width={"100%"}>
                             {doctors.map((doctor: any) =>
-                                <Grid xs={12} md={4} sm={6} key={doctor.id}>
+                                <Grid xs={12} md={3} sm={6}  key={doctor.id}>
                                     <Doctor doctor={doctor} showService />
                                 </Grid>
                             )}

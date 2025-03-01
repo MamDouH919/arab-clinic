@@ -179,9 +179,12 @@ export async function updateDoctor(formData: FormData, id: string) {
 
     let prevImageName = doctor.imageName
 
-    if (data.image != null && prevImageName && data.image.size > 0) {
-        const desertRef = ref(storage, prevImageName);
-        deleteObject(desertRef)
+    if (data.image != null && data.image.size > 0) {
+
+        if (prevImageName) {
+            const desertRef = ref(storage, prevImageName);
+            deleteObject(desertRef)
+        }
 
         const { imagePath, imageName } = await saveImage(data.image!, "doctors", data.name + "-" + data.nameAr)
         await db.doctors.update({

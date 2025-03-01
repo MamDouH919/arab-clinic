@@ -33,10 +33,14 @@ const Root = styled("div")(({ theme }) => ({
             transition: "all 0.3s ease-in-out", // Smooth transition
             borderBottomRightRadius: "17px"
         },
+        [`& .${classes.image}`]: {
+            transform: "scale(1.2)"
+        },
     },
     width: "100%",
     [`& .${classes.image}`]: {
-        objectFit: "cover"
+        objectFit: "cover",
+        transition: "transform 0.3s ease-in-out"
     },
     [`& .${classes.docName}`]: {
         position: "absolute",
@@ -90,18 +94,18 @@ const Doctor = ({
 }) => {
     const { t, i18n } = useTranslation()
 
-    console.log(doctor);
-
     return (
         <Root>
-            <Stack component={Paper} width={"100%"} height={400} position={"relative"} overflow={"hidden"}>
-                <img
-                    src={doctor.imagePath ?? "/logo-footer.webp"}
-                    alt={i18n.language === "ar" ? doctor.nameAr : doctor.name}
-                    width={"100%"}
-                    height={"100%"}
-                    className={classes.image}
-                />
+            <Stack component={Paper} width={"100%"} position={"relative"} overflow={"hidden"}>
+                <Stack height={300} overflow={"hidden"}>
+                    <img
+                        src={doctor.imagePath ?? "/logo-footer.webp"}
+                        alt={i18n.language === "ar" ? doctor.nameAr : doctor.name}
+                        width={"100%"}
+                        height={"100%"}
+                        className={classes.image}
+                    />
+                </Stack>
 
                 <Stack className={classes.docName} >
                     <Stack
@@ -117,8 +121,12 @@ const Doctor = ({
                         <Stack className={clsx(classes.bgPaper, classes.bgPaperRight)} />
                         <Stack className={clsx(classes.bgPaper, classes.bgPaperLeft)} />
                         <Typography fontSize={15}>{i18n.language === "ar" ? doctor.nameAr : doctor.name}</Typography>
-                        <Typography fontSize={12} color={"text.secondary"}>{i18n.language === "ar" ? doctor.expertiseAr : doctor.expertise}</Typography>
-                        {showService && <Typography fontSize={12} color={"text.secondary"}>{i18n.language === "ar" ? doctor.service.titleAr : doctor.service.title}</Typography>}
+                        <Typography fontSize={11} color={"text.secondary"}>{i18n.language === "ar" ? doctor.expertiseAr : doctor.expertise}</Typography>
+                        {showService &&
+                            <Typography fontSize={11} color={"secondary.main"}>
+                                {i18n.language === "ar" ? doctor.service.titleAr : doctor.service.title}
+                            </Typography>
+                        }
                     </Stack>
                 </Stack>
             </Stack>
