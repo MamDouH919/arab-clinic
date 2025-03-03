@@ -11,14 +11,23 @@ const classes = {
     serviceWrapper: `${PREFIX}-serviceWrapper`,
     imageWhite: `${PREFIX}-imageWhite`,
     serviceGrid: `${PREFIX}-serviceGrid`,
+    image: `${PREFIX}-image`,
 };
 const Root = styled("div")(({ theme }) => ({
     [`& .${classes.serviceGrid}`]: {
         display: "flex",
+        "&:hover": {
+            [`& .${classes.image}`]: {
+                transform: "scale(1.2)"
+            }
+        }
     },
     [`& .${classes.serviceWrapper}`]: {
         overflow: "hidden",
-    }
+    },
+    [`& .${classes.image}`]: {
+        transition: "transform .2s ease-in-out",
+    },
 }));
 
 interface inputProps {
@@ -52,10 +61,11 @@ const Services = (props: inputProps) => {
                                 return (
                                     <Grid md={4} sm={6} xs={12} key={index} className={classes.serviceGrid}>
                                         <Stack component={Paper} alignItems={"center"} spacing={2} width={"100%"} className={classes.serviceWrapper}>
-                                            <Box position={"relative"} width={"100%"} height={"350px"}>
+                                            <Box position={"relative"} width={"100%"} height={"350px"} overflow={"hidden"}>
                                                 <Image
                                                     src={service.iconPath}
                                                     alt={service.title}
+                                                    className={classes.image}
                                                     layout="fill"
                                                     objectFit="cover" // Adjust this if needed (cover, contain, etc.)
                                                 />

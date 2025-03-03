@@ -91,13 +91,13 @@ const MainPage = ({
                     {!loading && doctors.length > 0 &&
                         <Grid container spacing={4} justifyContent={"center"} width={"100%"}>
                             {doctors.map((doctor: any) =>
-                                <Grid xs={12} md={3} sm={6}  key={doctor.id}>
+                                <Grid xs={9} md={3} sm={6}  key={doctor.id}>
                                     <Doctor doctor={doctor} showService />
                                 </Grid>
                             )}
                         </Grid>
                     }
-                    {!loading && doctors.length === 0 && <NoData label={"noDoctors"} />}
+                    {!loading && doctors.length === 0 && <NoData label={t("noDoctors")} />}
                     {loading && <Loading height='350px' />}
                 </Stack>
             </Container>

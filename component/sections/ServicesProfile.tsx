@@ -140,7 +140,7 @@ const ServicesProfile = (props: inputProps) => {
                                     <Doctor doctor={doctor} />
                                 </Grid>
                             ) : <Grid>
-                                <NoData label={"noDoctors"} height='160px' />
+                                <NoData label={t("noDoctorsIndependent")} height='160px' />
                             </Grid>
                         }
 

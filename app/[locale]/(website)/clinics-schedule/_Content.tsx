@@ -124,7 +124,7 @@ const Content = ({
                     </Container>
                 </Stack>
             }
-            {!filterLoading && !loading && schedules.length === 0 && <NoData label={"noDoctors"} />}
+            {!filterLoading && !loading && schedules.length === 0 && <NoData label={t("noDoctors")} />}
             {(loading || filterLoading) && <Loading height='350px' />}
         </Stack>
     )

@@ -45,10 +45,11 @@
   "serviceDataDesc3": "إكتشف أقسام ومعدات آراب كلينيك.",
   "doctors": "الأطباء",
   "in": "في",
-  "noDoctors": "لا يوجد دكاتره تحت هذا القسم",
+  "noDoctorsIndependent": "لا يوجد أطباء تحت هذا القسم",
   "search": "بحث",
   "doctorList": "قائمة الآطباء",
   "makeAnAppointment": "احجز موعد",
   "servicesList": "قائمة الأقسام",
-  "schedules": "الجداول"
+  "schedules": "الجداول",
+  "noDoctors": "لا يوجد أطباء"
 }

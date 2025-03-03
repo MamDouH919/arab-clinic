@@ -44,10 +44,11 @@
   "serviceDataDesc3": "discover Arab Clinic’s unique departments & equipment.",
   "doctors": "doctors",
   "in": "in",
-  "noDoctors": "There are no doctors under this department",
+  "noDoctorsIndependent": "There are no doctors under this department",
   "search": "search",
   "doctorList": "doctor list",
   "makeAnAppointment": "make an appointment",
   "servicesList": "services list",
-  "schedules": "schedules"
+  "schedules": "schedules",
+  "noDoctors": "There are no doctors"
 }
