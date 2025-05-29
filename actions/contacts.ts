@@ -2,6 +2,7 @@
 
 import { AddContactsSchema } from "@/schemas"
 import db from "@/db/db"
+import { receiveContactEmail } from "@/lib/mail";
 
 export async function addContacts(formData: FormData) {
     const name = formData.get("name") as string;
@@ -24,6 +25,7 @@ export async function addContacts(formData: FormData) {
     }
 
     const data = result.data;
+    await receiveContactEmail(data.email, data.name, data.mobile, data.branch!, data.message);
 
     await db.contacts.create({
         data: {
