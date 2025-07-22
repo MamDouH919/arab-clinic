@@ -124,6 +124,7 @@ export const NavLinks = [
     { href: "/clients", label: "clients" },
     { href: "/employment", label: "employment" },
     { href: "/news", label: "news" },
+    { href: "/articles", label: "articles" },
     { href: "/departments", label: "services" },
     { href: "/contact-us", label: "contact" },
     { href: "/clinics-schedule", label: "schedules" },

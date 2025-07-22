@@ -171,3 +171,16 @@ model Schedules {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
+model Articles {
+  id            String   @id @default(uuid())
+  title         String
+  titleAr       String
+  description   String
+  descriptionAr String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  imagePath     String
+  imageName     String
+}

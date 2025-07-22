@@ -50,5 +50,11 @@
   "makeAnAppointment": "make an appointment",
   "servicesList": "services list",
   "schedules": "schedules",
-  "noDoctors": "There are no doctors"
+  "noDoctors": "There are no doctors",
+  "changeLang": "change language",
+  "changeLangDesc": "change language",
+  "articles": "articles",
+  "language": "language",
+  "noArticles": "There are no articles",
+  "readMoreArticles": "read more articles"
 }

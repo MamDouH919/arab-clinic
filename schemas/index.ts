@@ -332,3 +332,37 @@ export const UpdateSchedulesSchema = AddSchedulesSchema.extend({
       { message: i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250KB كيلوبايت" }
     )
 });
+
+
+export const AddArticlesSchema = z.object({
+  description: z.string({
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }).min(1, {
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }),
+  descriptionAr: z.string({
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }).min(1, {
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }),
+  title: z.string({
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }).min(1, {
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }),
+  titleAr: z.string({
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }).min(1, {
+    message: i18n.language === "en" ? "field is required" : "الحقل مطلوب",
+  }),
+  image: imageSchema.refine(file => file.size < 250 * 1024 && file.size > 0, i18n.language === "en" ? "File must be smaller than 250KB" : "يجب أن يكون الملف أصغر من 250 كيلوبايت")
+})
+
+export const UpdateArticlesSchema = AddArticlesSchema.extend({
+  image: imageSchema
+    .optional()
+    .refine(
+      file => !file || (file.size < 150 * 1024 && file.size > 0), // Allow undefined, null, or empty string
+      { message: i18n.language === "en" ? "File must be smaller than 150KB" : "يجب أن يكون الملف أصغر من 150 كيلوبايت" }
+    )
+})

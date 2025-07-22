@@ -158,6 +158,13 @@ const NavDrawer = (props: propsInput) => {
             primary: "news",
         },
         {
+            regex: /articles/,
+            pathname: "/admin/articles",
+            sectionName: "articles",
+            icon: NewspaperOutlined,
+            primary: "articles",
+        },
+        {
             regex: /clients/,
             pathname: "/admin/clients",
             sectionName: "clients",

@@ -51,5 +51,11 @@
   "makeAnAppointment": "احجز موعد",
   "servicesList": "قائمة الأقسام",
   "schedules": "الجداول",
-  "noDoctors": "لا يوجد أطباء"
+  "noDoctors": "لا يوجد أطباء",
+  "noArticles": "لا توجد مقالات",
+  "readMoreArticles": "اقرأ المزيد من المقالات",
+  "changeLang": "تغيير اللغة",
+  "changeLangDesc": "تغيير اللغة إلى اللغة العربية",
+  "language": "اللغة",
+  "articles": "المقالات"
 }
